@@ -1,0 +1,5 @@
+test jwt base64 encoded:
+
+eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJraXRjaGVuc2luay55b2RsLmV0aCIsImlzcyI6InlvZGwuZXRoIiwic3ViIjoiMHgzQkVDMEE5Q2VDQWQ2MzE1ODYwMDY3MzI1YzYwMzg2MWFkZjc0MGI1IiwiZXhwIjo5OX0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
+import { AppLayout } from "@/components/AppLayout";
+import { UserProvider } from "@/contexts/UserContext";
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Yapp | Deposit",
-  description: "Yodl mini-app (Yapp). Fund your Yodl wallet",
+  title: "Yodl Kitchen Sink",
+  description: "Demo application showcasing Yodl mini-app capabilities",
 };
 
 export default function RootLayout({
@@ -27,9 +29,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Theme accentColor='iris' hasBackground={false} panelBackground='translucent' radius='small' appearance='dark'>
-          {children}
-        </Theme>
+        <UserProvider>
+          <Theme accentColor='cyan' hasBackground={false} panelBackground='translucent' radius='small' appearance='dark'>
+            <AppLayout>{children}</AppLayout>
+          </Theme>
+        </UserProvider>
       </body>
     </html>
   );

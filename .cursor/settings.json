@@ -1,0 +1,16 @@
+{
+  "projectContext": {
+    "framework": "Next.js",
+    "version": "15",
+    "styling": "Tailwind CSS",
+    "other-tools": "Radix Themes, react-icons",
+    "typescript": true,
+    "conventions": {
+      "types": "prefer types over interfaces"
+    },
+    "customInstructions": [
+      "This project is building an SPA (or SPA-like/hybrid) app for mobile. It is supposed to demostrate how to build mini-apps for the Yodl super app",
+      "The project should be simple. An MVP using only best practices where possible."
+    ]
+  }
+}

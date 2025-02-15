@@ -1,62 +1,86 @@
 "use client";
 
-import { Container, Heading, Text, Flex } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
-import { UAParser } from "ua-parser-js";
-import { SOURCE_HEADERS } from "@/constants/sources";
-import { typedKeys } from "@/utils/typeUtils";
-import { SourceCard } from "@/components/SourceCard";
+import { Box, Heading, Text, Flex, Card, Section } from "@radix-ui/themes";
+import { useUser } from "@/contexts/UserContext";
+import { Loader } from "@/components/Loader";
+import { InfoBox } from "@/components/InfoBox";
 
-export default function Home() {
-  const [ensOrAddress, setEnsOrAddress] = useState<string>("your-ens.eth");
-  const [error, setError] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+export default function ProfilePage() {
+  const { userInfo, isLoading } = useUser();
 
-  useEffect(() => {
-    const decodeToken = () => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const jwtFromParams = params.get("jwt");
-        if (!jwtFromParams) return;
+  if (isLoading) {
+    return <Loader />;
+  }
 
-        const payload = JSON.parse(atob(jwtFromParams));
-        setEnsOrAddress(payload.ensName);
-      } catch (e) {
-        setError("Invalid token format");
-      }
-    };
-    decodeToken();
-    const parser = new UAParser();
-    setIsMobile(parser.getDevice().type === "mobile");
-  }, []);
+  if (!userInfo) {
+    return (
+      <Box p='4'>
+        <Heading size='4'>Profile</Heading>
+        <Heading as='h2' color='gray'>
+          Please connect your wallet to view your profile.
+        </Heading>
+      </Box>
+    );
+  }
 
   return (
-    <Container size='2' p='6'>
-      <Flex direction='column' gap='6' align='center' minHeight='90vh'>
-        {error ? (
-          <Text color='red'>{error}</Text>
-        ) : (
-          <>
-            <Flex direction='column' gap='2' align='center'>
-              <Heading>Fund your account</Heading>
-              <Heading size='2'>
-                Transfer assets to{" "}
-                <Text size='4' color='iris' className='fontFamily-mono'>
-                  {ensOrAddress}
-                </Text>
-              </Heading>
-            </Flex>
+    <>
+      <Section size='1'>
+        <Heading size='4' align='center'>
+          Welcome to Kitchen Sink
+        </Heading>
+        <Heading as='h2' size='1' align='center' color='gray'>
+          The all-in-one Yapp
+        </Heading>
+      </Section>
 
-            <Flex direction='column' gap='4' width='100%' maxWidth='400px'>
-              {typedKeys(SOURCE_HEADERS).map(sourceType => (
-                <SourceCard key={sourceType} sourceType={sourceType} isMobile={isMobile} ensOrAddress={ensOrAddress} />
-              ))}
-            </Flex>
-          </>
-        )}
-      </Flex>
-    </Container>
+      <Section size='1'>
+        {/* <InfoBox>A Yapp is a Yodl mini-app</InfoBox> */}
+        {/* <InfoBox>Kitchen Sink is a Yodl protocol demo Yapp</InfoBox> */}
+
+        <Flex direction='column' gap='3'>
+          <Flex direction='column' gap='2'>
+            <Text as='p' ml='2' weight='bold'>
+              What is a Yapp?
+            </Text>
+            <InfoBox>A Yapp is a Yodl mini-app</InfoBox>
+            {/* <Text as='p' size='2'>
+              A Yapp is a Yodl mini-app
+              </Text> */}
+          </Flex>
+
+          <Flex direction='column' gap='2'>
+            <Text as='p' ml='2' weight='bold'>
+              What is Kitchen Sink?
+            </Text>
+            <InfoBox>A Yodl protocol demo Yapp</InfoBox>
+            {/* <Text as='p' size='2'>
+              A Yodl protocol demo Yapp
+            </Text> */}
+          </Flex>
+        </Flex>
+      </Section>
+
+      <Card size='2' style={{ maxWidth: "600px" }}>
+        <Flex direction='column' gap='3'>
+          <Text weight='bold' color='gray'>
+            Connected through{" "}
+          </Text>
+          <Text size='4'>{userInfo.communityEns}</Text>
+
+          <Box>
+            <Text size='2' weight='bold' color='gray'>
+              Your Address
+            </Text>
+            <Text size='4' className='font-mono'>
+              {userInfo.fullAddress}
+            </Text>
+            <Text size='2' color='gray'>
+              ({userInfo.truncatedAddress})
+            </Text>
+          </Box>
+        </Flex>
+      </Card>
+    </>
   );
 }
-
-export const dynamic = "force-static";
