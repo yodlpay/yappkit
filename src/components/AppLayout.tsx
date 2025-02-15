@@ -1,5 +1,3 @@
-"use client";
-
 import { Container, Flex } from "@radix-ui/themes";
 import { Navigation } from "./Navigation";
 import { Header } from "./Header";

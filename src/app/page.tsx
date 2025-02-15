@@ -1,11 +1,11 @@
 "use client";
 
 import { Box, Heading, Text, Flex, Card, Section } from "@radix-ui/themes";
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/providers/UserProviders";
 import { Loader } from "@/components/Loader";
 import { InfoBox } from "@/components/InfoBox";
 import { Suspense } from "react";
-import { UserProvider } from "@/contexts/UserContext";
+import { UserProvider } from "@/providers/UserProviders";
 
 export default function ProfilePage() {
   const { userInfo, isLoading } = useUser();
@@ -61,6 +61,33 @@ export default function ProfilePage() {
           </Flex>
         </Flex>
       </Section>
+
+      {/* https://www.radix-ui.com/themes/docs/components/data-list */}
+
+      <Card size='2' style={{ maxWidth: "600px" }}>
+        <Flex direction='column' gap='3'>
+          {Object.entries(userInfo).map(([key, value]) => (
+            <Flex key={key} direction='column' gap='2'>
+              <Text weight='bold' color='gray'>
+                {key}
+              </Text>
+              <Text size='4'>{value}</Text>
+            </Flex>
+          ))}
+        </Flex>
+      </Card>
+      <Card size='2' style={{ maxWidth: "600px" }}>
+        <Flex direction='column' gap='3'>
+          {Object.entries(userInfo).map(([key, value]) => (
+            <Flex key={key} direction='column' gap='2'>
+              <Text weight='bold' color='gray'>
+                {key}
+              </Text>
+              <Text size='4'>{value}</Text>
+            </Flex>
+          ))}
+        </Flex>
+      </Card>
       <Card size='2' style={{ maxWidth: "600px" }}>
         <Flex direction='column' gap='3'>
           {Object.entries(userInfo).map(([key, value]) => (

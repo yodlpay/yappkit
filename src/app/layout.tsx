@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/AppLayout";
-import { UserProvider } from "@/contexts/UserContext";
+import { UserProvider } from "@/providers/UserProviders";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import { WalletProvider } from "@/providers/WalletProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <UserProvider>
-          <Theme accentColor='cyan' hasBackground={false} panelBackground='translucent' radius='small' appearance='dark'>
-            <AppLayout>{children}</AppLayout>
-          </Theme>
-        </UserProvider>
+        <WalletProvider>
+          <UserProvider>
+            <Theme accentColor='cyan' hasBackground={false} panelBackground='translucent' radius='small' appearance='dark'>
+              <AppLayout>{children}</AppLayout>
+            </Theme>
+          </UserProvider>
+        </WalletProvider>
       </body>
     </html>
   );
