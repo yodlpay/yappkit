@@ -1,12 +1,12 @@
 import { Box, Heading } from "@radix-ui/themes";
-import { TransactionsList } from './TransactionsList';
+import { TransactionsList } from "./TransactionsList";
 
-export default async function TransactionsPage() {
+export default function TransactionsPage() {
   // Could fetch initial data here
   return (
-    <Box p="4">
-      <Heading size="4">Transaction History</Heading>
+    <Box p='4'>
+      <Heading size='4'>Transaction History</Heading>
       <TransactionsList />
     </Box>
   );
-} 
+}

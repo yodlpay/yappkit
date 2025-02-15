@@ -3,13 +3,13 @@
 import { TabNav, Flex, Text } from "@radix-ui/themes";
 
 import { usePathname } from "next/navigation";
-import { FaUserCircle, FaWallet, FaTimes, FaCreditCard, FaChartLine, FaChartBar } from "react-icons/fa";
+import { FaUserCircle, FaWallet, FaTimes, FaCreditCard, FaChartLine, FaChartBar, FaHome } from "react-icons/fa";
 import { HiServer } from "react-icons/hi";
 
 import Link from "next/link";
 
 const ROUTES = [
-  { path: "/", label: "Profile", icon: FaUserCircle },
+  { path: "/", label: "Home", icon: FaHome },
   { path: "/connect", label: "Connect", icon: FaWallet },
   { path: "/close", label: "Close", icon: FaTimes },
   { path: "/payment", label: "Pay", icon: FaCreditCard },
