@@ -1,40 +1,37 @@
-"use client";
-
-import { Box, Heading, Card, Flex, Link, Text } from "@radix-ui/themes";
-import { FaCreditCard, FaChartLine, FaTrophy } from "react-icons/fa";
+import { Box, Card, Flex, Link, Text } from "@radix-ui/themes";
+import { FaChartLine, FaTrophy } from "react-icons/fa";
+import { PageHeader } from "@/components/PageHeader";
 
 const PAY_SECTIONS = [
   {
     title: "Close",
-    description: "Close the iframe",
+    description: "How to close iframe and return the main app",
     icon: FaChartLine,
     href: "/pay/close",
   },
   {
-    title: "Payment",
-    description: "Trigger a payment in Yodl UI",
+    title: "Payments",
+    description: "Make payments on yodl.me",
     icon: FaTrophy,
-    href: "/pay/payment",
+    href: "/pay/payments",
   },
 ] as const;
 
-export default function DemosPage() {
+export default function PayPage() {
   return (
-    <Box p='4'>
-      <Heading size='4' mb='4'>
-        Pay
-      </Heading>
-      <Flex direction='column' gap='3'>
+    <>
+      <PageHeader title='Pay' />
+      <Flex direction='column' gap='3' maxWidth='500px' mx='auto'>
         {PAY_SECTIONS.map(({ title, description, icon: Icon, href }) => (
           <Link key={href} href={href} style={{ textDecoration: "none" }}>
             <Card>
               <Flex align='center' gap='3'>
                 <Icon size={24} />
                 <Box>
-                  <Text as='div' size='3' weight='bold'>
+                  <Text as='p' size='3' weight='bold'>
                     {title}
                   </Text>
-                  <Text as='div' color='gray' size='2'>
+                  <Text as='p' color='gray' size='2'>
                     {description}
                   </Text>
                 </Box>
@@ -43,6 +40,6 @@ export default function DemosPage() {
           </Link>
         ))}
       </Flex>
-    </Box>
+    </>
   );
 }

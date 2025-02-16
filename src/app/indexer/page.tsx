@@ -1,18 +1,19 @@
 "use client";
 
-import { Box, Heading, Card, Flex, Link, Text } from "@radix-ui/themes";
-import { FaCreditCard, FaChartLine, FaTrophy } from "react-icons/fa";
+import { PageHeader } from "@/components/PageHeader";
+import { Box, Card, Flex, Link, Text } from "@radix-ui/themes";
+import { FaChartLine, FaTrophy } from "react-icons/fa";
 
 const INDEXER_SECTIONS = [
   {
-    title: "Transactions",
-    description: "View recent transactions of connected address",
+    title: "Payments API",
+    description: "Fetch indexed payments with the playground API",
     icon: FaChartLine,
-    href: "/indexer/transactions",
+    href: "/indexer/payments",
   },
   {
     title: "Leaderboard",
-    description: "View top users and statistics",
+    description: "View and create leaderboards",
     icon: FaTrophy,
     href: "/indexer/leaderboard",
   },
@@ -20,10 +21,8 @@ const INDEXER_SECTIONS = [
 
 export default function DemosPage() {
   return (
-    <Box p='4'>
-      <Heading size='4' mb='4'>
-        Indexer
-      </Heading>
+    <>
+      <PageHeader title='Indexer' />
       <Flex direction='column' gap='3'>
         {INDEXER_SECTIONS.map(({ title, description, icon: Icon, href }) => (
           <Link key={href} href={href} style={{ textDecoration: "none" }}>
@@ -43,6 +42,6 @@ export default function DemosPage() {
           </Link>
         ))}
       </Flex>
-    </Box>
+    </>
   );
 }

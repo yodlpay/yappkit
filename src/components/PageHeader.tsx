@@ -7,13 +7,19 @@ type PageHeaderProps = {
 };
 
 export function PageHeader({ title, backPath }: PageHeaderProps) {
-  return (
-    <Section p='4'>
+  return backPath ? (
+    <Section pt='0' pb='3'>
       <Flex width='100%' align='center'>
         <Box className='flex-1'>{backPath && <BackButton path={backPath} />}</Box>
         <Heading size='4'>{title}</Heading>
         <Box className='flex-1' />
       </Flex>
+    </Section>
+  ) : (
+    <Section pt='0' pb='3'>
+      <Heading size='4' align='center'>
+        {title}
+      </Heading>
     </Section>
   );
 }
