@@ -7,13 +7,15 @@ import { FaUserCircle, FaWallet, FaTimes, FaCreditCard, FaChartLine, FaChartBar,
 import { HiServer } from "react-icons/hi";
 
 import Link from "next/link";
+import { TbWebhook } from "react-icons/tb";
+import { MdWebhook } from "react-icons/md";
 
 const ROUTES = [
   { path: "/", label: "Home", icon: FaHome },
   { path: "/connect", label: "Connect", icon: FaWallet },
-  { path: "/close", label: "Close", icon: FaTimes },
-  { path: "/demos", label: "Demos", icon: FaChartLine },
-  { path: "/events", label: "Events", icon: HiServer },
+  { path: "/pay", label: "Pay", icon: FaCreditCard },
+  { path: "/indexer", label: "Indexer", icon: FaChartBar },
+  { path: "/webhook", label: "Webhook", icon: TbWebhook },
 ] as const;
 
 export function Navigation() {

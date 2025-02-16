@@ -1,11 +1,10 @@
 "use client";
 
-import { Box, Heading, Text, Flex, Card, Section } from "@radix-ui/themes";
+import { Box, Heading, Text, Flex, Section } from "@radix-ui/themes";
 import { useUser } from "@/providers/UserProviders";
 import { Loader } from "@/components/Loader";
 import { InfoBox } from "@/components/InfoBox";
-import { Suspense } from "react";
-import { UserProvider } from "@/providers/UserProviders";
+import { UserInfoDisplay } from "./userInfoDisplay";
 
 export default function ProfilePage() {
   const { userInfo, isLoading } = useUser();
@@ -17,9 +16,9 @@ export default function ProfilePage() {
   if (!userInfo) {
     return (
       <Box p='4'>
-        <Heading size='4'>Profile</Heading>
+        <Heading size='4'>User info could not be loaded</Heading>
         <Heading as='h2' color='gray'>
-          Please connect your wallet to view your profile.
+          Make sure you open the app via the Yodl app.
         </Heading>
       </Box>
     );
@@ -35,11 +34,7 @@ export default function ProfilePage() {
           The all-in-one Yapp
         </Heading>
       </Section>
-
       <Section size='1'>
-        {/* <Text>Kitchen Sink is an interactive demo Yapp built by Yodl.</Text>
-          <Text>It serves as en example of how to build a Yapp using the Yodl protocol.</Text> */}
-
         <Flex direction='column' gap='3' align='center'>
           <Flex direction='column' gap='2'>
             <Text weight='bold' align='center'>
@@ -47,71 +42,20 @@ export default function ProfilePage() {
             </Text>
             <InfoBox>A Yapp is a Yodl mini-app</InfoBox>
           </Flex>
-
           <Flex direction='column' gap='2'>
             <Text weight='bold' align='center'>
               What is Kitchen Sink?
             </Text>
             <InfoBox>A Yodl protocol demo Yapp</InfoBox>
           </Flex>
-          <Flex direction='column' gap='2'>
-            <Text weight='bold' align='center'>
-              You are connected with the following details
-            </Text>
-          </Flex>
         </Flex>
       </Section>
-
-      {/* https://www.radix-ui.com/themes/docs/components/data-list */}
-
-      <Card size='2' style={{ maxWidth: "600px" }}>
-        <Flex direction='column' gap='3'>
-          {Object.entries(userInfo).map(([key, value]) => (
-            <Flex key={key} direction='column' gap='2'>
-              <Text weight='bold' color='gray'>
-                {key}
-              </Text>
-              <Text size='4'>{value}</Text>
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
-      <Card size='2' style={{ maxWidth: "600px" }}>
-        <Flex direction='column' gap='3'>
-          {Object.entries(userInfo).map(([key, value]) => (
-            <Flex key={key} direction='column' gap='2'>
-              <Text weight='bold' color='gray'>
-                {key}
-              </Text>
-              <Text size='4'>{value}</Text>
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
-      <Card size='2' style={{ maxWidth: "600px" }}>
-        <Flex direction='column' gap='3'>
-          {Object.entries(userInfo).map(([key, value]) => (
-            <Flex key={key} direction='column' gap='2'>
-              <Text weight='bold' color='gray'>
-                {key}
-              </Text>
-              <Text size='4'>{value}</Text>
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
-      <Card size='2' style={{ maxWidth: "600px" }}>
-        <Flex direction='column' gap='3'>
-          {Object.entries(userInfo).map(([key, value]) => (
-            <Flex key={key} direction='column' gap='2'>
-              <Text weight='bold' color='gray'>
-                {key}
-              </Text>
-              <Text size='4'>{value}</Text>
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
+      <Section size='1'>
+        <Heading as='h3' size='2' align='center' mb='2' color='gray'>
+          You details
+        </Heading>
+        <UserInfoDisplay />
+      </Section>
     </>
   );
 }

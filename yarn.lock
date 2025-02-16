@@ -2084,6 +2084,11 @@
   dependencies:
     jose "^5.9.6"
 
+"@yodlpay/tokenlists@^0.8.4":
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/@yodlpay/tokenlists/-/tokenlists-0.8.4.tgz#f99e4e8c03d41d967415a7c5a6d7ac30116d163f"
+  integrity sha512-gsfPnLhlHUu63QnlZuitVci+ZNUQ0e2EY2Y4lw1U1PsW+bOmgZ+o+n5S+AoWwPohwdsowSLwkiSFjPNShHPYYw==
+
 abitype@1.0.8, abitype@^1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.8.tgz#3554f28b2e9d6e9f35eb59878193eabd1b9f46ba"
