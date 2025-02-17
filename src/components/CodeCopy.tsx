@@ -4,16 +4,15 @@ import { Code, Flex, IconButton } from "@radix-ui/themes";
 type CodeCopyProps = {
   text: string;
   truncate?: boolean;
-  variant?: "ghost" | "outline" | "solid" | "soft";
 };
 
-export const CodeCopy = ({ text, truncate, variant }: CodeCopyProps) => {
+export const CodeCopy = ({ text, truncate }: CodeCopyProps) => {
   return (
-    <Flex align='center' width='100%'>
-      <Code className='mr-2' truncate={truncate} variant={variant}>
+    <Flex align='center' width='100%' justify='between'>
+      <Code className='mr-2' truncate={truncate} variant='ghost'>
         {text}
       </Code>
-      <IconButton size='1' aria-label='Copy value' color='gray'>
+      <IconButton size='1' aria-label='Copy value' variant='ghost'>
         <CopyIcon />
       </IconButton>
     </Flex>

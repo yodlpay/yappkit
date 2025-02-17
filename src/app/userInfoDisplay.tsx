@@ -28,7 +28,7 @@ export const UserInfoDisplay = () => {
   })})`;
 
   const userInfoDisplayItems: UserInfoDisplayItem[] = [
-    { label: "Address", element: <CodeCopy text={address} truncate={true} /> },
+    { label: "Address", element: <CodeCopy  text={address} truncate={true} /> },
     { label: "Ens", element: <CodeCopy text={ens || "n/a"} /> },
     { label: "Yapp", element: <CodeCopy text={yappEns} /> },
     { label: "Community", element: <CodeCopy text={communityEns} /> },
@@ -39,7 +39,7 @@ export const UserInfoDisplay = () => {
       <DataList.Root>
         {userInfoDisplayItems.map((item, index) => (
           <DataList.Item key={index} align='center'>
-            <DataList.Label minWidth='88px'>{item.label}</DataList.Label>
+            <DataList.Label minWidth='88px'>{item.label}:</DataList.Label>
             <DataList.Value>{item.element}</DataList.Value>
           </DataList.Item>
         ))}

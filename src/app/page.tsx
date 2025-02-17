@@ -52,7 +52,7 @@ export default function ProfilePage() {
       </Section>
       <Section size='1'>
         <Heading as='h3' size='2' align='center' mb='2' color='gray'>
-          You details
+          Your details
         </Heading>
         <UserInfoDisplay />
       </Section>

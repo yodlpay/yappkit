@@ -1,47 +1,56 @@
 "use client";
 
 import { PageHeader } from "@/components/PageHeader";
-import { Box, Card, Flex, Link, Text } from "@radix-ui/themes";
-import { FaChartLine, FaTrophy } from "react-icons/fa";
+import { Flex, SegmentedControl } from "@radix-ui/themes";
+import { ApiPlayground } from "./components/ApiPlayground";
+import { Leaderboard } from "./components/Leaderboard";
+import { FaTrophy, FaChartLine } from "react-icons/fa";
+import { StickyTopBox } from "@/components/StickyPageHeader";
+import { useState } from "react";
 
-const INDEXER_SECTIONS = [
-  {
-    title: "Payments API",
-    description: "Fetch indexed payments with the playground API",
+const INDEXER_SECTIONS = {
+  playground: {
+    title: "API Playground",
+    // description: "Fetch indexed payments",
     icon: FaChartLine,
-    href: "/indexer/payments",
+    component: <ApiPlayground />,
   },
-  {
+  leaderboard: {
     title: "Leaderboard",
-    description: "View and create leaderboards",
+    // description: "View and create leaderboards",
     icon: FaTrophy,
-    href: "/indexer/leaderboard",
+    component: <Leaderboard />,
   },
-] as const;
+} as const;
 
-export default function DemosPage() {
+type IndexerSection = keyof typeof INDEXER_SECTIONS;
+
+export default function IndexerPage() {
+  const [currentView, setCurrentView] = useState<IndexerSection>("playground");
+
   return (
     <>
-      <PageHeader title='Indexer' />
-      <Flex direction='column' gap='3'>
-        {INDEXER_SECTIONS.map(({ title, description, icon: Icon, href }) => (
-          <Link key={href} href={href} style={{ textDecoration: "none" }}>
-            <Card>
-              <Flex align='center' gap='3'>
-                <Icon size={24} />
-                <Box>
-                  <Text as='div' size='3' weight='bold'>
-                    {title}
-                  </Text>
-                  <Text as='div' color='gray' size='2'>
-                    {description}
-                  </Text>
-                </Box>
-              </Flex>
-            </Card>
-          </Link>
-        ))}
-      </Flex>
+      <StickyTopBox>
+        <Flex direction="column" justify="between" align="center" gap="2">
+          <PageHeader title="Indexer" backPath="/" />
+          <SegmentedControl.Root
+            size="1"
+            value={currentView}
+            onValueChange={(value: IndexerSection) => setCurrentView(value)}
+            className="w-full"
+          >
+            {Object.entries(INDEXER_SECTIONS).map(([key, section]) => (
+              <SegmentedControl.Item key={key} value={key}>
+                <Flex align="center" gap="2">
+                  <section.icon />
+                  {section.title}
+                </Flex>
+              </SegmentedControl.Item>
+            ))}
+          </SegmentedControl.Root>
+        </Flex>
+      </StickyTopBox>
+      {INDEXER_SECTIONS[currentView].component}
     </>
   );
 }

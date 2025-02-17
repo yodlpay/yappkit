@@ -20,7 +20,7 @@ const PAY_SECTIONS = [
 export default function PayPage() {
   return (
     <>
-      <PageHeader title='Pay' />
+      <PageHeader title='Pay' backPath='/' />
       <Flex direction='column' gap='3' maxWidth='500px' mx='auto'>
         {PAY_SECTIONS.map(({ title, description, icon: Icon, href }) => (
           <Link key={href} href={href} style={{ textDecoration: "none" }}>

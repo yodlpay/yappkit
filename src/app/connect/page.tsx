@@ -1,13 +1,14 @@
-import { Box, Heading } from "@radix-ui/themes";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { PageHeader } from '@/components/PageHeader';
+import { Box, Flex, Heading } from "@radix-ui/themes";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function ConnectPage() {
   return (
-    <Box p='4'>
-      <Heading size='4'>Connect Your Wallet</Heading>
-      {/* Add wallet connection logic here */}
-
-      <ConnectButton />
-    </Box>
+    <>
+      <PageHeader title='Connect' backPath='/' />
+      <Flex justify='center' align='center' height='100%'>
+        <ConnectButton />
+      </Flex>
+    </>
   );
 }

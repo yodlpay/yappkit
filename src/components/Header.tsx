@@ -3,15 +3,19 @@
 import { Flex, Text } from "@radix-ui/themes";
 import { useUser } from "../providers/UserProviders";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-
+import Image from "next/image";
+import { FaSink } from "react-icons/fa";
+import Link from "next/link";
 export function Header() {
   const { userInfo } = useUser();
 
   return (
-    <Flex px='4' py='3' justify='between' align='center' gap='1'>
-      <Text size='2' weight='bold'>
-        Kitchensink Logo
-      </Text>
+    <Flex py='3' justify='between' align='center' gap='1' className='sticky top-0 z-50' style={{ backgroundColor: "var(--gray-1)" }}>
+      {/* <Image src='/favicon.ico' alt='Kitchensink Logo' width={24} height={24} /> */}
+      {/* <Image src='/kitchensink-logo.png' alt='Kitchensink Logo' width={24} height={24} /> */}
+      <Link href='/'>
+        <FaSink color='var(--accent-9)' size={24} />
+      </Link>
       {/* <ConnectButton /> */}
       {userInfo?.truncatedAddress && (
         <Text size='1' color='gray'>
