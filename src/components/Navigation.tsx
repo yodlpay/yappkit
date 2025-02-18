@@ -4,13 +4,18 @@ import Link from "next/link";
 import { TabNav, Flex } from "@radix-ui/themes";
 import { usePathname } from "next/navigation";
 import { TbWebhook } from "react-icons/tb";
-import { FaWallet, FaCreditCard, FaChartBar, FaHome } from "react-icons/fa";
+import { FaWallet, FaCreditCard, FaChartBar, FaHome, FaEthereum } from "react-icons/fa";
+import { LuToyBrick } from 'react-icons/lu';
+import { SiHiveBlockchain } from 'react-icons/si';
 
 const ROUTES = [
   { path: "/", label: "Home", icon: FaHome },
-  { path: "/connect", label: "Connect", icon: FaWallet },
+  // { path: "/connect", label: "Connect", icon: FaWallet },
+  // { path: "/connect", label: "Connect", icon: FaEthereum },
+  { path: "/connect", label: "Connect", icon: SiHiveBlockchain },
   { path: "/pay", label: "Pay", icon: FaCreditCard },
-  { path: "/indexer", label: "Indexer", icon: FaChartBar },
+  // { path: "/indexer", label: "Indexer", icon: FaChartBar },
+  { path: "/indexer", label: "Indexer", icon: LuToyBrick },
   { path: "/webhooks", label: "Webhook", icon: TbWebhook },
 ] as const;
 

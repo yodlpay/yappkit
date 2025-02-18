@@ -11,7 +11,7 @@ type InfoBoxProps = {
 
 export function InfoBox({ children, icon = <InfoCircledIcon /> }: InfoBoxProps) {
   return (
-    <Callout.Root size='1'>
+    <Callout.Root size="1">
       <Callout.Icon>{icon}</Callout.Icon>
       <Callout.Text>{children}</Callout.Text>
     </Callout.Root>

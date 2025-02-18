@@ -7,12 +7,14 @@ import { Leaderboard } from "./components/Leaderboard";
 import { FaTrophy, FaChartLine } from "react-icons/fa";
 import { StickyTopBox } from "@/components/StickyPageHeader";
 import { useState } from "react";
+import { LuToyBrick } from 'react-icons/lu';
 
 const INDEXER_SECTIONS = {
   playground: {
     title: "API Playground",
     // description: "Fetch indexed payments",
-    icon: FaChartLine,
+    // icon: FaChartLine,
+    icon: LuToyBrick,
     component: <ApiPlayground />,
   },
   leaderboard: {

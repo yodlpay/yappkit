@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Box, Theme } from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/AppLayout";
 import { UserProvider } from "@/providers/UserProviders";
+import { WalletProvider } from "@/providers/WalletProvider";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import { WalletProvider } from "@/providers/WalletProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +31,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <WalletProvider>
           <UserProvider>
-            <Theme accentColor='teal' hasBackground={false} panelBackground='translucent' radius='small' appearance='dark'>
+            <Theme
+              accentColor="teal"
+              hasBackground={false}
+              panelBackground="translucent"
+              radius="small"
+              appearance="dark"
+            >
               <AppLayout>{children}</AppLayout>
             </Theme>
           </UserProvider>
