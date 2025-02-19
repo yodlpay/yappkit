@@ -1,3 +1,4 @@
+import { SupportedChainId } from "@/types";
 import { getChains } from "@yodlpay/tokenlists";
 import { mainnet, polygon, optimism, arbitrum, base } from "viem/chains";
 
@@ -8,9 +9,12 @@ export const CHAINID_TO_VIEM_CHAIN = {
   [arbitrum.id]: arbitrum,
   [base.id]: base,
 };
-export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINID_TO_VIEM_CHAIN).map(Number);
+export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINID_TO_VIEM_CHAIN).map(
+  Number
+) as SupportedChainId[];
+
 export const SUPPORTED_CHAINS = getChains().filter((chain) =>
-  SUPPORTED_CHAIN_IDS.includes(chain.chainId)
+  SUPPORTED_CHAIN_IDS.includes(chain.chainId as SupportedChainId)
 );
 
 export const YODL_UI_URL = "https://yodl.me";

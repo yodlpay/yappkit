@@ -10,12 +10,12 @@ import { WriteBlockchain } from "../components/WriteBlockchain";
 
 const CONNECT_SECTIONS = {
   read: {
-    title: "Blockchain Data",
+    title: "Read Data",
     icon: TbHttpGet,
     component: <ReadBlockchain />,
   },
   write: {
-    title: "Blockchain Transactions",
+    title: "Send Transactions",
     icon: TbHttpPost,
     component: <WriteBlockchain />,
   },

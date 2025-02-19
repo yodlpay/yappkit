@@ -72,7 +72,11 @@ function UserProviderInner({ children }: { children: ReactNode }) {
     verifyJWT();
   }, [searchParams]);
 
-  return <UserContext.Provider value={{ userInfo, setUserInfo, isLoading }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ userInfo, setUserInfo, isLoading }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export function UserProvider({ children }: { children: ReactNode }) {

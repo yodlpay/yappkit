@@ -16,7 +16,7 @@ import {
 } from "@radix-ui/themes";
 import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvider";
 import { ResponseTable } from "./ResponseTable";
-import { buildQueryString, fetchIndexerData } from "@/utils/api";
+import { buildQueryString, fetchIndexerData } from "@/lib/indexerAapi";
 import { INDEXER_URL, SUPPORTED_CHAINS } from "@/constants";
 import { CodeCopy } from "@/components/CodeCopy";
 

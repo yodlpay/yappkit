@@ -12,7 +12,7 @@ export default function TransactionsPage() {
 
   return (
     <>
-      <PageHeader title='Close' backPath='/pay' />
+      <PageHeader title="Close" backPath="/pay" />
       <Text>Close the iframe</Text>
       <Separator />
       <Button onClick={handleClose}>Close</Button>

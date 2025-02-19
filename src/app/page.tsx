@@ -1,11 +1,21 @@
 "use client";
 
-import { Box, Heading, Text, Flex, Section, Popover, Button } from "@radix-ui/themes";
+import {
+  Box,
+  Heading,
+  Text,
+  Flex,
+  Section,
+  ChevronDownIcon,
+  Card,
+  Link,
+  Code,
+} from "@radix-ui/themes";
 import { useUser } from "@/providers/UserProviders";
 import { Loader } from "@/components/Loader";
 import { InfoBox } from "@/components/InfoBox";
 import { UserInfoDisplay } from "./userInfoDisplay";
-import { ChatBubbleIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import * as Accordion from "@radix-ui/react-accordion";
 
 export default function ProfilePage() {
   const { userInfo, isLoading } = useUser();
@@ -24,6 +34,43 @@ export default function ProfilePage() {
       </Box>
     );
   }
+
+  const faq = [
+    {
+      key: "qestion-1",
+      question: "What is a Yapp?",
+      answer: "A Yapp is an app that implements the Yodl protocol",
+    },
+    {
+      key: "qestion-2",
+      question: "What is Kitchen Sink?",
+      answer: "Kitchen Sink is a demo Yapp",
+    },
+    {
+      key: "qestion-3",
+      question: "What about wallet connection?",
+      answer:
+        "Yapps can use the Yodl UI for sending funds. For other transactions, they must implement their own connection logic",
+      content: (
+        <Text>
+          Yapps can use the Yodl UI for sending funds. For other transactions, they must implement
+          their own connection logic. <Link href="/connect">Try it out</Link>
+        </Text>
+      ),
+    },
+    {
+      key: "qestion-4",
+      question: "How to send Yodl transactions?",
+      answer:
+        "Use postMessage() for sending transactions to the parent window. More details in the yapp-sdk docs",
+      content: (
+        <Text>
+          Use <Code>postMessage()</Code> to send transactions details to the Yodl app.{" "}
+          <Link href="/pay">Try it out</Link>
+        </Text>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -44,34 +91,35 @@ export default function ProfilePage() {
       </Section>
 
       <Section size="1">
-        <Flex direction="column" gap="3" align="center">
-          <Flex justify="center" align="center" gap="2">
-            <Text>Kitchen Sink is a demo Yapp</Text>
-            <Popover.Root>
-              <Popover.Trigger>
-                {/* Comment */}
-                <Button variant="ghost">
-                  {/* <ChatBubbleIcon width="16" height="16" /> */}
-                  {/* <Text>Yapp</Text> */}
-                  {/* Yapp */}
-                  <InfoCircledIcon />
-                </Button>
-              </Popover.Trigger>
-              <Popover.Content width="360px">
-                <InfoBox>A Yapp is an app built on the Yodl protocol</InfoBox>
-              </Popover.Content>
-            </Popover.Root>
-          </Flex>
-
-          {/* <InfoBox>A Yapp is an app built on the Yodl protocol</InfoBox>
-            <Text>Kitchen Sink is a A Yodl protocol demo Yapp</Text> */}
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          FAQ
+        </Heading>
+        <Accordion.Root type="single" collapsible className="text-sm">
           <Flex direction="column" gap="2">
-            {/* <Heading as="h3" size="2" align="center" mb="2" color="gray">
-              What is Kitchen Sink?
-            </Heading>
-            <InfoBox>Kitchen Sink is a A Yodl protocol demo Yapp</InfoBox> */}
+            {faq.map(({ key, question, answer, content }) => (
+              <Card key={key} size="1">
+                <Accordion.Item value={key} key={key} className="w-full">
+                  <Flex direction="column" gap="2">
+                    <Accordion.Header>
+                      <Accordion.Trigger className="group w-full">
+                        <Flex justify="between" align="center" gap="2">
+                          <Text>{question}</Text>
+                          <ChevronDownIcon
+                            className="group-data-[state=open]:rotate-180"
+                            aria-hidden
+                          />
+                        </Flex>
+                      </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content>
+                      <InfoBox>{content || answer}</InfoBox>
+                    </Accordion.Content>
+                  </Flex>
+                </Accordion.Item>
+              </Card>
+            ))}
           </Flex>
-        </Flex>
+        </Accordion.Root>
       </Section>
     </>
   );

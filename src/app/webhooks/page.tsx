@@ -1,9 +1,10 @@
 import { PageHeader } from "@/components/PageHeader";
+import { StickyTopBox } from "@/components/StickyPageHeader";
 
 export default function WebhooksPage() {
   return (
-    <>
-      <PageHeader title='Webhooks' backPath='/' />
-    </>
+    <StickyTopBox>
+      <PageHeader title="Webhooks" backPath="/" />
+    </StickyTopBox>
   );
 }

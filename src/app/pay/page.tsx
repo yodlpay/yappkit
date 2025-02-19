@@ -1,6 +1,7 @@
 import { Box, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { FaChartLine, FaTrophy } from "react-icons/fa";
 import { PageHeader } from "@/components/PageHeader";
+import { StickyTopBox } from "@/components/StickyPageHeader";
 
 const PAY_SECTIONS = [
   {
@@ -19,27 +20,29 @@ const PAY_SECTIONS = [
 
 export default function PayPage() {
   return (
-    <>
-      <PageHeader title='Pay' backPath='/' />
-      <Flex direction='column' gap='3' maxWidth='500px' mx='auto'>
-        {PAY_SECTIONS.map(({ title, description, icon: Icon, href }) => (
-          <Link key={href} href={href} style={{ textDecoration: "none" }}>
-            <Card>
-              <Flex align='center' gap='3'>
-                <Icon size={24} />
-                <Box>
-                  <Text as='p' size='3' weight='bold'>
-                    {title}
-                  </Text>
-                  <Text as='p' color='gray' size='2'>
-                    {description}
-                  </Text>
-                </Box>
-              </Flex>
-            </Card>
-          </Link>
-        ))}
+    <StickyTopBox>
+      <Flex direction="column" justify="between" align="center" gap="2">
+        <PageHeader title="Pay" backPath="/" />
+        <Flex direction="column" gap="3" maxWidth="500px" mx="auto">
+          {PAY_SECTIONS.map(({ title, description, icon: Icon, href }) => (
+            <Link key={href} href={href} style={{ textDecoration: "none" }}>
+              <Card>
+                <Flex align="center" gap="3">
+                  <Icon size={24} />
+                  <Box>
+                    <Text as="p" size="3" weight="bold">
+                      {title}
+                    </Text>
+                    <Text as="p" color="gray" size="2">
+                      {description}
+                    </Text>
+                  </Box>
+                </Flex>
+              </Card>
+            </Link>
+          ))}
+        </Flex>
       </Flex>
-    </>
+    </StickyTopBox>
   );
 }

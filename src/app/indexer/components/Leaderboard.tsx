@@ -3,7 +3,7 @@ import { usePlayground } from "../../../providers/PlaygroundProvider";
 import { useEffect, useState } from "react";
 import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
 import Image from "next/image";
-import { fetchIndexerData } from "@/utils/api";
+import { fetchIndexerData } from "@/lib/indexerAapi";
 
 type LeaderboardItem = {
   rank: number;
@@ -15,7 +15,8 @@ type LeaderboardItem = {
 type TokenCount = { token: TokenInfo; count: number };
 
 export function Leaderboard() {
-  const { queryParams, setQueryParams, response, setResponse, setResponseStatusCode } = usePlayground();
+  const { queryParams, setQueryParams, response, setResponse, setResponseStatusCode } =
+    usePlayground();
   console.log("🚀  queryParams:", queryParams);
   const [receiver, setReceiver] = useState(queryParams.receiver || "laurids.yodl2.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
@@ -80,20 +81,23 @@ export function Leaderboard() {
     console.log("Selected Token:", selectedToken?.symbol);
 
     const filteredPayments = selectedToken
-      ? payments.filter(p => p.tokenOutSymbol === selectedToken.symbol.toUpperCase()) // Changed to compare with symbol
+      ? payments.filter((p) => p.tokenOutSymbol === selectedToken.symbol.toUpperCase()) // Changed to compare with symbol
       : payments;
 
     console.log("Filtered Payments:", filteredPayments);
 
-    const senderTotals = filteredPayments.reduce((acc: Record<string, { amount: number; count: number }>, payment: any) => {
-      const sender = payment.senderEnsPrimaryName || payment.senderAddress;
-      if (!acc[sender]) {
-        acc[sender] = { amount: 0, count: 0 };
-      }
-      acc[sender].amount += Number(payment.tokenOutAmountGross);
-      acc[sender].count += 1;
-      return acc;
-    }, {});
+    const senderTotals = filteredPayments.reduce(
+      (acc: Record<string, { amount: number; count: number }>, payment: any) => {
+        const sender = payment.senderEnsPrimaryName || payment.senderAddress;
+        if (!acc[sender]) {
+          acc[sender] = { amount: 0, count: 0 };
+        }
+        acc[sender].amount += Number(payment.tokenOutAmountGross);
+        acc[sender].count += 1;
+        return acc;
+      },
+      {}
+    );
 
     return Object.entries(senderTotals)
       .map(([sender, { amount, count }]) => ({
@@ -126,13 +130,18 @@ export function Leaderboard() {
 
   return (
     <>
-      <Section size='1'>
+      <Section size="1">
         <Card>
-          <Flex direction='column' gap='1'>
-            <Text size='2'>Receiver</Text>
-            <Flex gap='2'>
-              <TextField.Root size='2' placeholder='Receiver ENS or Address' value={receiver} onChange={e => setReceiver(e.target.value)} />
-              <Button size='2' onClick={handleSubmit}>
+          <Flex direction="column" gap="1">
+            <Text size="2">Receiver</Text>
+            <Flex gap="2">
+              <TextField.Root
+                size="2"
+                placeholder="Receiver ENS or Address"
+                value={receiver}
+                onChange={(e) => setReceiver(e.target.value)}
+              />
+              <Button size="2" onClick={handleSubmit}>
                 Submit
               </Button>
             </Flex>
@@ -140,12 +149,12 @@ export function Leaderboard() {
         </Card>
       </Section>
 
-      <Section size='1' pt='0'>
+      <Section size="1" pt="0">
         <Card>
           {availableTokens.length > 0 && (
-            <Section size='1' pt='0'>
-              <Flex direction='column' gap='1'>
-                <Text size='2'>Filter by Token</Text>
+            <Section size="1" pt="0">
+              <Flex direction="column" gap="1">
+                <Text size="2">Filter by Token</Text>
                 <Select.Root value={selectedToken?.symbol} onValueChange={handleSetSelectedToken}>
                   <Select.Trigger />
                   <Select.Content>
@@ -153,8 +162,13 @@ export function Leaderboard() {
                       <Select.Label>Tokens</Select.Label>
                       {availableTokens.map(({ token, count }) => (
                         <Select.Item key={token.symbol} value={token.symbol}>
-                          <Flex align='center' gap='2'>
-                            <Image src={token.logoUri || ""} alt={token.symbol} width={20} height={20} />
+                          <Flex align="center" gap="2">
+                            <Image
+                              src={token.logoUri || ""}
+                              alt={token.symbol}
+                              width={20}
+                              height={20}
+                            />
                             {token.symbol} ({count})
                           </Flex>
                         </Select.Item>
@@ -166,13 +180,13 @@ export function Leaderboard() {
             </Section>
           )}
 
-          <Table.Root size='1'>
+          <Table.Root size="1">
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Sender</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell justify='end'>Amount</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell justify='center'>Count</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell justify="end">Amount</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell justify="center">Count</Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -180,11 +194,13 @@ export function Leaderboard() {
               {leaderboardData.map(({ sender, amountTotal, rank, txCount }) => (
                 <Table.Row key={sender}>
                   <Table.RowHeaderCell>{rank}</Table.RowHeaderCell>
-                  <Table.Cell>{sender.length > 20 ? sender.slice(0, 12) + "..." + sender.slice(-4) : sender}</Table.Cell>
-                  <Table.Cell justify='end' className='font-mono '>
+                  <Table.Cell>
+                    {sender.length > 20 ? sender.slice(0, 12) + "..." + sender.slice(-4) : sender}
+                  </Table.Cell>
+                  <Table.Cell justify="end" className="font-mono ">
                     {numberFormatter.format(amountTotal)}
                   </Table.Cell>
-                  <Table.Cell justify='center'>{txCount}</Table.Cell>
+                  <Table.Cell justify="center">{txCount}</Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
