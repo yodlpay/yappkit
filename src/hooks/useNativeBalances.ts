@@ -42,7 +42,7 @@ export function useNativeBalances(address: Address | undefined, enabled = false)
   };
 }
 
-export const useEns = ({ address, ensName }: { address?: Address; ensName?: string }) => {
+export const useEns = ({ address, ensName }: { address: Address | null; ensName?: string }) => {
   return useQueries({
     queries: [
       {

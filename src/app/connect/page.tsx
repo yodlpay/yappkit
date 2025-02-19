@@ -5,8 +5,8 @@ import { Flex, SegmentedControl } from "@radix-ui/themes";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { useState } from "react";
 import { TbHttpGet, TbHttpPost } from "react-icons/tb";
-import { ReadBlockchain } from "../components/ReadBlockchain";
-import { WriteBlockchain } from "../components/WriteBlockchain";
+import { ReadBlockchain } from "./components/ReadBlockchain";
+import { WriteBlockchain } from "./components/WriteBlockchain";
 
 const CONNECT_SECTIONS = {
   read: {

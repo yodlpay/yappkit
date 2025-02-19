@@ -2,7 +2,7 @@ import { Box } from "@radix-ui/themes";
 
 export function StickyTopBox({ children }: { children: React.ReactNode }) {
   return (
-    <Box py="2" className="sticky top-12 z-10" style={{ backgroundColor: "var(--gray-1)" }}>
+    <Box className="sticky top-16 z-10 pb-2" style={{ backgroundColor: "var(--gray-1)" }}>
       {children}
     </Box>
   );

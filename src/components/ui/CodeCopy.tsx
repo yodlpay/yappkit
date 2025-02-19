@@ -5,10 +5,15 @@ type CodeCopyProps = {
   text: string;
   truncate?: boolean;
   position?: "front" | "back";
-justify?: "start" | "end" | "between";
+  justify?: "start" | "end" | "between";
 };
 
-export const CodeCopy = ({ text, truncate, position = "front", justify = "between" }: CodeCopyProps) => {
+export const CodeCopy = ({
+  text,
+  truncate,
+  position = "front",
+  justify = "between",
+}: CodeCopyProps) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(text).catch((err) => {
       console.error("Failed to copy text:", err);
@@ -28,12 +33,7 @@ export const CodeCopy = ({ text, truncate, position = "front", justify = "betwee
   );
 
   return (
-    <Flex
-      align="center"
-      width="100%"
-      gap="2"
-      justify={justify}
-    >
+    <Flex align="center" width="100%" gap="2" justify={justify}>
       {position === "front" && code}
       {copyButton}
       {position === "back" && code}

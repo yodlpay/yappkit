@@ -8,11 +8,11 @@ type AppLayoutProps = {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Container size="4" px="4">
-      <Flex direction="column" minHeight="100vh" height="100vh">
+    <Container size="1" px="4">
+      <Flex direction="column" minHeight="100vh">
         <Header />
-        <main className="mb-12">{children}</main>
-        <Container position="fixed" bottom="0" left="0" right="0" size="4">
+        <main className="mb-16">{children}</main>
+        <Container size="1" px="4" position="fixed" bottom="0" left="0" right="0">
           <Navigation />
         </Container>
       </Flex>

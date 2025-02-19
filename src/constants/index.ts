@@ -2,6 +2,8 @@ import { SupportedChainId } from "@/types";
 import { getChains } from "@yodlpay/tokenlists";
 import { mainnet, polygon, optimism, arbitrum, base } from "viem/chains";
 
+export const accentColor = "teal";
+
 export const CHAINID_TO_VIEM_CHAIN = {
   [mainnet.id]: mainnet,
   [polygon.id]: polygon,

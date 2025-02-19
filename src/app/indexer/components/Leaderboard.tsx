@@ -17,8 +17,7 @@ type TokenCount = { token: TokenInfo; count: number };
 export function Leaderboard() {
   const { queryParams, setQueryParams, response, setResponse, setResponseStatusCode } =
     usePlayground();
-  console.log("🚀  queryParams:", queryParams);
-  const [receiver, setReceiver] = useState(queryParams.receiver || "laurids.yodl2.eth");
+  const [receiver, setReceiver] = useState(queryParams.receiver || "vitalik.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
