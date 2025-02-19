@@ -2,17 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  Button,
-  Card,
-  Flex,
-  ScrollArea,
-  Section,
-  Spinner,
-  Table,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Button, Card, Flex, ScrollArea, Section, Table, Text, TextField } from "@radix-ui/themes";
 import { InfoBox } from "@/components/ui/InfoBox";
 import { getChain } from "@yodlpay/tokenlists";
 import { Address } from "viem";
@@ -53,7 +43,6 @@ export function ReadBlockchain() {
     console.log("🚀 resolvedAddress:", resolvedAddress);
     if (resolvedAddress) {
       setAddress(resolvedAddress);
-      // await fetchBalances(resolvedAddress);
     }
     setIsLoadingEns(false);
   };
@@ -73,7 +62,7 @@ export function ReadBlockchain() {
               <Text size="2">Ens</Text>
               <Flex
                 gap="3"
-                width="100%"
+                // width="100%"
                 // justify="between"
               >
                 <TextField.Root
@@ -83,7 +72,7 @@ export function ReadBlockchain() {
                   onChange={(e) => setEnsInput(e.target.value as Address)}
                 />
                 <Button size="2" disabled={!ensInput || isLoadingEns} onClick={handleEnsLookup}>
-                  {isLoadingEns ? <Spinner size="1" /> : <Text size="1">Lookup ENS</Text>}
+                  {isLoadingEns ? <Loader /> : <Text size="1">Lookup ENS</Text>}
                 </Button>
               </Flex>
             </Flex>
@@ -128,7 +117,7 @@ export function ReadBlockchain() {
                   disabled={!address || isLoadingAddress}
                   onClick={handleAddressSubmit}
                 >
-                  {isLoadingAddress ? <Spinner size="1" /> : <Text size="1">Get Balances</Text>}
+                  {isLoadingAddress ? <Loader /> : <Text size="1">Get Balances</Text>}
                 </Button>
               </Flex>
             </Flex>
