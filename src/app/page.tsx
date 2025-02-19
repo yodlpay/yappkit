@@ -10,11 +10,13 @@ import {
   Card,
   Link,
   Code,
+  Callout,
 } from "@radix-ui/themes";
 import { useUser } from "@/providers/UserProviders";
 import { Loader } from "@/components/ui/Loader";
 import { InfoBox } from "@/components/ui/InfoBox";
 import { UserInfoDisplay } from "./userInfoDisplay";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import * as Accordion from "@radix-ui/react-accordion";
 
 export default function ProfilePage() {
@@ -26,12 +28,19 @@ export default function ProfilePage() {
 
   if (!userInfo) {
     return (
-      <Box p="4">
-        <Heading size="4">User info could not be loaded</Heading>
-        <Heading as="h2" color="gray">
-          Make sure you open the app via the Yodl app.
-        </Heading>
-      </Box>
+      <Flex direction="column" gap="4" justify="center" align="center">
+        <Section p="4">
+          <Heading size="4">User info could not be loaded</Heading>
+        </Section>
+        <Section p="4">
+          <Callout.Root color="red">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>Make sure you open the app via the Yodl app.</Callout.Text>
+          </Callout.Root>
+        </Section>
+      </Flex>
     );
   }
 

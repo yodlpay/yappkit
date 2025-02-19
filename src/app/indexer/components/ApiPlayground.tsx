@@ -202,7 +202,7 @@ export function ApiPlayground() {
             </Flex>
             {response && (
               <Box width="100%">
-                <ScrollArea type="always" scrollbars="both" className="p-2 w-full max-h-72">
+                <ScrollArea scrollbars="both" className="p-2 w-full max-h-72">
                   <Flex gap="4" p="2" width="700px" className="text-xs">
                     <ResponseTable data={response} isExpanded={true} />
                   </Flex>
