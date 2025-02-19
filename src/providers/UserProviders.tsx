@@ -3,7 +3,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { Loader } from "@/components/Loader";
+import { Loader } from "@/components/ui/Loader";
 
 type UserInfo = {
   address: string;

@@ -18,7 +18,7 @@ import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvi
 import { ResponseTable } from "./ResponseTable";
 import { buildQueryString, fetchIndexerData } from "@/lib/indexerAapi";
 import { INDEXER_URL, SUPPORTED_CHAINS } from "@/constants";
-import { CodeCopy } from "@/components/CodeCopy";
+import { CodeCopy } from "@/components/ui/CodeCopy";
 
 type Input = {
   label: string;

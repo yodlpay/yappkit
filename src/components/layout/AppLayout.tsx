@@ -1,6 +1,6 @@
 import { Container, Flex } from "@radix-ui/themes";
-import { Navigation } from "./Navigation";
 import { Header } from "./Header";
+import { Navigation } from "./Navigation";
 
 type AppLayoutProps = {
   children: React.ReactNode;

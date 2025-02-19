@@ -1,5 +1,5 @@
 import { Section, Flex, Box, Heading } from "@radix-ui/themes";
-import { BackButton } from "./BackButton";
+import { BackButton } from "../ui/BackButton";
 
 type PageHeaderProps = {
   title: string;

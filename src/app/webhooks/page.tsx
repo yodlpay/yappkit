@@ -1,5 +1,5 @@
-import { PageHeader } from "@/components/PageHeader";
-import { StickyTopBox } from "@/components/StickyPageHeader";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StickyTopBox } from "@/components/ui/StickyTopBox";
 
 export default function WebhooksPage() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Flex, Text } from "@radix-ui/themes";
-import { useUser } from "../providers/UserProviders";
+import { useUser } from "../../providers/UserProviders";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { FaSink } from "react-icons/fa";

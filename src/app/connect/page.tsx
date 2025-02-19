@@ -1,8 +1,8 @@
 "use client";
 
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Flex, SegmentedControl } from "@radix-ui/themes";
-import { StickyTopBox } from "@/components/StickyPageHeader";
+import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { useState } from "react";
 import { TbHttpGet, TbHttpPost } from "react-icons/tb";
 import { ReadBlockchain } from "../components/ReadBlockchain";

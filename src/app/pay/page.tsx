@@ -1,7 +1,7 @@
 import { Box, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { FaChartLine, FaTrophy } from "react-icons/fa";
-import { PageHeader } from "@/components/PageHeader";
-import { StickyTopBox } from "@/components/StickyPageHeader";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StickyTopBox } from "@/components/ui/StickyTopBox";
 
 const PAY_SECTIONS = [
   {

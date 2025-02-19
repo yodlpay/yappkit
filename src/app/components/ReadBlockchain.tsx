@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button, Card, Flex, Heading, Section, Table, Text, TextField } from "@radix-ui/themes";
-import { InfoBox } from "@/components/InfoBox";
-import { useEns, useNativeBalances } from "@/utils/hooks/useNativeBalances";
+import { InfoBox } from "@/components/ui/InfoBox";
+import { useEns, useNativeBalances } from "@/hooks/useNativeBalances";
 import { getChain } from "@yodlpay/tokenlists";
 import { Address } from "viem";
 

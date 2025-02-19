@@ -12,8 +12,8 @@ import {
   Code,
 } from "@radix-ui/themes";
 import { useUser } from "@/providers/UserProviders";
-import { Loader } from "@/components/Loader";
-import { InfoBox } from "@/components/InfoBox";
+import { Loader } from "@/components/ui/Loader";
+import { InfoBox } from "@/components/ui/InfoBox";
 import { UserInfoDisplay } from "./userInfoDisplay";
 import * as Accordion from "@radix-ui/react-accordion";
 

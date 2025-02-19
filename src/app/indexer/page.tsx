@@ -1,13 +1,13 @@
 "use client";
 
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Flex, SegmentedControl } from "@radix-ui/themes";
 import { ApiPlayground } from "./components/ApiPlayground";
 import { Leaderboard } from "./components/Leaderboard";
 import { FaTrophy, FaChartLine } from "react-icons/fa";
-import { StickyTopBox } from "@/components/StickyPageHeader";
+import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { useState } from "react";
-import { LuToyBrick } from 'react-icons/lu';
+import { LuToyBrick } from "react-icons/lu";
 
 const INDEXER_SECTIONS = {
   playground: {

@@ -1,4 +1,4 @@
-import YappSDK from "@yodl/yapp-sdk";
+import YappSDK from "@yodlpay/yapp-sdk";
 
 // Single instance that can be imported anywhere
 export const sdk = new YappSDK({
