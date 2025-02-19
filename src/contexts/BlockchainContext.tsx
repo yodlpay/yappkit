@@ -13,6 +13,7 @@ type BlockchainState = {
   }[];
   addressFromEns: Address | null;
   lastEnsQueried: string | null;
+  lastAddressQueried: Address | null;
 };
 
 type BlockchainContextType = {
@@ -26,6 +27,7 @@ export const BlockchainContext = createContext<BlockchainContextType>({
     balances: [],
     addressFromEns: null,
     lastEnsQueried: null,
+    lastAddressQueried: null,
   },
   fetchBalances: async () => {},
   fetchEnsName: async () => null,
@@ -36,6 +38,7 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     balances: [],
     addressFromEns: null,
     lastEnsQueried: null,
+    lastAddressQueried: null,
   });
 
   const fetchBalances = async (address: Address) => {
@@ -60,6 +63,7 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     setState((prev) => ({
       ...prev,
       balances: results.filter((r): r is NonNullable<typeof r> => Boolean(r)),
+      lastAddressQueried: address,
     }));
   };
 

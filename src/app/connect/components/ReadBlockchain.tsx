@@ -17,7 +17,7 @@ export function ReadBlockchain() {
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
   const [isLoadingEns, setIsLoadingEns] = useState(false);
   const {
-    state: { balances, addressFromEns, lastEnsQueried },
+    state: { balances, addressFromEns, lastEnsQueried, lastAddressQueried },
     fetchBalances,
     fetchEnsName,
   } = useBlockchain();
@@ -51,7 +51,7 @@ export function ReadBlockchain() {
     <>
       <Section size="1">
         <InfoBox>
-          Yapps can use the details provided by the Yodl app to read data from the blockchain.
+          Yapps can use the details provided by the Yodl app to query data from the blockchain.
         </InfoBox>
       </Section>
 
@@ -97,7 +97,7 @@ export function ReadBlockchain() {
 
       <Section size="1">
         <Card>
-          <Flex direction="column" gap="2">
+          <Flex direction="column" gap="3">
             <Flex direction="column" gap="1">
               <Text size="2">Address</Text>
               <Flex
@@ -123,38 +123,48 @@ export function ReadBlockchain() {
             </Flex>
 
             {balances.length > 0 && (
-              <Table.Root size="1">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell justify="center">Chain</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell justify="center">Amount</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell justify="center">Coin</Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
+              <Flex direction="column" gap="1">
+                <Text as="p" size="2" className="text-start">
+                  Balances of{" "}
+                  <Text as="span" color={accentColor}>
+                    {lastAddressQueried?.slice(0, 6)}...{lastAddressQueried?.slice(-4)}
+                  </Text>
+                  :
+                </Text>
 
-                <Table.Body>
-                  {balances.map(({ chainId, formatted }) => (
-                    <Table.Row key={chainId}>
-                      <Table.RowHeaderCell justify="center">
-                        <Flex justify="center">
-                          <Image
-                            src={getChain(chainId).logoUri}
-                            alt={getChain(chainId).chainName}
-                            width={20}
-                            height={20}
-                          />
-                        </Flex>
-                      </Table.RowHeaderCell>
-                      <Table.Cell justify="center" className="font-mono ">
-                        {formatted.slice(0, 8)}
-                      </Table.Cell>
-                      <Table.Cell justify="center">
-                        <Text>{getChain(chainId).nativeTokenName}</Text>
-                      </Table.Cell>
+                <Table.Root size="1">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeaderCell justify="center">Chain</Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell justify="center">Amount</Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell justify="center">Coin</Table.ColumnHeaderCell>
                     </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
+                  </Table.Header>
+
+                  <Table.Body>
+                    {balances.map(({ chainId, formatted }) => (
+                      <Table.Row key={chainId}>
+                        <Table.RowHeaderCell justify="center">
+                          <Flex justify="center">
+                            <Image
+                              src={getChain(chainId).logoUri}
+                              alt={getChain(chainId).chainName}
+                              width={20}
+                              height={20}
+                            />
+                          </Flex>
+                        </Table.RowHeaderCell>
+                        <Table.Cell justify="center" className="font-mono ">
+                          {formatted.slice(0, 8)}
+                        </Table.Cell>
+                        <Table.Cell justify="center">
+                          <Text>{getChain(chainId).nativeTokenName}</Text>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              </Flex>
             )}
           </Flex>
         </Card>
