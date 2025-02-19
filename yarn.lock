@@ -2084,9 +2084,9 @@
   resolved "https://registry.yarnpkg.com/@yodlpay/tokenlists/-/tokenlists-0.8.5.tgz#299d01ba35e6a56c0e6ec1352fec2706e9478be1"
   integrity sha512-dABdYu6/auk6CxxBArpNPDraX5GzQrZj5KMVO+RpCv1zHBQpSQVhDYuFJTJ2/E9ftOdDjkmcVOxdDAA5hg3NYQ==
 
-"@yodlpay/yapp-sdk@github:yodlpay/yapp-sdk":
+"@yodlpay/yapp-sdk@https://github.com/yodlpay/yapp-sdk":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/yodlpay/yapp-sdk.git#7e5a4a94f680fb169e79c12d9ec615648db22eb5"
+  resolved "https://github.com/yodlpay/yapp-sdk#29b09d63a0be04aa425d99bd217584fa93eec418"
   dependencies:
     jose "^5.9.6"
 
