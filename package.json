@@ -18,7 +18,7 @@
     "@rainbow-me/rainbowkit": "^2.2.3",
     "@tanstack/react-query": "^5.66.0",
     "@yodlpay/tokenlists": "^0.8.4",
-    "@yodlpay/yapp-sdk": "github:yodlpay/yapp-sdk",
+    "@yodlpay/yapp-sdk": "https://github.com/yodlpay/yapp-sdk",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

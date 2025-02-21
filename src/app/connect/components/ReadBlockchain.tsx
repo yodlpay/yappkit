@@ -83,11 +83,9 @@ export function ReadBlockchain() {
 
       <Section size="1">
         <Flex direction="column" gap="3">
-          <Flex direction="column" gap="2" justify="center">
-            <Text align="center">
-              Look up the address of an ENS name or fetch the native coin balances of an address.
-            </Text>
-          </Flex>
+          <Text align="center">
+            Look up the address of an ENS name or fetch the native coin balances of an address.
+          </Text>
           <Card>
             <Flex direction="column" gap="4">
               <Flex direction="column" gap="3">
