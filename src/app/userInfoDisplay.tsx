@@ -32,7 +32,7 @@ export const UserInfoDisplay = () => {
     { label: "Ens", element: <CodeCopy text={ens || "n/a"} /> },
     { label: "Yapp", element: <CodeCopy text={yappEns} /> },
     { label: "Community", element: <CodeCopy text={communityEns} /> },
-    { label: "Exp", element: <Text>{formattedExpDate}</Text> },
+    { label: "Token Exp.", element: <Text>{formattedExpDate}</Text> },
   ];
   return (
     <Card size="2" className="max-w-[600px] mx-auto">

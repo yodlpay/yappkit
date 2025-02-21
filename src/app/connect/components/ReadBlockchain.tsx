@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button, Card, Flex, ScrollArea, Section, Table, Text, TextField } from "@radix-ui/themes";
+import {
+  Button,
+  Card,
+  Flex,
+  ScrollArea,
+  Section,
+  Table,
+  Text,
+  TextField,
+  Link,
+} from "@radix-ui/themes";
 import { InfoBox } from "@/components/ui/InfoBox";
 import { getChain } from "@yodlpay/tokenlists";
 import { Address } from "viem";
@@ -50,124 +60,140 @@ export function ReadBlockchain() {
   return (
     <>
       <Section size="1">
+        <Flex direction="column" gap="2" justify="center">
+          <Text align="center">
+            Querying data from the blockchain does not require a message signer. Libraries such as{" "}
+            {/* <Link href="https://ethers.org/">Ethers.js</Link> and{" "} */}
+            <Link href="https://docs.ethers.org/v5/" target="_blank">Ethers.js</Link> and{" "}
+            <Link href="https://viem.sh" target="_blank">Viem</Link> make it easy to get started.
+          </Text>
+        </Flex>
+      </Section>
+
+      <Section size="1">
         <InfoBox>
           Yapps can use the details provided by the Yodl app to query data from the blockchain.
         </InfoBox>
       </Section>
 
       <Section size="1">
-        <Card>
-          <Flex direction="column" gap="3">
-            <Flex direction="column" gap="1">
-              <Text size="2">Ens</Text>
-              <Flex
-                gap="3"
-                // width="100%"
-                // justify="between"
-              >
-                <TextField.Root
-                  size="2"
-                  placeholder="vitalik.eth"
-                  value={ensInput || ""}
-                  onChange={(e) => setEnsInput(e.target.value as Address)}
-                />
-                <Button size="2" disabled={!ensInput || isLoadingEns} onClick={handleEnsLookup}>
-                  {isLoadingEns ? <Loader /> : <Text size="1">Lookup ENS</Text>}
-                </Button>
+        <Flex direction="column" gap="3">
+          <Flex direction="column" gap="2" justify="center">
+            <Text align="center">
+              Look up the address of an ENS name or fetch the native coin balances of an address.
+            </Text>
+          </Flex>
+          <Card>
+            <Flex direction="column" gap="4">
+              <Flex direction="column" gap="3">
+                <Flex direction="column" gap="1">
+                  <Text size="2">Ens</Text>
+                  <Flex
+                    gap="3"
+                    // width="100%"
+                    // justify="between"
+                  >
+                    <TextField.Root
+                      size="2"
+                      placeholder="vitalik.eth"
+                      value={ensInput || ""}
+                      onChange={(e) => setEnsInput(e.target.value as Address)}
+                    />
+                    <Button size="2" disabled={!ensInput || isLoadingEns} onClick={handleEnsLookup}>
+                      {isLoadingEns ? <Loader /> : <Text size="1">Lookup ENS</Text>}
+                    </Button>
+                  </Flex>
+                </Flex>
+
+                {addressFromEns && (
+                  <Flex direction="column" gap="1">
+                    <Text as="p" size="2" className="text-start">
+                      Address of{" "}
+                      <Text as="span" color={accentColor}>
+                        {lastEnsQueried}
+                      </Text>
+                      :
+                    </Text>
+                    <ScrollArea scrollbars="horizontal" className="text-xs py-1">
+                      <CodeCopy text={addressFromEns} position="back" justify="start" />
+                    </ScrollArea>
+                  </Flex>
+                )}
+              </Flex>
+
+              <Flex direction="column" gap="3">
+                <Flex direction="column" gap="1">
+                  <Text size="2">Address</Text>
+                  <Flex
+                    gap="3"
+                    // width="100%"
+                    // justify="between"
+                  >
+                    <TextField.Root
+                      size="2"
+                      placeholder="Enter address (0x...)"
+                      value={address || ""}
+                      onChange={(e) => handleAddressChange(e.target.value)}
+                    ></TextField.Root>
+                    <Button
+                      size="2"
+                      type="submit"
+                      disabled={!address || isLoadingAddress}
+                      onClick={handleAddressSubmit}
+                    >
+                      {isLoadingAddress ? <Loader /> : <Text size="1">Get Balances</Text>}
+                    </Button>
+                  </Flex>
+                </Flex>
+
+                {balances.length > 0 && (
+                  <Flex direction="column" gap="1">
+                    <Text as="p" size="2" className="text-start">
+                      Balances of{" "}
+                      <Text as="span" color={accentColor}>
+                        {lastAddressQueried?.slice(0, 6)}...{lastAddressQueried?.slice(-4)}
+                      </Text>
+                      :
+                    </Text>
+
+                    <Table.Root size="1">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.ColumnHeaderCell justify="center">Chain</Table.ColumnHeaderCell>
+                          <Table.ColumnHeaderCell justify="center">Amount</Table.ColumnHeaderCell>
+                          <Table.ColumnHeaderCell justify="center">Coin</Table.ColumnHeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        {balances.map(({ chainId, formatted }) => (
+                          <Table.Row key={chainId}>
+                            <Table.RowHeaderCell justify="center">
+                              <Flex justify="center">
+                                <Image
+                                  src={getChain(chainId).logoUri}
+                                  alt={getChain(chainId).chainName}
+                                  width={20}
+                                  height={20}
+                                />
+                              </Flex>
+                            </Table.RowHeaderCell>
+                            <Table.Cell justify="center" className="font-mono ">
+                              {formatted.slice(0, 8)}
+                            </Table.Cell>
+                            <Table.Cell justify="center">
+                              <Text>{getChain(chainId).nativeTokenName}</Text>
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table.Root>
+                  </Flex>
+                )}
               </Flex>
             </Flex>
-
-            {addressFromEns && (
-              <Flex direction="column" gap="1">
-                <Text as="p" size="2" className="text-start">
-                  Address of{" "}
-                  <Text as="span" color={accentColor}>
-                    {lastEnsQueried}
-                  </Text>
-                  :
-                </Text>
-                <ScrollArea scrollbars="horizontal" className="text-xs py-1">
-                  <CodeCopy text={addressFromEns} position="back" justify="start" />
-                </ScrollArea>
-              </Flex>
-            )}
-          </Flex>
-        </Card>
-      </Section>
-
-      <Section size="1">
-        <Card>
-          <Flex direction="column" gap="3">
-            <Flex direction="column" gap="1">
-              <Text size="2">Address</Text>
-              <Flex
-                gap="3"
-                // width="100%"
-                // justify="between"
-              >
-                <TextField.Root
-                  size="2"
-                  placeholder="Enter address (0x...)"
-                  value={address || ""}
-                  onChange={(e) => handleAddressChange(e.target.value)}
-                ></TextField.Root>
-                <Button
-                  size="2"
-                  type="submit"
-                  disabled={!address || isLoadingAddress}
-                  onClick={handleAddressSubmit}
-                >
-                  {isLoadingAddress ? <Loader /> : <Text size="1">Get Balances</Text>}
-                </Button>
-              </Flex>
-            </Flex>
-
-            {balances.length > 0 && (
-              <Flex direction="column" gap="1">
-                <Text as="p" size="2" className="text-start">
-                  Balances of{" "}
-                  <Text as="span" color={accentColor}>
-                    {lastAddressQueried?.slice(0, 6)}...{lastAddressQueried?.slice(-4)}
-                  </Text>
-                  :
-                </Text>
-
-                <Table.Root size="1">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeaderCell justify="center">Chain</Table.ColumnHeaderCell>
-                      <Table.ColumnHeaderCell justify="center">Amount</Table.ColumnHeaderCell>
-                      <Table.ColumnHeaderCell justify="center">Coin</Table.ColumnHeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-
-                  <Table.Body>
-                    {balances.map(({ chainId, formatted }) => (
-                      <Table.Row key={chainId}>
-                        <Table.RowHeaderCell justify="center">
-                          <Flex justify="center">
-                            <Image
-                              src={getChain(chainId).logoUri}
-                              alt={getChain(chainId).chainName}
-                              width={20}
-                              height={20}
-                            />
-                          </Flex>
-                        </Table.RowHeaderCell>
-                        <Table.Cell justify="center" className="font-mono ">
-                          {formatted.slice(0, 8)}
-                        </Table.Cell>
-                        <Table.Cell justify="center">
-                          <Text>{getChain(chainId).nativeTokenName}</Text>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table.Root>
-              </Flex>
-            )}
-          </Flex>
-        </Card>
+          </Card>
+        </Flex>
       </Section>
     </>
   );

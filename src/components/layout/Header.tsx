@@ -23,7 +23,12 @@ export function Header() {
       <Link href="/">
         <FaSink color="var(--accent-9)" size={24} />
       </Link>
-      <ConnectButton label="Connect" chainStatus="none" accountStatus="avatar" />
+      <ConnectButton label="Connect" 
+      // chainStatus="none" 
+      chainStatus="icon" 
+      accountStatus="avatar" 
+      // accountStatus="full" 
+      />
       {/* {userInfo?.truncatedAddress && (
         <Text size='1' color='gray'>
           {userInfo.truncatedAddress}
