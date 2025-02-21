@@ -5731,7 +5731,21 @@ valtio@1.11.2:
     proxy-compare "2.5.1"
     use-sync-external-store "1.2.0"
 
-viem@^2.1.1, viem@^2.23.2, viem@^2.23.3:
+viem@2.23.1:
+  version "2.23.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.23.1.tgz#5fe527de258e33b2445af266698fd6575068112d"
+  integrity sha512-c5AyJCTA5LeNI/KCu++vkbqbh7irYjUSHxLIAHPKJ6IEcBNMt8+7sPG7gjMXpqVWnqPMzaW9CA2n+yUsKWttDA==
+  dependencies:
+    "@noble/curves" "1.8.1"
+    "@noble/hashes" "1.7.1"
+    "@scure/bip32" "1.6.2"
+    "@scure/bip39" "1.5.4"
+    abitype "1.0.8"
+    isows "1.0.6"
+    ox "0.6.7"
+    ws "8.18.0"
+
+viem@^2.1.1, viem@^2.23.3:
   version "2.23.4"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.23.4.tgz#164279352d7b5df2603e3d338386b026dc355b80"
   integrity sha512-UQquuolKlS1w5H5e0Fd1KKoUlIPJryIEBzY5AUhGyV1ka+9O6+3uYVhUzj6RbvGK0PtsMKn2ddwPZFwjNDVU/A==
