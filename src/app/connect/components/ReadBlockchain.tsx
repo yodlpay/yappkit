@@ -63,9 +63,14 @@ export function ReadBlockchain() {
         <Flex direction="column" gap="2" justify="center">
           <Text align="center">
             Querying data from the blockchain does not require a message signer. Libraries such as{" "}
-            {/* <Link href="https://ethers.org/">Ethers.js</Link> and{" "} */}
-            <Link href="https://docs.ethers.org/v5/" target="_blank">Ethers.js</Link> and{" "}
-            <Link href="https://viem.sh" target="_blank">Viem</Link> make it easy to get started.
+            <Link href="https://docs.ethers.org/v5/" target="_blank">
+              Ethers.js
+            </Link>{" "}
+            and{" "}
+            <Link href="https://viem.sh" target="_blank">
+              Viem
+            </Link>{" "}
+            make it easy to get started.
           </Text>
         </Flex>
       </Section>
