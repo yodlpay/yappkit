@@ -64,7 +64,7 @@ export default function PayPage() {
     const payload = {
       amount,
       currency,
-      memo: "Premium subscription",
+      // memo: "Premium subscription",
     };
 
     try {
