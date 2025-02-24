@@ -146,7 +146,7 @@ export default function PayPage() {
                 </Flex>
               </Flex>
 
-              <Button onClick={handlePayment} size="2">
+              <Button onClick={handlePayment} size="2" disabled={!receiver || !amount || !currency}>
                 Pay
               </Button>
 
