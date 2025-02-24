@@ -86,9 +86,9 @@ export function ReadBlockchain() {
         </Text>
       </Section>
 
-      <Section size="1">
+      <Section size="1" pt="0">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Loop up ENS and fetch balances
+          Fetch address and balances
         </Heading>
         <Card>
           <Flex direction="column" gap="4">

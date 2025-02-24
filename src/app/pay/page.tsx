@@ -96,16 +96,14 @@ export default function PayPage() {
         </Flex>
       </Section>
 
-      <Section size="1">
-        <InfoBox>
-          <Code>requestPayment</Code> calls <Code>window.postMessage</Code>
-          for secure communication between the iframe and the parent.
-        </InfoBox>
-      </Section>
+      <InfoBox>
+        <Code>requestPayment</Code> calls <Code>window.postMessage</Code>
+        for secure communication between the iframe and the parent.
+      </InfoBox>
 
       <Section size="1">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Initaite a payment
+          Initiate a payment
         </Heading>
         <Card>
           <Flex direction="column" gap="4">

@@ -59,8 +59,7 @@ export function WriteBlockchain() {
       <Section size="1">
         <Flex direction="column" gap="2" justify="center">
           <Text align="center">
-            Increment the count on the Counter contract. Connect a wallet and select one of base,
-            polygon or arbitrum chain.
+            Increment the count on the Counter contract. Connect a wallet and select chain.
           </Text>
         </Flex>
       </Section>

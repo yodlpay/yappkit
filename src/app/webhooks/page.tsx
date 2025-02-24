@@ -4,7 +4,6 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { CodeCopy } from "@/components/ui/CodeCopy";
 import { InfoBox } from "@/components/ui/InfoBox";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
-// import { Accordion } from '@radix-ui/react-accordion';
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
@@ -199,14 +198,10 @@ export default function WebhooksPage() {
         </Text>
       </Section>
 
-      <Section size="1">
-        <InfoBox>
-          Communities, yapps and users can set their own webhook URLs.
-        </InfoBox>
-      </Section>
+      <InfoBox>Communities, yapps and users can set their own webhook URLs.</InfoBox>
 
       <Section size="1">
-      <Heading as="h3" size="2" align="center" mb="2" color="gray">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
           Get Started
         </Heading>
         <Accordion.Root type="single" collapsible className="text-sm">
@@ -234,76 +229,6 @@ export default function WebhooksPage() {
                 </Accordion.Item>
               </Card>
             ))}
-
-            {/* <Card>
-              <Flex direction="column" gap="2">
-                <Heading as="h3" size="3">
-                  Step 2: Configure ENS Record
-                </Heading>
-                <Text>
-                  <Flex gap="2">
-                    <Text size="2">1.</Text>
-                    <Text size="2">
-                      Go to{" "}
-                      <Link href="https://app.justaname.id/" target="_blank">
-                        JustaName
-                      </Link>{" "}
-                      and connect with your current wallet
-                    </Text>
-                  </Flex>
-                </Text>
-                {justanameSteps.map((step, idx) => (
-                  <Flex key={step} gap="2">
-                    <Text size="2">{idx + 2}.</Text>
-                    <Text size="2">{step}.</Text>
-                  </Flex>
-                ))}
-                {webhookUrl ? (
-                  <ScrollArea scrollbars="horizontal" className="text-xs py-1">
-                    <CodeCopy
-                      text={`"webhooks": ["${webhookUrl}"]`}
-                      position="back"
-                      justify="start"
-                    />
-                  </ScrollArea>
-                ) : (
-                  <InfoBox color="gray">
-                    <Text>Generate a URL to get the yodl.me record</Text>
-                  </InfoBox>
-                )}
-              </Flex>
-            </Card>
-
-            <Card>
-              <Flex direction="column" gap="2">
-                <Heading as="h3" size="3">
-                  Step 3: Receive and inspect notifications
-                </Heading>
-                <Flex gap="2">
-                  <Text size="2">1.</Text>
-                  <Text size="2">You are now set up to receive notifications.</Text>
-                </Flex>
-                <Flex gap="2">
-                  <Text size="2">2.</Text>
-                  <Text size="2">
-                    Send yourself a payment to test it <Link href="./pay">here</Link>.
-                  </Text>
-                </Flex>
-                <Flex gap="2">
-                  <Text size="2">3.</Text>
-                  <Text size="2">
-                    Inspect the webhook notification
-                    {webhookType === "generate" && (
-                      <Link href={webhookVisitUrl!} target="_blank">
-                        {" "}
-                        here
-                      </Link>
-                    )}
-                    .
-                  </Text>
-                </Flex>
-              </Flex>
-            </Card> */}
           </Flex>
         </Accordion.Root>
       </Section>
