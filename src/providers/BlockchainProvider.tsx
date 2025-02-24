@@ -8,7 +8,6 @@ import { COUNTER_ABI } from "@/constants/contractAbi";
 import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
 import { base } from "viem/chains";
 import { SupportedChainId } from "@/types";
-
 type BlockchainState = {
   balances: {
     chainId: number;
@@ -28,7 +27,7 @@ type BlockchainContextType = {
   fetchCounterValue: (chainId?: number) => Promise<void>;
 };
 
-export const BlockchainContext = createContext<BlockchainContextType>({
+const BlockchainContext = createContext<BlockchainContextType>({
   state: {
     balances: [],
     addressFromEns: null,

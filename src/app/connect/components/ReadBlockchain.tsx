@@ -18,7 +18,7 @@ import { InfoBox } from "@/components/ui/InfoBox";
 import { getChain } from "@yodlpay/tokenlists";
 import { Address } from "viem";
 import { Loader } from "@/components/ui/Loader";
-import { useBlockchain } from "@/contexts/BlockchainContext";
+import { useBlockchain } from "@/providers/BlockchainProvider";
 import { CodeCopy } from "@/components/ui/CodeCopy";
 import { accentColor } from "@/constants";
 

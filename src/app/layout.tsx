@@ -6,7 +6,7 @@ import { UserProvider } from "@/providers/UserProviders";
 import { WalletProvider } from "@/providers/WalletProvider";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import { BlockchainProvider } from "@/contexts/BlockchainContext";
+import { BlockchainProvider } from "@/providers/BlockchainProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

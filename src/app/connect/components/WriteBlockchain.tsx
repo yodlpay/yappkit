@@ -6,7 +6,7 @@ import { COUNTER_ABI } from "@/constants/contractAbi";
 import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
 import { base } from "viem/chains";
 import { Loader } from "@/components/ui/Loader";
-import { useBlockchain } from "@/contexts/BlockchainContext";
+import { useBlockchain } from "@/providers/BlockchainProvider";
 
 export function WriteBlockchain() {
   const { isConnected, chainId } = useAccount();
