@@ -31,13 +31,10 @@ function UserProviderInner({ children }: { children: ReactNode }) {
   useEffect(() => {
     const verifyJWT = async () => {
       const jwt = searchParams.get("jwt");
-      console.log("🚀  jwt:", jwt);
 
       if (jwt) {
         try {
-          // const { sdk } = await import("@/lib/sdk"); // Dynamic import
           const payload = await sdk.verify(jwt);
-          console.log("🚀  payload:", payload);
 
           if (!payload) throw new Error("Invalid JWT payload");
 

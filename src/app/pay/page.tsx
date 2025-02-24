@@ -88,12 +88,10 @@ export default function PayPage() {
       </StickyTopBox>
 
       <Section size="1">
-        <Flex direction="column" gap="2" justify="center">
-          <Text align="center">
-            To initiate Yodl payments, yapps should use the <Code>requestPayment()</Code> function
-            exposed by the yapp SDK.
-          </Text>
-        </Flex>
+        <Text as="p" align="center">
+          To initiate Yodl payments, yapps should use the <Code>requestPayment()</Code> function
+          exposed by the yapp SDK.
+        </Text>
       </Section>
 
       <InfoBox>

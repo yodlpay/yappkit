@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Button, Flex, Text, Link } from "@radix-ui/themes";
 import { useUser } from "../../providers/UserProviders";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
-import { FaSink } from "react-icons/fa";
-import Link from "next/link";
+import { FaGithub, FaSink } from "react-icons/fa";
+// import Link from "next/link";
 export function Header() {
   const { userInfo } = useUser();
 
@@ -20,14 +20,20 @@ export function Header() {
     >
       {/* <Image src='/favicon.ico' alt='Kitchensink Logo' width={24} height={24} /> */}
       {/* <Image src='/kitchensink-logo.png' alt='Kitchensink Logo' width={24} height={24} /> */}
-      <Link href="/">
-        <FaSink color="var(--accent-9)" size={24} />
-      </Link>
-      <ConnectButton label="Connect" 
-      // chainStatus="none" 
-      chainStatus="icon" 
-      accountStatus="avatar" 
-      // accountStatus="full" 
+      <Flex gap="2">
+        {/* <Link href="/">
+          <FaSink color="var(--accent-9)" size={24} />
+        </Link> */}
+        <Link href="https://github.com/AndyOooh/kitchensink-yapp" target="_blank">
+          <FaGithub color="var(--accent-9)" size={24} />
+        </Link>
+      </Flex>
+      <ConnectButton
+        label="Connect"
+        // chainStatus="none"
+        chainStatus="icon"
+        accountStatus="avatar"
+        // accountStatus="full"
       />
       {/* {userInfo?.truncatedAddress && (
         <Text size='1' color='gray'>
