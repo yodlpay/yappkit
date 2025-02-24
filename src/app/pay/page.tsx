@@ -12,6 +12,7 @@ import {
   TextField,
   Select,
   Badge,
+  Heading,
 } from "@radix-ui/themes";
 import { FaChartLine, FaTrophy } from "react-icons/fa";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -89,95 +90,95 @@ export default function PayPage() {
       <Section size="1">
         <Flex direction="column" gap="2" justify="center">
           <Text align="center">
-            Yodl payments in yapps are handled by the yapp-sdk. Yapps send a{" "}
-            <Code>postMessage()</Code> to the parent window with the payment details.
+            To initiate Yodl payments, yapps should use the <Code>requestPayment()</Code> function
+            exposed by the yapp SDK.
           </Text>
         </Flex>
       </Section>
 
       <Section size="1">
         <InfoBox>
-          <Code>window.postMessage</Code> is the most secure way to communicate between yapps and
-          the main app.
+          <Code>requestPayment</Code> calls <Code>window.postMessage</Code>
+          for secure communication between the iframe and the parent.
         </InfoBox>
       </Section>
 
       <Section size="1">
-        <Flex direction="column" gap="3">
-          <Text align="center">Initaite a payment in the Yodl app.</Text>
-          <Card>
-            <Flex direction="column" gap="4">
-              <Flex direction="column" gap="3">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Initaite a payment
+        </Heading>
+        <Card>
+          <Flex direction="column" gap="4">
+            <Flex direction="column" gap="3">
+              <Flex direction="column" gap="1">
+                <Text size="2">To</Text>
+                <TextField.Root
+                  size="2"
+                  value={receiver}
+                  onChange={(e) => setReceiver(e.target.value)}
+                  placeholder="Enter receiver address"
+                />
+              </Flex>
+              <Flex justify="between">
                 <Flex direction="column" gap="1">
-                  <Text size="2">To</Text>
+                  <Text size="2">Amount</Text>
                   <TextField.Root
                     size="2"
-                    value={receiver}
-                    onChange={(e) => setReceiver(e.target.value)}
-                    placeholder="Enter receiver address or ENS"
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(Number(e.target.value))}
+                    placeholder="Enter amount"
                   />
                 </Flex>
-                <Flex justify="between">
-                  <Flex direction="column" gap="1">
-                    <Text size="2">Amount</Text>
-                    <TextField.Root
-                      size="2"
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(Number(e.target.value))}
-                      placeholder="Enter amount"
-                    />
-                  </Flex>
-                  <Flex direction="column" gap="1">
-                    <Text size="2">Currency</Text>
-                    <Select.Root
-                      value={currency}
-                      onValueChange={(value) => setCurrency(value as FiatCurrency)}
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        {CURRENCY_OPTIONS.map((option) => (
-                          <Select.Item key={option.value} value={option.value}>
-                            {option.label}
-                          </Select.Item>
-                        ))}
-                      </Select.Content>
-                    </Select.Root>
-                  </Flex>
+                <Flex direction="column" gap="1">
+                  <Text size="2">Currency</Text>
+                  <Select.Root
+                    value={currency}
+                    onValueChange={(value) => setCurrency(value as FiatCurrency)}
+                  >
+                    <Select.Trigger />
+                    <Select.Content>
+                      {CURRENCY_OPTIONS.map((option) => (
+                        <Select.Item key={option.value} value={option.value}>
+                          {option.label}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Root>
                 </Flex>
-
-                <Button onClick={handlePayment} size="2">
-                  Pay
-                </Button>
-
-                {error && (
-                  <Text color="red" size="2">
-                    {error}
-                  </Text>
-                )}
-
-                {paymentResponse?.txHash && (
-                  <Flex direction="column" gap="1">
-                    <Text size="2">
-                      Payment on {getChain(paymentResponse.chainId).chainName}{" "} chain
-                      <Badge color="green">Successful.</Badge>
-                    </Text>
-                    <Text size="2">
-                      <Link
-                        href={`${
-                          EXPLORERLINK_BY_CHAINID[paymentResponse.chainId as SupportedChainId]
-                        }/${paymentResponse.txHash}`}
-                        target="_blank"
-                      >
-                        View on explorer
-                      </Link>
-                    </Text>
-                  </Flex>
-                )}
               </Flex>
+
+              <Button onClick={handlePayment} size="2">
+                Pay
+              </Button>
+
+              {error && (
+                <Text color="red" size="2">
+                  {error}
+                </Text>
+              )}
+
+              {paymentResponse?.txHash && (
+                <Flex direction="column" gap="1">
+                  <Text size="2">
+                    Payment on {getChain(paymentResponse.chainId).chainName} chain
+                    <Badge color="green">Successful.</Badge>
+                  </Text>
+                  <Text size="2">
+                    <Link
+                      href={`${
+                        EXPLORERLINK_BY_CHAINID[paymentResponse.chainId as SupportedChainId]
+                      }/${paymentResponse.txHash}`}
+                      target="_blank"
+                    >
+                      View on explorer
+                    </Link>
+                  </Text>
+                </Flex>
+              )}
             </Flex>
-          </Card>
-        </Flex>
+          </Flex>
+        </Card>
       </Section>
     </>
   );

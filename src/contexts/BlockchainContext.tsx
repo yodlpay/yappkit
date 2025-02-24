@@ -4,6 +4,10 @@ import { SUPPORTED_CHAIN_IDS } from "@/constants";
 import { getPublicClientByChainId } from "@/lib/viem";
 import { useState, createContext, useContext } from "react";
 import { formatEther, Address } from "viem";
+import { COUNTER_ABI } from "@/constants/contractAbi";
+import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
+import { base } from "viem/chains";
+import { SupportedChainId } from "@/types";
 
 type BlockchainState = {
   balances: {
@@ -14,12 +18,14 @@ type BlockchainState = {
   addressFromEns: Address | null;
   lastEnsQueried: string | null;
   lastAddressQueried: Address | null;
+  counterValue: bigint | null;
 };
 
 type BlockchainContextType = {
   state: BlockchainState;
   fetchBalances: (address: Address) => Promise<void>;
   fetchEnsName: (ensName: string) => Promise<Address | null>;
+  fetchCounterValue: (chainId?: number) => Promise<void>;
 };
 
 export const BlockchainContext = createContext<BlockchainContextType>({
@@ -28,9 +34,11 @@ export const BlockchainContext = createContext<BlockchainContextType>({
     addressFromEns: null,
     lastEnsQueried: null,
     lastAddressQueried: null,
+    counterValue: null,
   },
   fetchBalances: async () => {},
   fetchEnsName: async () => null,
+  fetchCounterValue: async () => {},
 });
 
 export function BlockchainProvider({ children }: { children: React.ReactNode }) {
@@ -39,6 +47,7 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     addressFromEns: null,
     lastEnsQueried: null,
     lastAddressQueried: null,
+    counterValue: null,
   });
 
   const fetchBalances = async (address: Address) => {
@@ -86,8 +95,22 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     }
   };
 
+  const fetchCounterValue = async (chainId: number = base.id) => {
+    const client = getPublicClientByChainId(chainId as SupportedChainId);
+    try {
+      const value = await client.readContract({
+        address: COUNTER_ADDRESS_BY_CHAIN[chainId],
+        abi: COUNTER_ABI,
+        functionName: "number",
+      });
+      setState((prev) => ({ ...prev, counterValue: value }));
+    } catch (error) {
+      console.error("Error reading counter value:", error);
+    }
+  };
+
   return (
-    <BlockchainContext.Provider value={{ state, fetchBalances, fetchEnsName }}>
+    <BlockchainContext.Provider value={{ state, fetchBalances, fetchEnsName, fetchCounterValue }}>
       {children}
     </BlockchainContext.Provider>
   );

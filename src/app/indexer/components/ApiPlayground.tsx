@@ -12,7 +12,7 @@ import {
   TextField,
   Grid,
   Card,
-  Select,
+  Heading,
 } from "@radix-ui/themes";
 import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvider";
 import { ResponseTable } from "./ResponseTable";
@@ -25,26 +25,11 @@ type Input = {
   key: QueryParamKey;
   placeholder: string;
   alt?: Input;
-  // alt?: {
-  //   label: string;
-  //   key: QueryParamKey;
-  //   placeholder: string;
-  // };
   type?: string;
   options?: { label: string; value: string }[];
 };
 
 const inputs: Input[] = [
-  // {
-  //   label: "Sender",
-  //   key: "sender",
-  //   placeholder: "Sender ENS or Address",
-  //   alt: {
-  //     label: "SenderEns",
-  //     key: "senderEns",
-  //     placeholder: "Sender ENS",
-  //   },
-  // },
   {
     label: "Sender",
     key: "sender",
@@ -97,7 +82,7 @@ export function ApiPlayground() {
 
   const handleCheckboxChange = (key: QueryParamKey) => (values: string[]) => {
     const currentValues = (queryParams[key] as string[]) || [];
-    const lastSelected = values[values.length - 1]; // Get the most recently selected value
+    const lastSelected = values[values.length - 1];
     if (lastSelected === "all") {
       setQueryParams({ ...queryParams, [key]: ["all"] });
     } else if (currentValues.includes("all")) {
@@ -131,6 +116,9 @@ export function ApiPlayground() {
   return (
     <>
       <Section size="1">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Fetch payments
+        </Heading>
         <Card>
           <Flex direction="column" gap="2" align="start">
             {inputs.map((input, index) =>
@@ -182,6 +170,9 @@ export function ApiPlayground() {
       </Section>
 
       <Section size="1" pt="0">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Inspect response
+        </Heading>
         <Card>
           <Flex direction="column" gap="2" align="start">
             <Flex gap="2" justify="between" align="center" width="100%">

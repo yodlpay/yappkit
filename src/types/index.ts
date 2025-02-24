@@ -1,3 +1,3 @@
-import { CHAINID_TO_VIEM_CHAIN, SUPPORTED_CHAIN_IDS } from "@/constants";
+import { CHAINID_TO_VIEM_CHAIN } from "@/constants";
 
 export type SupportedChainId = keyof typeof CHAINID_TO_VIEM_CHAIN;

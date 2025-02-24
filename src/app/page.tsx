@@ -48,34 +48,30 @@ export default function ProfilePage() {
     {
       key: "qestion-1",
       question: "What is a Yapp?",
-      answer: "A Yapp is an app that implements the Yodl protocol",
+      answer: "A Yapp is an app that implements the Yodl protocol.",
     },
     {
       key: "qestion-2",
       question: "What is Kitchen Sink?",
-      answer: "Kitchen Sink is a demo Yapp",
-    },
-    {
-      key: "qestion-3",
-      question: "What about wallet connection?",
-      answer:
-        "Yapps can use the Yodl UI for sending funds. For other transactions, they must implement their own connection logic",
-      content: (
-        <Text>
-          Yapps can use the Yodl UI for sending funds. For other transactions, they must implement
-          their own connection logic. <Link href="/connect">Try it out</Link>
-        </Text>
-      ),
+      answer: "Kitchen Sink is a demo Yapp.",
     },
     {
       key: "qestion-4",
       question: "How to send Yodl transactions?",
-      answer:
-        "Use postMessage() for sending transactions to the parent window. More details in the yapp-sdk docs",
       content: (
         <Text>
-          Use <Code>postMessage()</Code> to send transactions details to the Yodl app.{" "}
-          <Link href="/pay">Try it out</Link>
+          Use the <Code>requestPayment()</Code> function from the yapp SDK.{" "}
+          <Link href="/pay">Try it out</Link>.
+        </Text>
+      ),
+    },
+    {
+      key: "qestion-3",
+      question: "What about wallet connection?",
+      content: (
+        <Text>
+          To send on-chain transactions besides Yodl transactions, yapps must implement their own
+          wallet connection. <Link href="/connect">Learn more</Link>.
         </Text>
       ),
     },

@@ -1,4 +1,14 @@
-import { Box, Section, Table, TextField, Select, Flex, Text, Button, Card } from "@radix-ui/themes";
+import {
+  Section,
+  Table,
+  TextField,
+  Select,
+  Flex,
+  Text,
+  Button,
+  Card,
+  Heading,
+} from "@radix-ui/themes";
 import { usePlayground } from "../../../providers/PlaygroundProvider";
 import { useEffect, useState } from "react";
 import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
@@ -34,8 +44,6 @@ export function Leaderboard() {
 
   const handleSubmit = async () => {
     try {
-      // const params = { [receiver.startsWith("0x") ? "receiver" : "receiverEnsPrimaryName"]: receiver };
-      // const { status, data } = await fetchIndexerData("/payments", params);
       const { status, data } = await fetchIndexerData("/payments", { receiver });
       setQueryParams({ receiver });
       setResponseStatusCode(status);
@@ -75,15 +83,9 @@ export function Leaderboard() {
   const getLeaderboardData = (payments: any[]): LeaderboardItem[] => {
     if (!payments) return [];
 
-    // Debug logs
-    console.log("Payments:", payments);
-    console.log("Selected Token:", selectedToken?.symbol);
-
     const filteredPayments = selectedToken
       ? payments.filter((p) => p.tokenOutSymbol === selectedToken.symbol.toUpperCase()) // Changed to compare with symbol
       : payments;
-
-    console.log("Filtered Payments:", filteredPayments);
 
     const senderTotals = filteredPayments.reduce(
       (acc: Record<string, { amount: number; count: number }>, payment: any) => {
@@ -112,24 +114,20 @@ export function Leaderboard() {
       }));
   };
 
-  // Update the useEffect to manage leaderboard state
   useEffect(() => {
-    console.log("Response changed:", response?.payments?.length);
     if (response?.payments) {
       processData(response);
       const newLeaderboard = getLeaderboardData(response.payments);
-      console.log("New leaderboard:", newLeaderboard);
       setLeaderboardData(newLeaderboard);
     }
-  }, [response, selectedToken]); // Add selectedToken as dependency
-
-  // Remove the direct calculation from render
-  // const leaderboard = response ? getLeaderboardData(response.payments) : [];
-  console.log("🚀  leaderboard:", leaderboardData);
+  }, [response, selectedToken]);
 
   return (
     <>
       <Section size="1">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Create a leaderboard
+        </Heading>
         <Card>
           <Flex direction="column" gap="1">
             <Text size="2">Receiver</Text>
@@ -149,6 +147,9 @@ export function Leaderboard() {
       </Section>
 
       <Section size="1" pt="0">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Leaderboard
+        </Heading>
         <Card>
           {availableTokens.length > 0 && (
             <Section size="1" pt="0">
