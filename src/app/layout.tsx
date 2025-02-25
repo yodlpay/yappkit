@@ -40,7 +40,7 @@ export default function RootLayout({
               accentColor="teal"
               hasBackground={false}
               panelBackground="translucent"
-              radius="small"
+              radius="medium"
               appearance="dark"
             >
               <BlockchainProvider>

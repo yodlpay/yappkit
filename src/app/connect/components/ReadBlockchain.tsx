@@ -1,193 +1,139 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import {
-  Button,
-  Card,
-  Flex,
-  ScrollArea,
-  Section,
-  Table,
-  Text,
-  TextField,
-  Link,
-  Heading,
-} from "@radix-ui/themes";
-import { InfoBox } from "@/components/ui/InfoBox";
-import { getChain } from "@yodlpay/tokenlists";
-import { Address } from "viem";
-import { Loader } from "@/components/ui/Loader";
+import { Card, Flex, Section, Table, Text, Select, Heading, Callout } from "@radix-ui/themes";
 import { useBlockchain } from "@/providers/BlockchainProvider";
-import { CodeCopy } from "@/components/ui/CodeCopy";
-import { accentColor } from "@/constants";
+import { CardList } from "@/components/ui/CardList";
+import { useUser } from "@/providers/UserProviders";
+import { SupportedChainId } from "@/types";
+import { SUPPORTED_CHAINS } from "@/constants";
+
+const useCases = [
+  {
+    title: "Balance",
+    text: "Fetch token balances of users.",
+  },
+  {
+    title: "Airdrop",
+    text: "Target users or communities in airdrops.",
+  },
+  {
+    title: "ENS",
+    text: "Check if an ENS name or NFT is available.",
+  },
+  {
+    title: "POAP",
+    text: "Send a POAP to a user's address.",
+  },
+];
+
+const TOKENS_TO_FETCH = ["USDT", "USDC", "USDGLO", "DAI", "USDM"];
 
 export function ReadBlockchain() {
-  const [ensInput, setEnsInput] = useState<Address | null>(null);
-  const [address, setAddress] = useState<Address | null>(null);
-  const [isLoadingAddress, setIsLoadingAddress] = useState(false);
-  const [isLoadingEns, setIsLoadingEns] = useState(false);
+  const [selectedChainId, setSelectedChainId] = useState<SupportedChainId>(8453); // Default to Base
+  const { userInfo, isLoading } = useUser();
+  const [isLoadingTokenBalances, setIsLoadingTokenBalances] = useState(false);
   const {
-    state: { balances, addressFromEns, lastEnsQueried, lastAddressQueried },
-    fetchBalances,
-    fetchEnsName,
+    state: { tokenBalances },
+    fetchTokenBalances,
   } = useBlockchain();
 
-  const handleAddressSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoadingAddress(true);
-    if (!address) return;
-    await fetchBalances(address);
-    setIsLoadingAddress(false);
-  };
-
-  const handleAddressChange = (value: string) => {
-    setAddress(value as Address);
-  };
-
-  const handleEnsLookup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!ensInput) return;
-
-    setIsLoadingEns(true);
-    const resolvedAddress = await fetchEnsName(ensInput);
-    console.log("🚀 resolvedAddress:", resolvedAddress);
-    if (resolvedAddress) {
-      setAddress(resolvedAddress);
+  useEffect(() => {
+    if (userInfo) {
+      setIsLoadingTokenBalances(true);
+      fetchTokenBalances(userInfo.address, selectedChainId, TOKENS_TO_FETCH).finally(() =>
+        setIsLoadingTokenBalances(false)
+      );
     }
-    setIsLoadingEns(false);
-  };
+  }, [userInfo?.address, selectedChainId]);
 
   return (
     <>
       <Section size="1">
-        <Text as="p" align="center">
-          Querying data from the blockchain does not require a wallet connection.
-          <br />
-          Libraries such as{" "}
-          <Link href="https://docs.ethers.org/v5/" target="_blank">
-            Ethers.js
-          </Link>{" "}
-          and{" "}
-          <Link href="https://viem.sh" target="_blank">
-            Viem
-          </Link>{" "}
-          make it easy to get started.
-        </Text>
+        <Flex direction="column" gap="2">
+          <Text as="p" align="center">
+            Building great yapps does not require a wallet connection. The verified properties of
+            the jwt enables yapps to identify users and communities. A few examples of what&apos;s
+            possible:
+          </Text>
+          <CardList list={useCases} />
+        </Flex>
       </Section>
-
-      <InfoBox>
-        Yapps can use the details provided by the Yodl app to query data from the blockchain.
-      </InfoBox>
 
       <Section size="1">
         <Text as="p" align="center">
-          Look up the address of an ENS name or fetch the native coin balances of an address.
+          Below shows select stable coin balances of the user&apos;s address from the jwt. Switch
+          the chain to fetch balances on other chains.
         </Text>
       </Section>
 
-      <Section size="1" pt="0">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Fetch address and balances
-        </Heading>
+      <Heading as="h3" size="2" align="center" color="gray">
+        Balances of {userInfo?.truncatedAddress}
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           <Flex direction="column" gap="4">
             <Flex direction="column" gap="3">
               <Flex direction="column" gap="1">
-                <Text size="2">Ens</Text>
-                <Flex gap="3">
-                  <TextField.Root
-                    size="2"
-                    placeholder="vitalik.eth"
-                    value={ensInput || ""}
-                    onChange={(e) => setEnsInput(e.target.value as Address)}
-                  />
-                  <Button size="2" disabled={!ensInput || isLoadingEns} onClick={handleEnsLookup}>
-                    {isLoadingEns ? <Loader /> : <Text size="1">Lookup ENS</Text>}
-                  </Button>
-                </Flex>
+                <Text size="2">Chain</Text>
+                <Select.Root
+                  value={selectedChainId.toString()}
+                  onValueChange={(value) => setSelectedChainId(Number(value) as SupportedChainId)}
+                >
+                  <Select.Trigger className="w-fit" />
+                  <Select.Content>
+                    {SUPPORTED_CHAINS.map(({ chainId, chainName, logoUri }) => (
+                      <Select.Item key={chainId} value={String(chainId)}>
+                        <Flex align="center" gap="2">
+                          <Image src={logoUri ?? ""} alt={chainName} width={20} height={20} />
+                          {chainName}
+                        </Flex>
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
               </Flex>
 
-              {addressFromEns && (
+              {userInfo ? (
                 <Flex direction="column" gap="1">
-                  <Text as="p" size="2" className="text-start">
-                    Address of{" "}
-                    <Text as="span" color={accentColor}>
-                      {lastEnsQueried}
-                    </Text>
-                    :
-                  </Text>
-                  <ScrollArea scrollbars="horizontal" className="text-xs py-1">
-                    <CodeCopy text={addressFromEns} position="back" justify="start" />
-                  </ScrollArea>
-                </Flex>
-              )}
-            </Flex>
-
-            <Flex direction="column" gap="3">
-              <Flex direction="column" gap="1">
-                <Text size="2">Address</Text>
-                <Flex gap="3">
-                  <TextField.Root
-                    size="2"
-                    placeholder="0x12345..."
-                    value={address || ""}
-                    onChange={(e) => handleAddressChange(e.target.value)}
-                  ></TextField.Root>
-                  <Button
-                    size="2"
-                    type="submit"
-                    disabled={!address || isLoadingAddress}
-                    onClick={handleAddressSubmit}
-                  >
-                    {isLoadingAddress ? <Loader /> : <Text size="1">Get Balances</Text>}
-                  </Button>
-                </Flex>
-              </Flex>
-
-              {balances.length > 0 && (
-                <Flex direction="column" gap="1">
-                  <Text as="p" size="2" className="text-start">
-                    Balances of{" "}
-                    <Text as="span" color={accentColor}>
-                      {lastAddressQueried?.slice(0, 6)}...{lastAddressQueried?.slice(-4)}
-                    </Text>
-                    :
-                  </Text>
-
                   <Table.Root size="1">
                     <Table.Header>
                       <Table.Row>
-                        <Table.ColumnHeaderCell justify="center">Chain</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Token</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell justify="center">Amount</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell justify="center">Coin</Table.ColumnHeaderCell>
                       </Table.Row>
                     </Table.Header>
 
                     <Table.Body>
-                      {balances.map(({ chainId, formatted }) => (
-                        <Table.Row key={chainId}>
-                          <Table.RowHeaderCell justify="center">
-                            <Flex justify="center">
+                      {tokenBalances.map(({ token, formatted }) => (
+                        <Table.Row key={token.symbol}>
+                          <Table.RowHeaderCell align="center">
+                            <Flex gap="2">
                               <Image
-                                src={getChain(chainId).logoUri}
-                                alt={getChain(chainId).chainName}
+                                src={token.logoUri ?? ""}
+                                alt={token.symbol}
                                 width={20}
                                 height={20}
                               />
+                              <Text>{token.symbol}</Text>
                             </Flex>
                           </Table.RowHeaderCell>
-                          <Table.Cell justify="center" className="font-mono ">
-                            {formatted.slice(0, 8)}
-                          </Table.Cell>
-                          <Table.Cell justify="center">
-                            <Text>{getChain(chainId).nativeTokenName}</Text>
+                          <Table.Cell justify="center" className="font-mono">
+                            {Number(formatted).toFixed(2)}
                           </Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>
                   </Table.Root>
                 </Flex>
+              ) : (
+                <Callout.Root color="red">
+                  <Callout.Text>
+                    Token details could not be loaded. Make sure you open the app via the Yodl app.
+                  </Callout.Text>
+                </Callout.Root>
               )}
             </Flex>
           </Flex>

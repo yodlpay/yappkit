@@ -25,7 +25,7 @@ export function Header() {
           <FaSink color="var(--accent-9)" size={24} />
         </Link> */}
         <Link href="https://github.com/AndyOooh/kitchensink-yapp" target="_blank">
-          <FaGithub color="var(--accent-9)" size={24} />
+          <FaGithub color='white' size={24} />
         </Link>
       </Flex>
       <ConnectButton

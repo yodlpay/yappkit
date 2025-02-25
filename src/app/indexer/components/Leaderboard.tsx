@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
 import Image from "next/image";
 import { fetchIndexerData } from "@/lib/indexerAapi";
+import { CardList } from "@/components/ui/CardList";
+import { useUser } from "@/providers/UserProviders";
 
 type LeaderboardItem = {
   rank: number;
@@ -24,10 +26,26 @@ type LeaderboardItem = {
 
 type TokenCount = { token: TokenInfo; count: number };
 
+const useCases = [
+  {
+    title: "Confirmation",
+    text: "Confirm a payment has been made",
+  },
+  {
+    title: "Leaderboard",
+    text: "Create leaderboards",
+  },
+  {
+    title: "Milestones",
+    text: "Show progress towards milestones",
+  },
+];
+
 export function Leaderboard() {
   const { queryParams, setQueryParams, response, setResponse, setResponseStatusCode } =
     usePlayground();
-  const [receiver, setReceiver] = useState(queryParams.receiver || "vitalik.eth");
+  const { userInfo } = useUser();
+  const [receiver, setReceiver] = useState(queryParams.receiver || userInfo?.ens || "vitalik.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
@@ -125,9 +143,31 @@ export function Leaderboard() {
   return (
     <>
       <Section size="1">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Create a leaderboard
-        </Heading>
+        <Flex direction="column" gap="2">
+          <Text as="p" align="center">
+            A leadeboard is just one of many possible applications of the payments history. Listed
+            below are a few other use cases.
+          </Text>
+          {/* <Text as="p" align="center">
+            The payments history is an integral part of the Yodl tool-chain? and has many use cases.
+            A few examples are listed below.
+          </Text> */}
+          <CardList list={useCases} />
+        </Flex>
+      </Section>
+
+      <Section size="1">
+        <Text as="p" align="center">
+          Fill in a receiver address or ENS to create a leaderboard of the top senders to a
+          receiver.
+        </Text>
+      </Section>
+
+      <Heading as="h3" size="2" align="center" color="gray">
+        Create a leaderboard
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           <Flex direction="column" gap="1">
             <Text size="2">Receiver</Text>
@@ -146,10 +186,11 @@ export function Leaderboard() {
         </Card>
       </Section>
 
-      <Section size="1" pt="0">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Leaderboard
-        </Heading>
+      <Heading as="h3" size="2" align="center" color="gray">
+        Leaderboard
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           {availableTokens.length > 0 && (
             <Section size="1" pt="0">

@@ -10,12 +10,12 @@ import { WriteBlockchain } from "./components/WriteBlockchain";
 
 const CONNECT_SECTIONS = {
   read: {
-    title: "Read Data",
+    title: "Not Connected",
     icon: TbHttpGet,
     component: <ReadBlockchain />,
   },
   write: {
-    title: "Send Transactions",
+    title: "Connected",
     icon: TbHttpPost,
     component: <WriteBlockchain />,
   },
@@ -30,7 +30,7 @@ export default function ConnectPage() {
     <>
       <StickyTopBox>
         <Flex direction="column" justify="between" align="center" gap="2">
-          <PageHeader title="Connect" backPath="/" />
+          <PageHeader title="Wallet Connection" backPath="/" />
           <SegmentedControl.Root
             size="1"
             value={currentView}
@@ -40,7 +40,7 @@ export default function ConnectPage() {
             {Object.entries(CONNECT_SECTIONS).map(([key, section]) => (
               <SegmentedControl.Item key={key} value={key}>
                 <Flex align="center" gap="2">
-                  <section.icon />
+                  {/* <section.icon /> */}
                   {section.title}
                 </Flex>
               </SegmentedControl.Item>

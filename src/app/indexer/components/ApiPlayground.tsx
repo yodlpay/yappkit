@@ -13,6 +13,7 @@ import {
   Grid,
   Card,
   Heading,
+  Link,
 } from "@radix-ui/themes";
 import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvider";
 import { ResponseTable } from "./ResponseTable";
@@ -116,9 +117,24 @@ export function ApiPlayground() {
   return (
     <>
       <Section size="1">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Fetch payments
-        </Heading>
+        <Flex direction="column" gap="2">
+          <Text as="p" align="center">
+            The indexer API let&apos;s yapps query the db for payment history with the{" "}
+            <Code>/payments</Code> endpoint. The inputs below show some of the possible filters for
+            the query. Full documentation can be found{" "}
+            <Link href="" target="_blank">
+              here
+            </Link>
+            . The endpoint returns a paginated list of payments. Try it out below.
+          </Text>
+        </Flex>
+      </Section>
+
+      <Heading as="h3" size="2" align="center" color="gray">
+        Fetch payments
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           <Flex direction="column" gap="2" align="start">
             {inputs.map((input, index) =>
@@ -169,10 +185,11 @@ export function ApiPlayground() {
         </Card>
       </Section>
 
-      <Section size="1" pt="0">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Inspect response
-        </Heading>
+      <Heading as="h3" size="2" align="center" color="gray">
+        Inspect response
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           <Flex direction="column" gap="2" align="start">
             <Flex gap="2" justify="between" align="center" width="100%">

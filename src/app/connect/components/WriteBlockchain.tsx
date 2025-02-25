@@ -7,6 +7,22 @@ import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
 import { base } from "viem/chains";
 import { Loader } from "@/components/ui/Loader";
 import { useBlockchain } from "@/providers/BlockchainProvider";
+import { CardList } from "@/components/ui/CardList";
+
+const useCases = [
+  {
+    title: "Mint NFT",
+    text: "Mint an NFT to a user's address.",
+  },
+  {
+    title: "Claim",
+    text: "Claim an (onchain) username for a user.",
+  },
+  {
+    title: "Lottery",
+    text: "Let users participate in a decentralized lottery.",
+  },
+];
 
 export function WriteBlockchain() {
   const { isConnected, chainId } = useAccount();
@@ -42,32 +58,27 @@ export function WriteBlockchain() {
   return (
     <>
       <Section size="1">
-        <Flex direction="column" gap="2" justify="center">
-          <Text align="center">
-            To enable on-chain transactions besides Yodl payments, yapps must provide wallet
-            connection functionality. This can be done easily with{" "}
-            <Link href="https://www.rainbowkit.com/" target="_blank">
-              RainbowKit
-            </Link>{" "}
-            for example.
+        <Flex direction="column" gap="2">
+          <Text as="p" align="center">
+            To enable on-chain transactions other than Yodl payments, yapps must provide wallet
+            connection functionality. A few examples of what&apos;s possible:
           </Text>
-        </Flex>
-      </Section>
-
-      {/* <InfoBox>Users can make transactions by connecting their wallet in a yapp.</InfoBox> */}
-
-      <Section size="1">
-        <Flex direction="column" gap="2" justify="center">
-          <Text align="center">
-            Increment the count on the Counter contract. Connect a wallet and select chain.
-          </Text>
+          <CardList list={useCases} />
         </Flex>
       </Section>
 
       <Section size="1">
-        <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Increment counter
-        </Heading>
+        <Text as="p" align="center">
+          Below is an exmple of an on-chain transaction that requires a wallet connection. Connect a
+          wallet and select chain to increment the count on the Counter contract.
+        </Text>
+      </Section>
+
+      <Heading as="h3" size="2" align="center" color="gray">
+        Increment counter
+      </Heading>
+
+      <Section size="1" pt="1">
         <Card>
           <Flex direction="column" gap="2">
             <Flex gap="4" align="start" width="100%" justify="between">

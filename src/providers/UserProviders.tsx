@@ -4,9 +4,10 @@ import { createContext, useContext, ReactNode, useState, useEffect, Suspense } f
 import { useSearchParams } from "next/navigation";
 import { sdk } from "@/lib/sdk";
 import { Loader } from "@/components/ui/Loader";
+import { Address } from "viem";
 
 type UserInfo = {
-  address: string;
+  address: Address;
   truncatedAddress: string;
   ens: string | null;
   communityEns: string;
@@ -39,7 +40,7 @@ function UserProviderInner({ children }: { children: ReactNode }) {
           if (!payload) throw new Error("Invalid JWT payload");
 
           const newUserInfo = {
-            address: payload.sub,
+            address: payload.sub as Address,
             truncatedAddress: payload.sub.slice(0, 6) + "..." + payload.sub.slice(-4),
             ens: payload.ens,
             communityEns: payload.iss,

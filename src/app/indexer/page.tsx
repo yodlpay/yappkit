@@ -44,7 +44,7 @@ export default function IndexerPage() {
             {Object.entries(INDEXER_SECTIONS).map(([key, section]) => (
               <SegmentedControl.Item key={key} value={key}>
                 <Flex align="center" gap="2">
-                  <section.icon />
+                  {/* <section.icon /> */}
                   {section.title}
                 </Flex>
               </SegmentedControl.Item>

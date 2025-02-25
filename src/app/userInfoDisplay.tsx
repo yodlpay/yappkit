@@ -40,20 +40,20 @@ export const UserInfoDisplay = () => {
       label: "Ens",
       description:
         "The connected ENS name of the user in the Yodl app. Useful for looking up ENS records, e.g. Yodl settings including preferred tokens and chains.",
-      element: <CodeCopy text={ens || "n/a"} />,
+      element: <CodeCopy text={ens || "n/a"} truncate={true} />,
     },
     {
       label: "Yapp",
       description:
         "This yapp's ENS name. It must match the SDK config.ensName. Essential in rejecting malicious JWT's. The SDK's verify function handles the check.",
       // This is essential for verifying that the jtw is targetted this app. Verification happens through the SDK verify function.",
-      element: <CodeCopy text={yappEns} />,
+      element: <CodeCopy text={yappEns} truncate={true} />,
     },
     {
       label: "Community",
       description:
         "The community from which the yapp was opened. Useful for implementing community specifc features, styling etc.",
-      element: <CodeCopy text={communityEns} />,
+      element: <CodeCopy text={communityEns} truncate={true} />,
     },
     {
       label: "Token Exp.",

@@ -23,7 +23,6 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { accentColor } from "@/constants";
-import { CardList } from "@/components/ui/CardList";
 
 export default function ProfilePage() {
   const { userInfo, isLoading } = useUser();
@@ -34,15 +33,15 @@ export default function ProfilePage() {
 
   const useCases = [
     {
-      title: "Learn",
-      text: "Learn to build yapps with examples",
+      key: "use-case-1",
+      text: "Learn how to build yapps with examples",
     },
     {
-      title: "Explore",
-      text: "Explore features by navigating the app",
+      key: "use-case-2",
+      text: "Explore core features by navigating the app",
     },
     {
-      title: "Clone",
+      key: "use-case-3",
       text: "Clone the repo and use it as reference",
     },
   ];
@@ -80,31 +79,23 @@ export default function ProfilePage() {
     },
   ];
 
-  // if (!userInfo) {
-  //   return (
-  //     <Flex direction="column" gap="4" justify="center" align="center">
-  //       <Section p="4">
-  //         <Heading size="4">User info could not be loaded</Heading>
-  //       </Section>
-  //       <Section p="4">
-  //         <Callout.Root color="red">
-  //           <Callout.Icon>
-  //             <InfoCircledIcon />
-  //           </Callout.Icon>
-  //           <Callout.Text>Make sure you open the app via the Yodl app.</Callout.Text>
-  //         </Callout.Root>
-  //       </Section>
-  //     </Flex>
-
-  //     <Flex direction="column" gap="4" justify="center" align="center" minHeight="90vh">
-  //       <Callout.Root color="red">
-  //         <Callout.Text>
-  //           Token details could not be loaded. Make sure you open the app via the Yodl app.
-  //         </Callout.Text>
-  //       </Callout.Root>
-  //     </Flex>
-  //   );
-  // }
+  if (!userInfo) {
+    return (
+      <Flex direction="column" gap="4" justify="center" align="center">
+        <Section p="4">
+          <Heading size="4">User info could not be loaded</Heading>
+        </Section>
+        <Section p="4">
+          <Callout.Root color="red">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>Make sure you open the app via the Yodl app.</Callout.Text>
+          </Callout.Root>
+        </Section>
+      </Flex>
+    );
+  }
 
   return (
     <>
@@ -112,20 +103,44 @@ export default function ProfilePage() {
         <PageHeader title="Welcome to Kitchen Sink" />
       </StickyTopBox>
 
-      <InfoBox>This yapp is maintained by the Yodl team.</InfoBox>
+      {/* <InfoBox>This yapp is maintained by the Yodl team.</InfoBox> */}
       <Section size="1">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
           Intro
         </Heading>
 
         <Flex direction="column" gap="2">
-          <Text as="p" align="center">
-            Kitchen Sink is the demo app for yapp builders.
-            <br />
-            It showcases the core features of the Yodl yapp SDK and a few examples of the many
-            possibilities it brings. Use it to:
+          <Text as="p" size="2" align="center" mb="2">
+            Kitchen Sink is the demo app for yapp builders. It showcases the core features of the
+            Yodl yapp SDK.
           </Text>
-          <CardList list={useCases} />
+
+          <Card size="1">
+            {useCases.map(({ key, text }) => (
+              <Flex width="100%" align="center" gap="2" className="font-bold" key={key}>
+                <DotFilledIcon color={accentColor} />
+                <Text size="2" className="flex-1">
+                  {text}
+                </Text>
+              </Flex>
+            ))}
+          </Card>
+        </Flex>
+      </Section>
+
+      <Section size="1">
+        <Heading as="h3" size="2" align="center" mb="2" color="gray">
+          Token
+        </Heading>
+        <Flex direction="column" gap="2">
+          <Text as="p" size="2" align="center">
+            Yapps opened through the Yodl app receive a JSON Web Token in the <Code>jwt</Code> query
+            parameter.
+            <br />
+            The token containes verfied details about the user and where they came from.
+          </Text>
+
+          <UserInfoDisplay />
         </Flex>
       </Section>
 

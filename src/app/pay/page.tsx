@@ -89,7 +89,7 @@ export default function PayPage() {
 
       <Section size="1">
         <Text as="p" align="center">
-          To initiate Yodl payments, yapps should use the <Code>requestPayment()</Code> function
+          To request a Yodl payment, yapps should use the <Code>requestPayment()</Code> function
           exposed by the yapp SDK.
         </Text>
       </Section>
@@ -98,10 +98,18 @@ export default function PayPage() {
         <Code>requestPayment</Code> calls <Code>window.postMessage</Code>
         for secure communication between the iframe and the parent.
       </InfoBox>
+      <Section size="1">
+        <Text as="p" align="center">
+          When the Yodl app receives a payment request, the payment modal will be displayed. The
+          user can configure payment settings, e.g. outgoing token, and complete or reject the
+          payment. After completed payment the modal will close and the yapp receives an object with{" "}
+          <Code>txHash</Code> and <Code>chainId</Code>. Try it out below.
+        </Text>
+      </Section>
 
       <Section size="1">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Initiate a payment
+          Request a payment
         </Heading>
         <Card>
           <Flex direction="column" gap="4">
