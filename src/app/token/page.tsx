@@ -23,8 +23,8 @@ export default function TokenPage() {
 
       <Section>
         <Text as="p" align="center">
-          Below shows data from the token that was sent when the yapp was opened. Tab the info icon
-          learn more about data item.
+          Below shows data from the current token. Tab the info icon to learn more about each data
+          item.
         </Text>
       </Section>
 

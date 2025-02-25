@@ -122,8 +122,8 @@ export default function ProfilePage() {
           <Text as="p" align="center">
             Kitchen Sink is the demo app for yapp builders.
             <br />
-            It showcases the core features of the Yodl yapp SDK and a few examples of the many
-            possibilities it brings. Use it to:
+            It showcases the core building blocks of yapp creation including the yapp SDK, Indexer
+            API and more. This is done through examples and explanations. Use it to:
           </Text>
           <CardList list={useCases} />
         </Flex>

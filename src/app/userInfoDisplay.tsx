@@ -62,7 +62,7 @@ export const UserInfoDisplay = () => {
     },
   ];
   return (
-    <Card size="2" className="max-w-[600px] mx-auto">
+    <Card size="2">
       <DataList.Root>
         {userInfoDisplayItems.map((item, index) => (
           <DataList.Item key={index} align="center">
@@ -75,7 +75,7 @@ export const UserInfoDisplay = () => {
                   </Flex>
                 </DataList.Label>
               </Popover.Trigger>
-              <Popover.Content size="1" maxWidth="80dvw">
+              <Popover.Content size="1" maxWidth="300px">
                 <Text size="1">{item.description}</Text>
               </Popover.Content>
             </Popover.Root>
