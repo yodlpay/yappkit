@@ -4,16 +4,18 @@ import {
 } from "@justaname.id/react";
 import { mainnet } from "viem/chains";
 
-// export const ORIGIN = "https://yodl.me";
-// export const DOMAIN = "yodl.me";
-export const ORIGIN = "http://localhost:3000";
-export const DOMAIN = "localhost:3000";
+export const originProd = "https://kitchensink-yapp.vercel.app";
+export const domainProd = "kitchensink-yapp.vercel.app";
+export const originDev = "http://localhost:3000";
+export const domainDev = "localhost:3000";
+export const ORIGIN = process.env.NODE_ENV === "production" ? originProd : originDev;
+export const DOMAIN = process.env.NODE_ENV === "production" ? domainProd : domainDev;
 
 export const JustaNameProvider = ({ children }: { children: React.ReactNode }) => {
   const justaNameConfig: JustaNameProviderConfig = {
     config: {
-    //   origin: ORIGIN,
-    //   domain: DOMAIN,
+      origin: ORIGIN,
+      domain: DOMAIN,
       signInTtl: 120000,
     },
     networks: [
