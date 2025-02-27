@@ -26,11 +26,11 @@ import { accentColor } from "@/constants";
 import { CardList } from "@/components/ui/CardList";
 
 export default function ProfilePage() {
-  const { userInfo, isLoading } = useUser();
+  // const { userInfo, isLoading } = useUser();
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   const useCases = [
     {
@@ -123,7 +123,7 @@ export default function ProfilePage() {
             Kitchen Sink is the demo app for yapp builders.
             <br />
             It showcases the core building blocks of yapp creation including the yapp SDK, Indexer
-            API and more. This is done through examples and explanations. Use it to:
+            API, webhooks and payments. This is done through examples and explanations. Use it to:
           </Text>
           <CardList list={useCases} />
         </Flex>

@@ -7,6 +7,7 @@ import { WalletProvider } from "@/providers/WalletProvider";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { BlockchainProvider } from "@/providers/BlockchainProvider";
+import { JustaNameProvider } from "@/providers/JustaNameProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,19 +36,21 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <WalletProvider>
-          <UserProvider>
-            <Theme
-              accentColor="teal"
-              hasBackground={false}
-              panelBackground="translucent"
-              radius="medium"
-              appearance="dark"
-            >
-              <BlockchainProvider>
-                <AppLayout>{children}</AppLayout>
-              </BlockchainProvider>
-            </Theme>
-          </UserProvider>
+          <JustaNameProvider>
+            <UserProvider>
+              <Theme
+                accentColor="teal"
+                hasBackground={false}
+                panelBackground="translucent"
+                radius="medium"
+                appearance="dark"
+              >
+                <BlockchainProvider>
+                  <AppLayout>{children}</AppLayout>
+                </BlockchainProvider>
+              </Theme>
+            </UserProvider>
+          </JustaNameProvider>
         </WalletProvider>
       </body>
     </html>

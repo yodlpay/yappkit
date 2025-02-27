@@ -13,13 +13,8 @@ export type UserInfoDisplayItem = {
 export const UserInfoDisplay = () => {
   const { userInfo, isLoading } = useUser();
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (!userInfo) {
-    return null;
-  }
+  if (isLoading) return <Loader />;
+  if (!userInfo) return null;
 
   const { ens, truncatedAddress, yappEns, communityEns, exp, someClaim, address } = userInfo;
   const expirationDate = new Date(userInfo.exp * 1000);

@@ -3,13 +3,13 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import { darkTheme, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { polygon, optimism, arbitrum, base } from "wagmi/chains";
+import { polygon, optimism, arbitrum, base, mainnet } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const config = getDefaultConfig({
-  appName: "Kicthen Sink",
+  appName: "Yapp Kit",
   projectId: "YOUR_PROJECT_ID",
-  chains: [polygon, optimism, arbitrum, base],
+  chains: [polygon, optimism, arbitrum, base, mainnet],
   ssr: true,
 });
 

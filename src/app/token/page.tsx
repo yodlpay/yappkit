@@ -4,6 +4,7 @@ import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Heading, Flex, Section, Text, Code } from "@radix-ui/themes";
 import { UserInfoDisplay } from "../userInfoDisplay";
+
 export default function TokenPage() {
   return (
     <>
