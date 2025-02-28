@@ -66,23 +66,21 @@ export function WriteBlockchain() {
           <CardList list={useCases} />
         </Flex>
       </Section>
-
       <Section size="1">
         <Text as="p" align="center">
           Below is an exmple of an on-chain transaction that requires a wallet connection. Connect a
           wallet and select chain to increment the count on the Counter contract.
         </Text>
       </Section>
-
       <Heading as="h3" size="2" align="center" color="gray">
         Increment counter
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="2">
-            <Flex gap="4" align="start" width="100%" justify="between">
-              <Text>Counter: {counterValue?.toString() ?? "Loading..."}</Text>
+            <Flex gap="4" align="center" width="100%" justify="between">
+              <Text size="2">Counter: {counterValue?.toString() ?? "Loading..."}</Text>
               <Button disabled={!isConnected || isLoading} onClick={handleIncrement}>
                 {isLoading ? <Loader /> : "Increment"}
               </Button>
@@ -95,7 +93,6 @@ export function WriteBlockchain() {
           </Flex>
         </Card>
       </Section>
-
       <InfoBox>
         The Counter contract is deployed on base, polygon, and arbitrum. Incrementing requires a
         small amount of gas.

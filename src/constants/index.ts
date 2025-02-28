@@ -3,6 +3,7 @@ import { getChains } from "@yodlpay/tokenlists";
 import { polygon, arbitrum, base, mainnet } from "viem/chains";
 
 export const accentColor = "teal";
+export const baseFontSize = "2"; // 14px
 
 export const CHAINID_TO_VIEM_CHAIN = {
   [mainnet.id]: mainnet,

@@ -57,7 +57,7 @@ export const UserInfoDisplay = () => {
     },
   ];
   return (
-    <Card size="2">
+    <Card size="1">
       <DataList.Root>
         {userInfoDisplayItems.map((item, index) => (
           <DataList.Item key={index} align="center">

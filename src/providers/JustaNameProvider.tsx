@@ -2,7 +2,7 @@ import {
   JustaNameProvider as JustaNameProviderImport,
   JustaNameProviderConfig,
 } from "@justaname.id/react";
-import { mainnet } from "viem/chains";
+import { base, mainnet } from "viem/chains";
 
 export const originProd = "https://kitchensink-yapp.vercel.app";
 export const domainProd = "kitchensink-yapp.vercel.app";
@@ -22,12 +22,6 @@ export const JustaNameProvider = ({ children }: { children: React.ReactNode }) =
       {
         chainId: 1,
         providerUrl: mainnet.rpcUrls.default.http[0],
-      },
-    ],
-    ensDomains: [
-      {
-        chainId: mainnet.id,
-        ensDomain: "yodl.eth",
       },
     ],
   };

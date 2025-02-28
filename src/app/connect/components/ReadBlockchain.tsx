@@ -73,7 +73,7 @@ export function ReadBlockchain() {
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="4">
             <Flex direction="column" gap="3">
               <Flex direction="column" gap="1">

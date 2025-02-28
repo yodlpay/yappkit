@@ -111,7 +111,7 @@ export default function PayPage() {
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
           Request a payment
         </Heading>
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="4">
             <Flex direction="column" gap="3">
               <Flex direction="column" gap="1">

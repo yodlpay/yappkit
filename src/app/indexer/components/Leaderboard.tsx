@@ -168,7 +168,7 @@ export function Leaderboard() {
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="1">
             <Text size="2">Receiver</Text>
             <Flex gap="2">
@@ -191,7 +191,7 @@ export function Leaderboard() {
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           {availableTokens.length > 0 && (
             <Section size="1" pt="0">
               <Flex direction="column" gap="1">

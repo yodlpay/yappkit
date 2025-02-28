@@ -3,18 +3,12 @@
 import { PageHeader } from "@/components/layout/PageHeader";
 import { CodeCopy } from "@/components/ui/CodeCopy";
 import { InfoBox } from "@/components/ui/InfoBox";
-import { Loader } from "@/components/ui/Loader";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
-import { getPublicClientByChainId } from "@/lib/viem";
-import { useUser } from "@/providers/UserProviders";
 import {
-  UseSubnameUpdateFunctionParams,
   useUpdateSubname,
-  useSubname,
-  useAddressEnsNames,
   useAccountEnsNames,
   useAccountSubnames,
-  Records as AccountSubname,
+  Records,
 } from "@justaname.id/react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
@@ -32,78 +26,74 @@ import {
   Code,
 } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { mainnet } from "viem/chains";
-import { normalize } from "viem/ens";
-import { useAccount, useEnsName, useSwitchChain } from "wagmi";
+import { Address } from "viem";
+import { normalize, namehash } from "viem/ens";
+import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
+import { ResponseTable } from "../indexer/components/ResponseTable";
 
-type WebhookType = "generate" | "custom";
+const WEBHOOK_TYPES = ["generate", "custom"] as const;
+type WebhookType = (typeof WEBHOOK_TYPES)[number];
 
-const webhookTypes: { label: string; value: WebhookType }[] = [
-  {
-    label: "Generate",
-    value: "generate",
-  },
-  {
-    label: "Custom",
-    value: "custom",
-  },
-];
+type EnsType = "jan-subname" | "other-subname" | "ens" | "none" | "loading";
 
 export default function WebhooksPage() {
   const [webhookUrl, setWebhookUrl] = useState<string | null>(null);
-  console.log("🚀 webhookUrl:", webhookUrl);
   const [webhookVisitUrl, setWebhookVisitUrl] = useState<string | null>(null);
   const [webhookType, setWebhookType] = useState<WebhookType>("generate");
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
-  const [meYodlRecord, setMeYodlRecord] = useState<Record<string, any> | null>(null);
+
+  const [ensType, setEnsType] = useState<EnsType>("loading");
+  const [accountRecords, setAccountRecords] = useState<Records | null>(null);
+  const [yodlRecord, setYodlRecord] = useState<Record<string, any> | null>(null);
   const [updateEnsError, setUpdateEnsError] = useState<string | null>(null);
   const [isUpdatingEns, setIsUpdatingEns] = useState(false);
   const [isEnsUpdated, setIsEnsUpdated] = useState(false);
 
-  const { isConnected, chain, address } = useAccount();
-  const { userInfo, isLoading: isUserLoading } = useUser();
+  const { isConnected, chain } = useAccount();
+  const { writeContractAsync } = useWriteContract();
   const { switchChainAsync, isPending: switchChainPending } = useSwitchChain();
-  const { updateSubname } = useUpdateSubname();
 
-  const { refetchAccountSubnames, accountSubnames } = useAccountSubnames();
-  const [subName, setSubName] = useState<AccountSubname | null>(null);
-  console.log("🚀 subName:", subName);
-  // ens
+  const { updateSubname } = useUpdateSubname();
+  const { accountSubnames, isAccountSubnamesPending } = useAccountSubnames();
+  const { accountEnsNames, isAccountEnsNamesPending } = useAccountEnsNames();
+
+  const yodlRecordKey = "me.yodl";
 
   useEffect(() => {
-    if (!accountSubnames || !address) return;
-    const accountSubname = accountSubnames?.find(
-      (subname) => subname.sanitizedRecords.ethAddress.value === address
-    );
-    const meYodlRecord = accountSubname?.sanitizedRecords.allTexts.find((r) => r.key === meYodlKey);
+    if (!isConnected) return;
+    if (isAccountSubnamesPending || isAccountEnsNamesPending) {
+      setEnsType("loading");
+      return;
+    }
+    const getEnsTypeAndRecords = (): {
+      ensType: EnsType;
+      records: Records | null;
+    } => {
+      if (accountSubnames.length) {
+        const janSubname = accountSubnames.find((subname) => subname.isJAN);
+        if (janSubname) return { ensType: "jan-subname", records: janSubname };
+        return { ensType: "other-subname", records: null };
+      }
+      if (accountEnsNames.length) {
+        return { ensType: "ens", records: accountEnsNames[0] };
+      }
+      return { ensType: "none", records: null };
+    };
+    const { ensType, records } = getEnsTypeAndRecords();
+    setEnsType(ensType);
+    setAccountRecords(records);
 
-    setSubName(accountSubname || null);
-    setMeYodlRecord(meYodlRecord ? JSON.parse(meYodlRecord.value) : null);
-  }, [accountSubnames, address]);
+    if (records === null) return;
 
-  const mainnetClient = getPublicClientByChainId(mainnet.id);
-  const meYodlKey = "me.yodl";
-
-  const fetchAndParseEnsText = async (ens: string, key: string) => {
-    const ensText = await mainnetClient.getEnsText({
-      name: normalize(ens),
-      key,
-    });
-    return ensText ? JSON.parse(ensText) : {};
-  };
-
-  // useEffect(() => {
-  //   const getMeYodl = async () => {
-  //     if (isUserLoading || !userInfo) return;
-  //     const meYodlRecordParsed = await fetchAndParseEnsText(userInfo.yappEns, meYodlKey);
-  //     console.log("🚀 meYodlRecordParsed:", meYodlRecordParsed);
-  //     setMeYodlRecord(meYodlRecordParsed);
-  //   };
-  //   getMeYodl();
-  // }, [userInfo, isUserLoading]);
-
-  if (isUserLoading) return <Loader />;
-  if (!userInfo) return null;
+    const meYodlRecord = records.sanitizedRecords.allTexts.find((r) => r.key === yodlRecordKey);
+    setYodlRecord(meYodlRecord ? JSON.parse(meYodlRecord.value) : null);
+  }, [
+    isConnected,
+    accountSubnames,
+    accountEnsNames,
+    isAccountSubnamesPending,
+    isAccountEnsNamesPending,
+  ]);
 
   const handleGenerateUrl = async () => {
     setIsLoadingGenerate(true);
@@ -124,45 +114,60 @@ export default function WebhooksPage() {
   const handleUpdateEns = async () => {
     setUpdateEnsError(null);
     setIsUpdatingEns(true);
-    if (!isConnected || !chain || !subName) {
+    if (!isConnected || !chain || !accountRecords || ensType === "loading") {
       setUpdateEnsError("Wallet not connected");
       return;
     }
+
+    if (!accountRecords) {
+      setUpdateEnsError("No records found"); // fix this
+      return;
+    }
+
     if (chain.id !== 1) await switchChainAsync({ chainId: 1 });
 
-    const ensToUpdate = subName.ens;
+    const ensToUpdate = accountRecords.ens;
 
-    const newText = {
-      [meYodlKey]: JSON.stringify({
-        ...meYodlRecord,
-        webhooks: [...(meYodlRecord?.webhooks || []), webhookUrl],
-        // webhooks: [...(meYodlRecord?.webhooks || []), "New"],
-      }),
-    };
+    const newYodlRecord = JSON.stringify({
+      ...yodlRecord,
+      webhooks: [...(yodlRecord?.webhooks || []), webhookUrl],
+    });
 
     try {
-      await updateSubname({
-        text: newText,
-        ens: normalize(ensToUpdate),
-      });
+      if (ensType === "jan-subname") {
+        await updateSubname({
+          text: { [yodlRecordKey]: newYodlRecord },
+          ens: normalize(ensToUpdate),
+        });
+      } else if (ensType === "ens") {
+        await writeContractAsync({
+          address: accountRecords.records.resolverAddress as Address,
+          abi: [
+            {
+              inputs: [
+                { internalType: "bytes32", name: "node", type: "bytes32" },
+                { internalType: "string", name: "key", type: "string" },
+                { internalType: "string", name: "value", type: "string" },
+              ],
+              name: "setText",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+          ],
+          functionName: "setText",
+          args: [namehash(ensToUpdate), yodlRecordKey, newYodlRecord],
+        });
+      }
     } catch (error) {
-      console.error("🚀 error:", error);
       setUpdateEnsError("Failed to update ENS record");
       return;
     } finally {
       setIsUpdatingEns(false);
     }
-    setMeYodlRecord(newText);
+    setYodlRecord({ [yodlRecordKey]: newYodlRecord });
     setIsEnsUpdated(true);
   };
-
-  // const justanameSteps = [
-  //   "Select your currenct ENS",
-  //   "Click on your account in the top right",
-  //   "Click 'Profile' --> 'Edit Profile' --> 'Custom'",
-  //   "Create a new 'yodl.me' record with the below string or append to the existing one",
-  //   "Go 'Back' and 'Save'",
-  // ];
 
   const steps = [
     {
@@ -205,10 +210,10 @@ export default function WebhooksPage() {
             onValueChange={(value) => setWebhookType(value as WebhookType)}
           >
             <Flex gap="4">
-              {webhookTypes.map((type) => (
-                <Text as="label" size="2" key={type.value}>
+              {WEBHOOK_TYPES.map((type) => (
+                <Text as="label" size="2" key={type}>
                   <Flex gap="2">
-                    <RadioGroup.Item value={type.value} /> {type.label}
+                    <RadioGroup.Item value={type} /> {type}
                   </Flex>
                 </Text>
               ))}
@@ -252,13 +257,14 @@ export default function WebhooksPage() {
             This contains chain and token preferences if configured and is also the record used to
             configure webhooks.
           </Text>
-          <Text>Current me.yodl record for {subName?.ens}:</Text>
-          <Code>
-            {JSON.stringify(meYodlRecord, null, 2)}
-            {/* {Object.entries(meYodl || {})
-              .map(([key, value]) => `${key}: ${value}`)
-              .join("\n")} */}
-          </Code>
+          <Text>
+            Current <Code variant="ghost">me.yodl</Code> record for {accountRecords?.ens}:
+          </Text>
+          <Card size="1">
+            <ScrollArea scrollbars="both" className="p-2 w-full max-h-72">
+              <ResponseTable data={yodlRecord || "No record found"} />
+            </ScrollArea>
+          </Card>
 
           {isConnected ? (
             <>
@@ -279,27 +285,10 @@ export default function WebhooksPage() {
               )}
               {updateEnsError && <Text color="red">{updateEnsError}</Text>}
               {isEnsUpdated && <Text color="green">ENS record updated</Text>}
-
-              {/* {justanameSteps.map((step, idx) => (
-                <Flex key={step} gap="2">
-                  <Text size="2">{idx + 2}.</Text>
-                  <Text size="2">{step}.</Text>
-                </Flex>
-              ))} */}
             </>
           ) : (
             <Text>Connect your wallet to update the ENS record</Text>
           )}
-
-          {/* {webhookUrl ? (
-            <ScrollArea scrollbars="horizontal" className="text-xs py-1">
-              <CodeCopy text={`"webhooks": ["${webhookUrl}"]`} position="back" justify="start" />
-            </ScrollArea>
-          ) : (
-            <InfoBox color="gray">
-              <Text>Generate a URL to get the yodl.me record</Text>
-            </InfoBox>
-          )} */}
         </Flex>
       ),
     },
@@ -343,27 +332,30 @@ export default function WebhooksPage() {
       </StickyTopBox>
 
       <Section size="1">
-        <Text as="p" align="center" size="3" className="text-center">
+        <Text as="p" align="center">
           Receive payments notifications via webhooks.
           <br />
           Configure the <Code>yodl.me</Code> ENS record with webhook URLs.
         </Text>
       </Section>
 
-      <Flex direction="column" gap="2">
-        <InfoBox>Communities, yapps and users can set their own webhook URLs.</InfoBox>
+      <InfoBox>Communities, yapps and users can set their own webhook URLs.</InfoBox>
 
-        <Text>TODO: Show local state webhook, logged in subname and yodl.me.webhooks here.</Text>
-      </Flex>
+      <Section size="1">
+        <Text as="p" align="center">
+          To update the ENS record a wallet with a yodl.eth subname or a regular ENS name must be
+          connected.
+        </Text>
+      </Section>
 
       <Section size="1">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
           Get Started
         </Heading>
-        <Accordion.Root type="single" collapsible className="text-sm">
+        <Accordion.Root type="multiple" className="text-sm">
           <Flex direction="column" gap="2">
             {steps.map((step) => (
-              <Card key={step.header}>
+              <Card key={step.header} size="1">
                 <Accordion.Item value={step.header} className="w-full">
                   <Flex direction="column" gap="2">
                     <Accordion.Header>

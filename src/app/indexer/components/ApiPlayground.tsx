@@ -135,7 +135,7 @@ export function ApiPlayground() {
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="2" align="start">
             {inputs.map((input, index) =>
               input.type === "checkbox" ? (
@@ -190,7 +190,7 @@ export function ApiPlayground() {
       </Heading>
 
       <Section size="1" pt="1">
-        <Card>
+        <Card size="1">
           <Flex direction="column" gap="2" align="start">
             <Flex gap="2" justify="between" align="center" width="100%">
               <Flex gap="2" align="center">

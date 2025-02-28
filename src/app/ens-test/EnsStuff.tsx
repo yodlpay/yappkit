@@ -1,6 +1,14 @@
+import { getEnsText, normalize, namehash } from "viem/ens";
 import { Button, Code, Flex, Text, TextField } from "@radix-ui/themes";
-import { getEnsText, normalize } from "viem/ens";
-import { useEnsText, useAccount, useSwitchChain } from "wagmi";
+import {
+  useEnsText,
+  useAccount,
+  useSwitchChain,
+  useEnsName,
+  useEnsResolver,
+  useWalletClient,
+  useWriteContract,
+} from "wagmi";
 import { useState, useEffect, useMemo } from "react";
 import { getPublicClientByChainId } from "@/lib/viem";
 import { Address } from "viem";
@@ -9,63 +17,184 @@ import {
   // useIsSubnameAvailable,
   useUpdateSubname,
   UseSubnameUpdateFunctionParams,
+  useAccountSubnames,
+  usePrimaryName,
+  useAddressEnsNames,
+  useAccountEnsNames,
+  useUpdateChanges,
+  useAddSubname,
+  useJustaName,
 } from "@justaname.id/react";
+import { mainnet } from "viem/chains";
+
+const client = getPublicClientByChainId(1);
+export const YODL_ENS_DOMAIN = "yodl.eth";
 
 export const EnsStuff = () => {
   const [ensTexts, setEnsTexts] = useState<Record<string, any>>({});
   const [resolverSupport, setResolverSupport] = useState<Record<string, boolean>>({});
 
-  const { updateSubname, isUpdateSubnamePending: isUpdating } = useUpdateSubname();
+  const { switchChainAsync, isPending: switchChainPending } = useSwitchChain(); // wagmi
+  const { addSubname } = useAddSubname();
+  const { updateSubname, isUpdateSubnamePending: isUpdating } = useUpdateSubname(); // justaname
+  // const changeParams = {
+  //   ens: normalize("andyoee.eth"),
+  //   chainId: mainnet.id,
+  //   text: {
+  //     ["me.yodl"]: "lalalala",
+  //   },
+  // };
+  // const {
+  //   canUpdateEns,
+  //   getUpdateChanges,
+  //   changes,
+  //   checkIfUpdateIsValid,
+  //   isUpdateChangesPending: isUpdatingChanges,
+  // } = useUpdateChanges(changeParams); // justaname
+  // console.log("🚀 changes:", changes);
+  // console.log("🚀 canUpdateEns:", canUpdateEns);
+
+  // const updateEns = async () => {
+  //   const result = await getUpdateChanges(changeParams);
+  //   console.log("🚀 result:", result);
+  // };
+
+  // if (canUpdateEns) {
+  //   updateEns();
+  // }
+
+  // wagmi
   const { address, isConnected, chain } = useAccount();
-  const { switchChainAsync, isPending: switchChainPending } = useSwitchChain();
+  const { data: ensName } = useEnsName({ address });
+  const { data: resolverAddress } = useEnsResolver({ name: ensName! });
+  console.log("🚀 ensName:", ensName);
+  console.log("🚀 resolverAddress:", resolverAddress);
 
-  const client = getPublicClientByChainId(1);
+  // justaname
+  const { primaryName } = usePrimaryName({ address: address });
+  // const { addressEnsNames } = useAddressEnsNames({ address: address }); // works but acc better
+  const { accountEnsNames } = useAccountEnsNames();
+  const { refetchAccountSubnames, accountSubnames } = useAccountSubnames();
+  console.log("🚀 primaryName:", primaryName);
+  console.log("🚀 accountEnsNames:", accountEnsNames);
+  console.log("🚀 accountSubnames:", accountSubnames);
+  // const { justaname, backendUrl, routes, chainId, ensDomains } = useJustaName();
+  const justanameHook = useJustaName();
+  console.log('🚀 justanameHook:', justanameHook);
 
-  const ensNames = useMemo(
-    () => [
-      "andy.yodl.eth",
-      "yodlmeister.eth",
-      "billme.eth",
-      "deposit.yodl.eth",
-      "laurids.yodl.eth",
-    ],
-    []
-  );
+  const { writeContract, writeContractAsync, isPending: isUpdatingSubname } = useWriteContract();
 
-  const handleUpdateEns = async (ens: string = "andy.yodl.eth") => {
+  const walletClient = useWalletClient();
+
+  useEffect(() => {
+    const getEnsTexts = async () => {
+      const resolverAddress = await client.getEnsResolver({
+        name: normalize("selts.eth"),
+      });
+      console.log("🚀 resolverAddress:", resolverAddress);
+    };
+    getEnsTexts();
+  }, []);
+
+  const handleUpdateEns = async () => {
     if (!isConnected || !address) {
       console.log("Wallet not connected");
       return;
     }
 
-    if (chain?.id !== 1) await switchChainAsync({ chainId: 1 });
-
-    const ensText = await client.getEnsText({
-      name: normalize(ens),
-      key: "me.yodl",
-    });
-    console.log("🚀 ensText:", ensText);
-
-    const ensTextAsObject: Record<string, any> = ensText ? JSON.parse(ensText) : {};
-
-    console.log("🚀 ensTextAsObject:", ensTextAsObject);
-
-    const newText = {
-      "me.yodl": JSON.stringify({
-        ...ensTextAsObject,
-        webhooks: [...(ensTextAsObject.webhooks || []), "https://webhook.site/1234567890"],
-      }),
-    };
-
-    console.log("🚀 newText:", newText);
-
-    const params: UseSubnameUpdateFunctionParams = {
-      text: newText,
-      ens: normalize(ens),
-    };
+    const ens = "andyoee.eth";
+    // const ens = "andy.yodl.eth";
 
     try {
-      await updateSubname(params);
+      // Check if the resolver exists
+      const resolver = await client.getEnsResolver({
+        name: normalize(ens),
+      });
+
+      if (!resolver) {
+        console.error("No resolver found for", ens);
+        return;
+      }
+
+      // Check if the connected address is the owner
+      const owner = await client.getEnsAddress({
+        name: normalize(ens),
+      });
+
+      if (owner?.toLowerCase() !== address.toLowerCase()) {
+        console.error("Connected address is not the owner of", ens);
+        console.log("Owner:", owner);
+        console.log("Connected address:", address);
+        return;
+      }
+
+      if (chain?.id !== 1) await switchChainAsync({ chainId: 1 });
+
+      const hasSubname = accountSubnames.length > 0;
+      console.log("🚀 hasSubname:", hasSubname);
+
+      const ensText = await client.getEnsText({
+        name: normalize(ens),
+        key: "me.yodl",
+      });
+      console.log("🚀 ensText:", ensText);
+
+      const ensTextAsObject: Record<string, any> = ensText ? JSON.parse(ensText) : {};
+
+      console.log("🚀 ensTextAsObject:", ensTextAsObject);
+
+      const newText = {
+        "me.yodl": JSON.stringify({
+          ...ensTextAsObject,
+          webhooks: [...(ensTextAsObject.webhooks || []), "https://webhook.site/1425"],
+        }),
+      };
+
+      console.log("🚀 newText:", newText);
+
+      const params: UseSubnameUpdateFunctionParams = {
+        text: newText,
+        ens: normalize(ens),
+      };
+
+      // isRegistered
+      // ? await updateSubname({
+      //     text,
+      //     ens: username,
+      //   })
+      // : await addSubname({
+      //     text,
+      //     username,
+      //     ensDomain: YODL_ENS_DOMAIN,
+      //   });
+
+      console.log("🙌🙌🙌 Updating subname");
+      // const res = await updateSubname(params);
+      const res = await addSubname({
+        text: newText,
+        username: "lalala1984",
+        // ensDomain: YODL_ENS_DOMAIN,
+      });
+      console.log("🚀 res:", res);
+
+      // await writeContractAsync({
+      //   address: resolver,
+      //   abi: [
+      //     {
+      //       inputs: [
+      //         { internalType: "bytes32", name: "node", type: "bytes32" },
+      //         { internalType: "string", name: "key", type: "string" },
+      //         { internalType: "string", name: "value", type: "string" },
+      //       ],
+      //       name: "setText",
+      //       outputs: [],
+      //       stateMutability: "nonpayable",
+      //       type: "function",
+      //     },
+      //   ],
+      //   functionName: "setText",
+      //   args: [namehash(ens), "me.yodl", JSON.stringify(newText)],
+      // });
     } catch (error) {
       console.error("🚀 error:", error);
     }
