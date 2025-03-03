@@ -18,7 +18,7 @@ import {
 import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvider";
 import { ResponseTable } from "./ResponseTable";
 import { buildQueryString, fetchIndexerData } from "@/lib/indexerAapi";
-import { INDEXER_URL, SUPPORTED_CHAINS } from "@/constants";
+import { CONFIG, SUPPORTED_CHAINS } from "@/constants";
 import { CodeCopy } from "@/components/ui/CodeCopy";
 
 type Input = {
@@ -103,7 +103,7 @@ export function ApiPlayground() {
     setResponseStatusCode(null);
     setResponse(null);
     try {
-      const { status, data } = await fetchIndexerData("/payments", queryParams);
+      const { status, data } = await fetchIndexerData(queryParams);
       setResponseStatusCode(status);
       setResponse(data);
     } catch (error) {
@@ -112,7 +112,7 @@ export function ApiPlayground() {
     }
   };
 
-  const url = `${INDEXER_URL}/payments${buildQueryString(queryParams)}`;
+  const url = `${CONFIG.INDEXER_URL}/payments${buildQueryString(queryParams)}`;
 
   return (
     <>
@@ -137,10 +137,10 @@ export function ApiPlayground() {
       <Section size="1" pt="1">
         <Card size="1">
           <Flex direction="column" gap="2" align="start">
-            {inputs.map((input, index) =>
-              input.type === "checkbox" ? (
-                <Flex key={input.label} direction="column" gap="1" width="100%">
-                  <Text size="2">{input.label}</Text>
+            {inputs.map((input) => (
+              <Flex key={input.label} direction="column" gap="1" width="100%">
+                <Text size="2">{input.label}</Text>
+                {input.type === "checkbox" ? (
                   <CheckboxGroup.Root
                     value={(queryParams[input.key] as string[]) || []}
                     onValueChange={handleCheckboxChange(input.key)}
@@ -156,10 +156,7 @@ export function ApiPlayground() {
                       ))}
                     </Grid>
                   </CheckboxGroup.Root>
-                </Flex>
-              ) : (
-                <Flex key={input.label} direction="column" gap="1" width="100%">
-                  <Text size="2">{input.label}</Text>
+                ) : (
                   <TextField.Root
                     size="2"
                     placeholder={input.placeholder}
@@ -172,9 +169,10 @@ export function ApiPlayground() {
                   >
                     <TextField.Slot></TextField.Slot>
                   </TextField.Root>
-                </Flex>
-              )
-            )}
+                )}
+              </Flex>
+            ))}
+
             <ScrollArea scrollbars="horizontal" className="text-xs py-1">
               <CodeCopy text={url} position="back" justify="start" />
             </ScrollArea>

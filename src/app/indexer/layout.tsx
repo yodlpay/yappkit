@@ -1,4 +1,4 @@
-import { PlaygroundProvider } from "../../providers/PlaygroundProvider";
+import { PlaygroundProvider } from "@/providers/PlaygroundProvider";
 
 export default function IndexerLayout({
   children,

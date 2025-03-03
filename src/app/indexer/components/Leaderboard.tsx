@@ -16,17 +16,19 @@ import Image from "next/image";
 import { fetchIndexerData } from "@/lib/indexerAapi";
 import { CardList } from "@/components/ui/CardList";
 import { useUser } from "@/providers/UserProviders";
+import { getLeaderboardData } from "./utils";
+import { processPaymentsData } from "./utils";
 
-type LeaderboardItem = {
+export type LeaderboardItem = {
   rank: number;
   sender: string;
   amountTotal: number;
   txCount: number;
 };
 
-type TokenCount = { token: TokenInfo; count: number };
+export type TokenCount = { token: TokenInfo; count: number };
 
-const useCases = [
+const USECASES = [
   {
     title: "Confirmation",
     text: "Confirm a payment has been made",
@@ -50,6 +52,20 @@ export function Leaderboard() {
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
 
+  useEffect(() => {
+    if (response?.payments) {
+      const tokens = processPaymentsData(response.payments);
+      setAvailableTokens(tokens);
+
+      if (!selectedToken && tokens.length > 0) {
+        setSelectedToken(tokens[0].token);
+      }
+
+      const newLeaderboard = getLeaderboardData(response.payments, selectedToken);
+      setLeaderboardData(newLeaderboard);
+    }
+  }, [response, selectedToken]);
+
   const numberFormatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -62,7 +78,7 @@ export function Leaderboard() {
 
   const handleSubmit = async () => {
     try {
-      const { status, data } = await fetchIndexerData("/payments", { receiver });
+      const { status, data } = await fetchIndexerData({ receiver });
       setQueryParams({ receiver });
       setResponseStatusCode(status);
       setResponse(data);
@@ -72,74 +88,6 @@ export function Leaderboard() {
     }
   };
 
-  const processData = (data: any) => {
-    if (!data?.payments) return;
-
-    // Get unique tokens and their counts
-    const tokenCounts = data.payments.reduce((acc: Record<string, number>, payment: any) => {
-      const token = payment.tokenOutSymbol;
-      acc[token] = (acc[token] || 0) + 1;
-      return acc;
-    }, {});
-
-    const tokens = Object.entries(tokenCounts)
-      .map(([symbol, count]): TokenCount | null => {
-        const token = getTokenBySymbol(symbol);
-        return token ? { token, count: Number(count) } : null;
-      })
-      .filter((item): item is TokenCount => item !== null)
-      .sort((a, b) => b.count - a.count);
-
-    setAvailableTokens(tokens);
-
-    // If no token is selected, select the most frequent one
-    if (!selectedToken && tokens.length > 0) {
-      setSelectedToken(tokens[0].token);
-    }
-  };
-
-  const getLeaderboardData = (payments: any[]): LeaderboardItem[] => {
-    if (!payments) return [];
-
-    const filteredPayments = selectedToken
-      ? payments.filter((p) => p.tokenOutSymbol === selectedToken.symbol.toUpperCase()) // Changed to compare with symbol
-      : payments;
-
-    const senderTotals = filteredPayments.reduce(
-      (acc: Record<string, { amount: number; count: number }>, payment: any) => {
-        const sender = payment.senderEnsPrimaryName || payment.senderAddress;
-        if (!acc[sender]) {
-          acc[sender] = { amount: 0, count: 0 };
-        }
-        acc[sender].amount += Number(payment.tokenOutAmountGross);
-        acc[sender].count += 1;
-        return acc;
-      },
-      {}
-    );
-
-    return Object.entries(senderTotals)
-      .map(([sender, { amount, count }]) => ({
-        rank: 0,
-        sender,
-        amountTotal: Number(amount),
-        txCount: count,
-      }))
-      .sort((a, b) => b.amountTotal - a.amountTotal)
-      .map((item, index) => ({
-        ...item,
-        rank: index + 1,
-      }));
-  };
-
-  useEffect(() => {
-    if (response?.payments) {
-      processData(response);
-      const newLeaderboard = getLeaderboardData(response.payments);
-      setLeaderboardData(newLeaderboard);
-    }
-  }, [response, selectedToken]);
-
   return (
     <>
       <Section size="1">
@@ -148,11 +96,7 @@ export function Leaderboard() {
             A leadeboard is just one of many possible applications of the payments history. Listed
             below are a few other use cases.
           </Text>
-          {/* <Text as="p" align="center">
-            The payments history is an integral part of the Yodl tool-chain? and has many use cases.
-            A few examples are listed below.
-          </Text> */}
-          <CardList list={useCases} />
+          <CardList list={USECASES} />
         </Flex>
       </Section>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Box,
   Card,
   Flex,
   Link,
@@ -14,7 +13,6 @@ import {
   Badge,
   Heading,
 } from "@radix-ui/themes";
-import { FaChartLine, FaTrophy } from "react-icons/fa";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { InfoBox } from "@/components/ui/InfoBox";
@@ -22,30 +20,7 @@ import { FiatCurrency } from "@yodlpay/yapp-sdk/dist/types/currency";
 import { PaymentResponse } from "@yodlpay/yapp-sdk";
 import { sdk } from "@/lib/sdk";
 import { useState } from "react";
-import { SupportedChainId } from "@/types";
-import { EXPLORERLINK_BY_CHAINID } from "@/constants";
 import { getChain } from "@yodlpay/tokenlists";
-
-// const PAY_SECTIONS = [
-//   {
-//     title: "Close",
-//     description: "How to close iframe and return the main app",
-//     icon: FaChartLine,
-//     href: "/pay/close",
-//   },
-//   {
-//     title: "Payments",
-//     description: "Make payments on yodl.me",
-//     icon: FaTrophy,
-//     href: "/pay/payments",
-//   },
-// ] as const;
-
-const CURRENCY_OPTIONS = [
-  { label: "USD", value: FiatCurrency.USD },
-  { label: "EUR", value: FiatCurrency.EUR },
-  { label: "GBP", value: FiatCurrency.GBP },
-] as const;
 
 export default function PayPage() {
   const [amount, setAmount] = useState<number>(1);
@@ -65,12 +40,10 @@ export default function PayPage() {
     const payload = {
       amount,
       currency,
-      // memo: "Premium subscription",
     };
 
     try {
       const response = await sdk.requestPayment(receiver, payload);
-      console.log("🚀 response:", response);
       setPaymentResponse(response);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -98,12 +71,13 @@ export default function PayPage() {
         <Code>requestPayment</Code> calls <Code>window.postMessage</Code>
         for secure communication between the iframe and the parent.
       </InfoBox>
+
       <Section size="1">
         <Text as="p" align="center">
           When the Yodl app receives a payment request, the payment modal will be displayed. The
           user can configure payment settings, e.g. outgoing token, and complete or reject the
-          payment. After completed payment the modal will close and the yapp receives an object with{" "}
-          <Code>txHash</Code> and <Code>chainId</Code>. Try it out below.
+          payment. After completed payment the modal will close and the yapp receives a response
+          with <Code>txHash</Code> and <Code>chainId</Code>. Try it out below.
         </Text>
       </Section>
 
@@ -111,6 +85,7 @@ export default function PayPage() {
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
           Request a payment
         </Heading>
+
         <Card size="1">
           <Flex direction="column" gap="4">
             <Flex direction="column" gap="3">
@@ -142,9 +117,9 @@ export default function PayPage() {
                   >
                     <Select.Trigger />
                     <Select.Content>
-                      {CURRENCY_OPTIONS.map((option) => (
-                        <Select.Item key={option.value} value={option.value}>
-                          {option.label}
+                      {Object.values(FiatCurrency).map((option) => (
+                        <Select.Item key={option} value={option}>
+                          {option}
                         </Select.Item>
                       ))}
                     </Select.Content>
@@ -162,7 +137,7 @@ export default function PayPage() {
                 </Text>
               )}
 
-              {paymentResponse?.txHash && (
+              {paymentResponse && (
                 <Flex direction="column" gap="1">
                   <Text size="2">
                     Payment on {getChain(paymentResponse.chainId).chainName} chain
@@ -170,9 +145,9 @@ export default function PayPage() {
                   </Text>
                   <Text size="2">
                     <Link
-                      href={`${
-                        EXPLORERLINK_BY_CHAINID[paymentResponse.chainId as SupportedChainId]
-                      }/${paymentResponse.txHash}`}
+                      href={`${getChain(paymentResponse.chainId).explorerUrl}/${
+                        paymentResponse.txHash
+                      }`}
                       target="_blank"
                     >
                       View on explorer
@@ -180,6 +155,7 @@ export default function PayPage() {
                   </Text>
                 </Flex>
               )}
+              
             </Flex>
           </Flex>
         </Card>

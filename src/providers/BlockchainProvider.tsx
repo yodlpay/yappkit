@@ -1,21 +1,15 @@
 "use client";
 
-import { SUPPORTED_CHAIN_IDS } from "@/constants";
 import { getPublicClientByChainId } from "@/lib/viem";
 import { useState, createContext, useContext } from "react";
-import { formatEther, Address, getContract, erc20Abi, formatUnits } from "viem";
-import { COUNTER_ABI } from "@/constants/contractAbi";
-import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
+import { Address, erc20Abi, formatUnits } from "viem";
+import { COUNTER_ABI } from "@/constants/counterContract";
+import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants";
 import { base } from "viem/chains";
 import { SupportedChainId } from "@/types";
 import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
 
 type BlockchainState = {
-  // balances: {
-  //   chainId: number;
-  //   balance: bigint;
-  //   formatted: string;
-  // }[];
   tokenBalances: {
     chainId: number;
     token: TokenInfo;
@@ -30,7 +24,6 @@ type BlockchainState = {
 
 type BlockchainContextType = {
   state: BlockchainState;
-  // fetchBalances: (address: Address) => Promise<void>;
   fetchTokenBalances: (
     address: Address,
     chainId: SupportedChainId,
@@ -42,14 +35,12 @@ type BlockchainContextType = {
 
 const BlockchainContext = createContext<BlockchainContextType>({
   state: {
-    // balances: [],
     tokenBalances: [],
     addressFromEns: null,
     lastEnsQueried: null,
     lastAddressQueried: null,
     counterValue: null,
   },
-  // fetchBalances: async () => {},
   fetchTokenBalances: async () => {},
   fetchEnsName: async () => null,
   fetchCounterValue: async () => {},
@@ -57,7 +48,6 @@ const BlockchainContext = createContext<BlockchainContextType>({
 
 export function BlockchainProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<BlockchainState>({
-    // balances: [],
     tokenBalances: [],
     addressFromEns: null,
     lastEnsQueried: null,
@@ -100,35 +90,9 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     setState((prev) => ({ ...prev, tokenBalances: filteredTokenBalances }));
   };
 
-  // const fetchBalances = async (address: Address) => {
-  //   const clients = SUPPORTED_CHAIN_IDS.map((chainId) => getPublicClientByChainId(chainId));
-
-  //   const results = await Promise.all(
-  //     clients.map(async (client, index) => {
-  //       try {
-  //         const balance = await client.getBalance({ address });
-  //         return {
-  //           chainId: SUPPORTED_CHAIN_IDS[index],
-  //           balance,
-  //           formatted: formatEther(balance),
-  //         };
-  //       } catch (error) {
-  //         console.error(`Error fetching balance:`, error);
-  //         return null;
-  //       }
-  //     })
-  //   );
-
-  //   setState((prev) => ({
-  //     ...prev,
-  //     balances: results.filter((r): r is NonNullable<typeof r> => Boolean(r)),
-  //     lastAddressQueried: address,
-  //   }));
-  // };
-
   const fetchEnsName = async (ensName: string): Promise<Address | null> => {
     try {
-      const client = getPublicClientByChainId(1); // mainnet
+      const client = getPublicClientByChainId(1);
       const address = await client.getEnsAddress({ name: ensName });
       if (address) {
         setState((prev) => ({
@@ -163,7 +127,6 @@ export function BlockchainProvider({ children }: { children: React.ReactNode }) 
     <BlockchainContext.Provider
       value={{
         state,
-        // fetchBalances,
         fetchTokenBalances,
         fetchEnsName,
         fetchCounterValue,

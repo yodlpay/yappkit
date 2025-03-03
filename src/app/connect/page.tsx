@@ -4,19 +4,16 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Flex, SegmentedControl } from "@radix-ui/themes";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { useState } from "react";
-import { TbHttpGet, TbHttpPost } from "react-icons/tb";
 import { ReadBlockchain } from "./components/ReadBlockchain";
 import { WriteBlockchain } from "./components/WriteBlockchain";
 
 const CONNECT_SECTIONS = {
   read: {
     title: "Not Connected",
-    icon: TbHttpGet,
     component: <ReadBlockchain />,
   },
   write: {
     title: "Connected",
-    icon: TbHttpPost,
     component: <WriteBlockchain />,
   },
 } as const;
@@ -40,7 +37,6 @@ export default function ConnectPage() {
             {Object.entries(CONNECT_SECTIONS).map(([key, section]) => (
               <SegmentedControl.Item key={key} value={key}>
                 <Flex align="center" gap="2">
-                  {/* <section.icon /> */}
                   {section.title}
                 </Flex>
               </SegmentedControl.Item>

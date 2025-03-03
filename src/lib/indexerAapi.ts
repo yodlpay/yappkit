@@ -1,9 +1,9 @@
-import { INDEXER_URL } from "@/constants";
+import { CONFIG } from "@/constants";
 import { QueryParams } from "@/providers/PlaygroundProvider";
 
 export const buildQueryString = (params: Record<string, any>) => {
   const processedParams = { ...params };
-  // Remove sourceChainIds if "all" is selected
+
   if (processedParams.sourceChainIds?.includes("all")) {
     delete processedParams.sourceChainIds;
   }
@@ -30,10 +30,9 @@ export const buildQueryString = (params: Record<string, any>) => {
   return urlParams.toString() ? `?${urlParams.toString()}` : "";
 };
 
-// export const fetchIndexerData = async (endpoint: string, params: Record<string, any>) => {
-export const fetchIndexerData = async (endpoint: string, params: QueryParams) => {
+export const fetchIndexerData = async (params: QueryParams) => {
   const queryString = buildQueryString(params);
-  const url = `${INDEXER_URL}${endpoint}${queryString}`;
+  const url = `${CONFIG.INDEXER_URL}/payments${queryString}`;
   const response = await fetch(url);
   return {
     status: response.status,

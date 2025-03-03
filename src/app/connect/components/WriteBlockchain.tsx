@@ -1,15 +1,15 @@
 import { InfoBox } from "@/components/ui/InfoBox";
-import { Card, Flex, Section, Text, Button, Link, Heading } from "@radix-ui/themes";
+import { Card, Flex, Section, Text, Button, Heading } from "@radix-ui/themes";
 import { useAccount, useWriteContract } from "wagmi";
 import { useState, useEffect } from "react";
-import { COUNTER_ABI } from "@/constants/contractAbi";
-import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants/contracts";
+import { COUNTER_ABI } from "@/constants/counterContract";
+import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants";
 import { base } from "viem/chains";
 import { Loader } from "@/components/ui/Loader";
 import { useBlockchain } from "@/providers/BlockchainProvider";
 import { CardList } from "@/components/ui/CardList";
 
-const useCases = [
+const USECASES = [
   {
     title: "Mint NFT",
     text: "Mint an NFT to a user's address.",
@@ -27,19 +27,19 @@ const useCases = [
 export function WriteBlockchain() {
   const { isConnected, chainId } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
+  const { writeContractAsync: increment } = useWriteContract();
   const {
     state: { counterValue },
     fetchCounterValue,
   } = useBlockchain();
 
-  // Fetch counter value on mount and when chainId changes
   useEffect(() => {
+    if (!chainId || chainId === 1) return;
     fetchCounterValue(chainId || base.id);
   }, [chainId, fetchCounterValue]);
 
-  const { writeContractAsync: increment } = useWriteContract();
   const handleIncrement = async () => {
-    if (!chainId) return;
+    if (!chainId || chainId === 1) return;
     setIsLoading(true);
     try {
       await increment({
@@ -48,7 +48,6 @@ export function WriteBlockchain() {
         functionName: "increment",
         args: [],
       });
-      // Refetch the counter value after increment
       await fetchCounterValue(chainId);
     } finally {
       setIsLoading(false);
@@ -63,7 +62,7 @@ export function WriteBlockchain() {
             To enable on-chain transactions other than Yodl payments, yapps must provide wallet
             connection functionality. A few examples of what&apos;s possible:
           </Text>
-          <CardList list={useCases} />
+          <CardList list={USECASES} />
         </Flex>
       </Section>
       <Section size="1">
@@ -80,11 +79,21 @@ export function WriteBlockchain() {
         <Card size="1">
           <Flex direction="column" gap="2">
             <Flex gap="4" align="center" width="100%" justify="between">
-              <Text size="2">Counter: {counterValue?.toString() ?? "Loading..."}</Text>
-              <Button disabled={!isConnected || isLoading} onClick={handleIncrement}>
+              <Text size="2">
+                Counter: {counterValue?.toString() || chainId === 1 ? "" : "Loading..."}
+              </Text>
+              <Button
+                disabled={!isConnected || isLoading || chainId === 1}
+                onClick={handleIncrement}
+              >
                 {isLoading ? <Loader /> : "Increment"}
               </Button>
             </Flex>
+            {chainId === 1 && (
+              <InfoBox color="red">
+                <Text>Please switch to a chain other than mainnet</Text>
+              </InfoBox>
+            )}
             {!isConnected && (
               <InfoBox color="red">
                 <Text>Please connect your wallet to interact</Text>

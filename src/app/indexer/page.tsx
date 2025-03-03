@@ -4,23 +4,16 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Flex, SegmentedControl } from "@radix-ui/themes";
 import { ApiPlayground } from "./components/ApiPlayground";
 import { Leaderboard } from "./components/Leaderboard";
-import { FaTrophy, FaChartLine } from "react-icons/fa";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { useState } from "react";
-import { LuToyBrick } from "react-icons/lu";
 
 const INDEXER_SECTIONS = {
   playground: {
     title: "API Playground",
-    // description: "Fetch indexed payments",
-    // icon: FaChartLine,
-    icon: LuToyBrick,
     component: <ApiPlayground />,
   },
   leaderboard: {
     title: "Leaderboard",
-    // description: "View and create leaderboards",
-    icon: FaTrophy,
     component: <Leaderboard />,
   },
 } as const;
@@ -44,7 +37,6 @@ export default function IndexerPage() {
             {Object.entries(INDEXER_SECTIONS).map(([key, section]) => (
               <SegmentedControl.Item key={key} value={key}>
                 <Flex align="center" gap="2">
-                  {/* <section.icon /> */}
                   {section.title}
                 </Flex>
               </SegmentedControl.Item>

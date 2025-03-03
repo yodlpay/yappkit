@@ -16,7 +16,7 @@ export const UserInfoDisplay = () => {
   if (isLoading) return <Loader />;
   if (!userInfo) return null;
 
-  const { ens, truncatedAddress, yappEns, communityEns, exp, someClaim, address } = userInfo;
+  const { ens, yappEns, communityEns, exp, address } = userInfo;
   const expirationDate = new Date(userInfo.exp * 1000);
   const formattedExpDate = `${userInfo.exp} (${expirationDate.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -41,7 +41,6 @@ export const UserInfoDisplay = () => {
       label: "Yapp",
       description:
         "This yapp's ENS name. It must match the SDK config.ensName. Essential in rejecting malicious JWT's. The SDK's verify function handles the check.",
-      // This is essential for verifying that the jtw is targetted this app. Verification happens through the SDK verify function.",
       element: <CodeCopy text={yappEns} truncate={true} />,
     },
     {

@@ -9,14 +9,14 @@ import { useUser } from "@/providers/UserProviders";
 import { SupportedChainId } from "@/types";
 import { SUPPORTED_CHAINS } from "@/constants";
 
-const useCases = [
+const USECASES = [
   {
     title: "Balance",
     text: "Fetch token balances of users.",
   },
   {
     title: "Airdrop",
-    text: "Target users or communities in airdrops.",
+    text: "Target users or communities with airdrops.",
   },
   {
     title: "ENS",
@@ -46,7 +46,7 @@ export function ReadBlockchain() {
         setIsLoadingTokenBalances(false)
       );
     }
-  }, [userInfo?.address, selectedChainId]);
+  }, [userInfo, selectedChainId, fetchTokenBalances]);
 
   return (
     <>
@@ -57,7 +57,7 @@ export function ReadBlockchain() {
             the jwt enables yapps to identify users and communities. A few examples of what&apos;s
             possible:
           </Text>
-          <CardList list={useCases} />
+          <CardList list={USECASES} />
         </Flex>
       </Section>
 
@@ -87,7 +87,13 @@ export function ReadBlockchain() {
                     {SUPPORTED_CHAINS.map(({ chainId, chainName, logoUri }) => (
                       <Select.Item key={chainId} value={String(chainId)}>
                         <Flex align="center" gap="2">
-                          <Image src={logoUri ?? ""} alt={chainName} width={20} height={20} />
+                          <Image
+                            src={logoUri ?? ""}
+                            alt={chainName}
+                            width={20}
+                            height={20}
+                            style={{ maxWidth: "20px", maxHeight: "20px" }}
+                          />
                           {chainName}
                         </Flex>
                       </Select.Item>
@@ -116,6 +122,7 @@ export function ReadBlockchain() {
                                 alt={token.symbol}
                                 width={20}
                                 height={20}
+                                style={{ maxWidth: "20px", maxHeight: "20px" }}
                               />
                               <Text>{token.symbol}</Text>
                             </Flex>

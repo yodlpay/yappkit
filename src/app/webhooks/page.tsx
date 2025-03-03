@@ -30,6 +30,7 @@ import { Address } from "viem";
 import { normalize, namehash } from "viem/ens";
 import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
 import { ResponseTable } from "../indexer/components/ResponseTable";
+import { PUBLIC_RESOLVER_ABI } from "@/constants";
 
 const WEBHOOK_TYPES = ["generate", "custom"] as const;
 type WebhookType = (typeof WEBHOOK_TYPES)[number];
@@ -86,13 +87,27 @@ export default function WebhooksPage() {
     if (records === null) return;
 
     const meYodlRecord = records.sanitizedRecords.allTexts.find((r) => r.key === yodlRecordKey);
-    setYodlRecord(meYodlRecord ? JSON.parse(meYodlRecord.value) : null);
+    if (meYodlRecord) {
+      try {
+        const parsedRecord = JSON.parse(meYodlRecord.value);
+        if (JSON.stringify(parsedRecord) !== JSON.stringify(yodlRecord)) {
+          setYodlRecord(parsedRecord);
+        }
+      } catch (e) {
+        console.error("Failed to parse yodl record:", e);
+        setYodlRecord(null);
+      }
+    } else {
+      setYodlRecord(null);
+    }
   }, [
     isConnected,
     accountSubnames,
     accountEnsNames,
     isAccountSubnamesPending,
     isAccountEnsNamesPending,
+    yodlRecordKey,
+    yodlRecord,
   ]);
 
   const handleGenerateUrl = async () => {
@@ -120,7 +135,7 @@ export default function WebhooksPage() {
     }
 
     if (!accountRecords) {
-      setUpdateEnsError("No records found"); // fix this
+      setUpdateEnsError("No records found");
       return;
     }
 
@@ -128,44 +143,32 @@ export default function WebhooksPage() {
 
     const ensToUpdate = accountRecords.ens;
 
-    const newYodlRecord = JSON.stringify({
+    const newYodlRecord = {
       ...yodlRecord,
       webhooks: [...(yodlRecord?.webhooks || []), webhookUrl],
-    });
+    };
 
     try {
       if (ensType === "jan-subname") {
         await updateSubname({
-          text: { [yodlRecordKey]: newYodlRecord },
+          text: { [yodlRecordKey]: JSON.stringify(newYodlRecord) },
           ens: normalize(ensToUpdate),
         });
       } else if (ensType === "ens") {
         await writeContractAsync({
           address: accountRecords.records.resolverAddress as Address,
-          abi: [
-            {
-              inputs: [
-                { internalType: "bytes32", name: "node", type: "bytes32" },
-                { internalType: "string", name: "key", type: "string" },
-                { internalType: "string", name: "value", type: "string" },
-              ],
-              name: "setText",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-          ],
+          abi: PUBLIC_RESOLVER_ABI,
           functionName: "setText",
-          args: [namehash(ensToUpdate), yodlRecordKey, newYodlRecord],
+          args: [namehash(ensToUpdate), yodlRecordKey, JSON.stringify(newYodlRecord)],
         });
       }
+      setYodlRecord(newYodlRecord);
     } catch (error) {
       setUpdateEnsError("Failed to update ENS record");
       return;
     } finally {
       setIsUpdatingEns(false);
     }
-    setYodlRecord({ [yodlRecordKey]: newYodlRecord });
     setIsEnsUpdated(true);
   };
 
@@ -280,7 +283,7 @@ export default function WebhooksPage() {
               </Button>
               {!webhookUrl && (
                 <Text size="1" color="red">
-                  Generate a URL in Step 1 to update the record
+                  Prepare a URL in Step 1 to update the record
                 </Text>
               )}
               {updateEnsError && <Text color="red">{updateEnsError}</Text>}
@@ -333,24 +336,21 @@ export default function WebhooksPage() {
 
       <Section size="1">
         <Text as="p" align="center">
-          Receive payments notifications via webhooks.
+          Communities, yapps and users can receive payments notifications via webhooks.
           <br />
           Configure the <Code>yodl.me</Code> ENS record with webhook URLs.
         </Text>
       </Section>
 
-      <InfoBox>Communities, yapps and users can set their own webhook URLs.</InfoBox>
-
-      <Section size="1">
-        <Text as="p" align="center">
-          To update the ENS record a wallet with a yodl.eth subname or a regular ENS name must be
-          connected.
-        </Text>
-      </Section>
+      <InfoBox>
+        To update the ENS record a wallet with a yodl.eth subname or a top-level ENS name must be
+        connected. Top-level ENS names can only set text records on mainnet and it requires gas to
+        do so.
+      </InfoBox>
 
       <Section size="1">
         <Heading as="h3" size="2" align="center" mb="2" color="gray">
-          Get Started
+          Configure Webhooks
         </Heading>
         <Accordion.Root type="multiple" className="text-sm">
           <Flex direction="column" gap="2">

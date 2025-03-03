@@ -1,13 +1,14 @@
+import "@radix-ui/themes/styles.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { UserProvider } from "@/providers/UserProviders";
 import { WalletProvider } from "@/providers/WalletProvider";
-import "@radix-ui/themes/styles.css";
-import "./globals.css";
 import { BlockchainProvider } from "@/providers/BlockchainProvider";
 import { JustaNameProvider } from "@/providers/JustaNameProvider";
+import { accentColor } from "@/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Yodl Kitchen Sink",
+  title: "YappKit",
   description: "Demo application showcasing Yodl mini-app capabilities",
   icons: {
     icon: "/favicon.ico",
@@ -39,7 +40,7 @@ export default function RootLayout({
           <JustaNameProvider>
             <UserProvider>
               <Theme
-                accentColor="teal"
+                accentColor={accentColor}
                 hasBackground={false}
                 panelBackground="translucent"
                 radius="medium"
