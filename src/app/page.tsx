@@ -1,11 +1,23 @@
 "use client";
 
-import { Heading, Text, Flex, Section, ChevronDownIcon, Card, Link, Code } from "@radix-ui/themes";
+import {
+  Heading,
+  Text,
+  Flex,
+  Section,
+  ChevronDownIcon,
+  Card,
+  Link,
+  Code,
+  Button,
+} from "@radix-ui/themes";
 import { InfoBox } from "@/components/ui/InfoBox";
 import * as Accordion from "@radix-ui/react-accordion";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { CardList } from "@/components/ui/CardList";
+import { sdk } from "@/lib/sdk";
+import { CONFIG } from "@/constants";
 
 const USE_CASES = [
   {
@@ -29,12 +41,12 @@ const FAQ_ITEMS = [
     answer: "A Yapp is an app that implements the Yodl protocol.",
   },
   {
-    key: "question-4",
+    key: "question-2",
     question: "How to request Yodl payments?",
     content: (
       <Text>
         Use the <Code>requestPayment()</Code> function from the yapp SDK.{" "}
-        <Link href="/pay">Try it out</Link>.
+        <Link href="/pay">Try it</Link>.
       </Text>
     ),
   },
@@ -45,6 +57,18 @@ const FAQ_ITEMS = [
       <Text>
         To send on-chain transactions besides Yodl payments, yapps must implement their own wallet
         connection. <Link href="/connect">Learn more</Link>.
+      </Text>
+    ),
+  },
+  {
+    key: "question-4",
+    question: "How to close a Yapp?",
+    content: (
+      <Text>
+        To close a Yapp, use the <Code>close(targetOrigin: string)</Code> function from the yapp SDK. Try it:{" "}
+        <Button type="button" mt="2" onClick={() => sdk.close(CONFIG.PARENT_URL!)}>
+          Close
+        </Button>
       </Text>
     ),
   },
@@ -96,7 +120,7 @@ export default function ProfilePage() {
                       </Accordion.Trigger>
                     </Accordion.Header>
                     <Accordion.Content>
-                      <Text as="p" size="2" color="gray">
+                      <Text as="p" size="2">
                         {content || answer}
                       </Text>
                     </Accordion.Content>

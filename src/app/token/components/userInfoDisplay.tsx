@@ -1,5 +1,5 @@
 import { CodeCopy } from "@/components/ui/CodeCopy";
-import { Loader } from "@/components/ui/Loader";
+import { FullScreenLoader } from "@/components/ui/Loader";
 import { useUser } from "@/providers/UserProviders";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Card, DataList, Flex, Popover, Text } from "@radix-ui/themes";
@@ -13,7 +13,7 @@ export type UserInfoDisplayItem = {
 export const UserInfoDisplay = () => {
   const { userInfo, isLoading } = useUser();
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <FullScreenLoader />;
   if (!userInfo) return null;
 
   const { ens, yappEns, communityEns, exp, address } = userInfo;

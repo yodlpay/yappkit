@@ -1,13 +1,9 @@
 import { InfoBox } from "@/components/ui/InfoBox";
-import { Card, Flex, Section, Text, Button, Heading } from "@radix-ui/themes";
-import { useAccount, useWriteContract } from "wagmi";
-import { useState, useEffect } from "react";
-import { COUNTER_ABI } from "@/constants/counterContract";
-import { COUNTER_ADDRESS_BY_CHAIN } from "@/constants";
+import { Card, Flex, Section, Text, Button, Heading, Spinner } from "@radix-ui/themes";
+import { useAccount } from "wagmi";
 import { base } from "viem/chains";
-import { Loader } from "@/components/ui/Loader";
-import { useBlockchain } from "@/providers/BlockchainProvider";
 import { CardList } from "@/components/ui/CardList";
+import { useCounter } from "@/hooks/useCounter";
 
 const USECASES = [
   {
@@ -26,31 +22,14 @@ const USECASES = [
 
 export function WriteBlockchain() {
   const { isConnected, chainId } = useAccount();
-  const [isLoading, setIsLoading] = useState(false);
-  const { writeContractAsync: increment } = useWriteContract();
-  const {
-    state: { counterValue },
-    fetchCounterValue,
-  } = useBlockchain();
-
-  useEffect(() => {
-    if (!chainId || chainId === 1) return;
-    fetchCounterValue(chainId || base.id);
-  }, [chainId, fetchCounterValue]);
+  const { value: counterValue, increment, isLoading, error } = useCounter(chainId || base.id);
 
   const handleIncrement = async () => {
     if (!chainId || chainId === 1) return;
-    setIsLoading(true);
     try {
-      await increment({
-        address: COUNTER_ADDRESS_BY_CHAIN[chainId],
-        abi: COUNTER_ABI,
-        functionName: "increment",
-        args: [],
-      });
-      await fetchCounterValue(chainId);
-    } finally {
-      setIsLoading(false);
+      await increment();
+    } catch (error) {
+      console.error("Failed to increment counter:", error);
     }
   };
 
@@ -67,8 +46,8 @@ export function WriteBlockchain() {
       </Section>
       <Section size="1">
         <Text as="p" align="center">
-          Below is an exmple of an on-chain transaction that requires a wallet connection. Connect a
-          wallet and select chain to increment the count on the Counter contract.
+          Below is an example of an on-chain transaction that requires a wallet connection. Connect
+          a wallet and select chain to increment the count on the Counter contract.
         </Text>
       </Section>
       <Heading as="h3" size="2" align="center" color="gray">
@@ -80,13 +59,20 @@ export function WriteBlockchain() {
           <Flex direction="column" gap="2">
             <Flex gap="4" align="center" width="100%" justify="between">
               <Text size="2">
-                Counter: {counterValue?.toString() || chainId === 1 ? "" : "Loading..."}
+                Counter:{" "}
+                {chainId === 1 ? (
+                  ""
+                ) : counterValue !== undefined ? (
+                  counterValue.toString()
+                ) : (
+                  <Spinner />
+                )}
               </Text>
               <Button
                 disabled={!isConnected || isLoading || chainId === 1}
                 onClick={handleIncrement}
               >
-                {isLoading ? <Loader /> : "Increment"}
+                {isLoading ? <Spinner /> : "Increment"}
               </Button>
             </Flex>
             {chainId === 1 && (
@@ -97,6 +83,11 @@ export function WriteBlockchain() {
             {!isConnected && (
               <InfoBox color="red">
                 <Text>Please connect your wallet to interact</Text>
+              </InfoBox>
+            )}
+            {error && (
+              <InfoBox color="red">
+                <Text>{error.message}</Text>
               </InfoBox>
             )}
           </Flex>

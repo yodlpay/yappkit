@@ -5,6 +5,16 @@ import { darkTheme, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rai
 import { WagmiProvider } from "wagmi";
 import { polygon, optimism, arbitrum, base, mainnet } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { memo } from "react";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      retry: 2,
+    },
+  },
+});
 
 const config = getDefaultConfig({
   appName: "Yapp Kit",
@@ -13,9 +23,7 @@ const config = getDefaultConfig({
   ssr: true,
 });
 
-export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient();
-
+export const WalletProvider = memo(({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -32,4 +40,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       </QueryClientProvider>
     </WagmiProvider>
   );
-};
+});
+
+WalletProvider.displayName = "WalletProvider";

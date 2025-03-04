@@ -3,7 +3,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { sdk } from "@/lib/sdk";
-import { Loader } from "@/components/ui/Loader";
+import { FullScreenLoader } from "@/components/ui/Loader";
 import { Address } from "viem";
 
 type UserInfo = {
@@ -79,7 +79,7 @@ function UserProviderInner({ children }: { children: ReactNode }) {
 
 export function UserProvider({ children }: { children: ReactNode }) {
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<FullScreenLoader />}>
       <UserProviderInner>{children}</UserProviderInner>
     </Suspense>
   );

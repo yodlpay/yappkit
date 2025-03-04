@@ -8,16 +8,18 @@ import {
   Button,
   Card,
   Heading,
+  Callout,
+  Skeleton,
+  Box,
 } from "@radix-ui/themes";
-import { usePlayground } from "../../../providers/PlaygroundProvider";
 import { useEffect, useState } from "react";
 import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
 import Image from "next/image";
-import { fetchIndexerData } from "@/lib/indexerAapi";
-import { CardList } from "@/components/ui/CardList";
-import { useUser } from "@/providers/UserProviders";
 import { getLeaderboardData } from "./utils";
 import { processPaymentsData } from "./utils";
+import { useUser } from "@/providers/UserProviders";
+import { useIndexerQuery } from "@/hooks/useIndexerQuery";
+import { CardList } from "@/components/ui/CardList";
 
 export type LeaderboardItem = {
   rank: number;
@@ -44,27 +46,29 @@ const USECASES = [
 ];
 
 export function Leaderboard() {
-  const { queryParams, setQueryParams, response, setResponse, setResponseStatusCode } =
-    usePlayground();
   const { userInfo } = useUser();
-  const [receiver, setReceiver] = useState(queryParams.receiver || userInfo?.ens || "vitalik.eth");
+  const [receiver, setReceiver] = useState(userInfo?.ens || "vitalik.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
 
+  const { data, isLoading, isError, error, refetch } = useIndexerQuery({
+    receiver,
+  });
+
   useEffect(() => {
-    if (response?.payments) {
-      const tokens = processPaymentsData(response.payments);
+    if (data?.data?.payments) {
+      const tokens = processPaymentsData(data.data.payments);
       setAvailableTokens(tokens);
 
       if (!selectedToken && tokens.length > 0) {
         setSelectedToken(tokens[0].token);
       }
 
-      const newLeaderboard = getLeaderboardData(response.payments, selectedToken);
+      const newLeaderboard = getLeaderboardData(data.data.payments, selectedToken);
       setLeaderboardData(newLeaderboard);
     }
-  }, [response, selectedToken]);
+  }, [data, selectedToken]);
 
   const numberFormatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
@@ -76,16 +80,8 @@ export function Leaderboard() {
     setSelectedToken(token);
   };
 
-  const handleSubmit = async () => {
-    try {
-      const { status, data } = await fetchIndexerData({ receiver });
-      setQueryParams({ receiver });
-      setResponseStatusCode(status);
-      setResponse(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setResponseStatusCode(500);
-    }
+  const handleSubmit = () => {
+    refetch();
   };
 
   return (
@@ -165,6 +161,14 @@ export function Leaderboard() {
             </Section>
           )}
 
+          {isError && (
+            <Callout.Root color="red">
+              <Callout.Text>
+                No data found for this address. Please check if the ENS or address is correct.
+              </Callout.Text>
+            </Callout.Root>
+          )}
+
           <Table.Root size="1">
             <Table.Header>
               <Table.Row>
@@ -176,18 +180,51 @@ export function Leaderboard() {
             </Table.Header>
 
             <Table.Body>
-              {leaderboardData.map(({ sender, amountTotal, rank, txCount }) => (
-                <Table.Row key={sender}>
-                  <Table.RowHeaderCell>{rank}</Table.RowHeaderCell>
-                  <Table.Cell>
-                    {sender.length > 20 ? sender.slice(0, 12) + "..." + sender.slice(-4) : sender}
-                  </Table.Cell>
-                  <Table.Cell justify="end" className="font-mono ">
-                    {numberFormatter.format(amountTotal)}
-                  </Table.Cell>
-                  <Table.Cell justify="center">{txCount}</Table.Cell>
-                </Table.Row>
-              ))}
+              {isLoading && (
+                <>
+                  {Array(5)
+                    .fill(0)
+                    .map((_, i) => (
+                      <Table.Row key={`skeleton-${i}`}>
+                        <Table.RowHeaderCell>
+                          <Skeleton>
+                            <Box width="20px">{i + 1}</Box>
+                          </Skeleton>ß
+                        </Table.RowHeaderCell>
+                        <Table.Cell>
+                          <Skeleton>
+                            <Text>0x1234...5678</Text>
+                          </Skeleton>
+                        </Table.Cell>
+                        <Table.Cell justify="end">
+                          <Skeleton>
+                            <Text className="font-mono">1000.00</Text>
+                          </Skeleton>
+                        </Table.Cell>
+                        <Table.Cell justify="center">
+                          <Skeleton>
+                            <Text>10</Text>
+                          </Skeleton>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                </>
+              )}
+              {data &&
+                !isLoading &&
+                !isError &&
+                leaderboardData.map(({ sender, amountTotal, rank, txCount }) => (
+                  <Table.Row key={sender}>
+                    <Table.RowHeaderCell>{rank}</Table.RowHeaderCell>
+                    <Table.Cell>
+                      {sender.length > 20 ? sender.slice(0, 12) + "..." + sender.slice(-4) : sender}
+                    </Table.Cell>
+                    <Table.Cell justify="end" className="font-mono ">
+                      {numberFormatter.format(amountTotal)}
+                    </Table.Cell>
+                    <Table.Cell justify="center">{txCount}</Table.Cell>
+                  </Table.Row>
+                ))}
             </Table.Body>
           </Table.Root>
         </Card>

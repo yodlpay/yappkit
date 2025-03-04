@@ -6,7 +6,6 @@ import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { UserProvider } from "@/providers/UserProviders";
 import { WalletProvider } from "@/providers/WalletProvider";
-import { BlockchainProvider } from "@/providers/BlockchainProvider";
 import { JustaNameProvider } from "@/providers/JustaNameProvider";
 import { accentColor } from "@/constants";
 
@@ -46,9 +45,7 @@ export default function RootLayout({
                 radius="medium"
                 appearance="dark"
               >
-                <BlockchainProvider>
-                  <AppLayout>{children}</AppLayout>
-                </BlockchainProvider>
+                <AppLayout>{children}</AppLayout>
               </Theme>
             </UserProvider>
           </JustaNameProvider>

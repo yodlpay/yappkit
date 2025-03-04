@@ -15,11 +15,13 @@ import {
   Heading,
   Link,
 } from "@radix-ui/themes";
-import { QueryParamKey, usePlayground } from "../../../providers/PlaygroundProvider";
+import { useIndexerQuery } from "@/hooks/useIndexerQuery";
 import { ResponseTable } from "./ResponseTable";
-import { buildQueryString, fetchIndexerData } from "@/lib/indexerAapi";
 import { CONFIG, SUPPORTED_CHAINS } from "@/constants";
 import { CodeCopy } from "@/components/ui/CodeCopy";
+import { useState } from "react";
+import { QueryParamKey, QueryParams } from "../types";
+import { buildQueryString } from "./utils";
 
 type Input = {
   label: string;
@@ -62,14 +64,12 @@ const inputs: Input[] = [
 ];
 
 export function ApiPlayground() {
-  const {
-    queryParams,
-    setQueryParams,
-    response,
-    setResponse,
-    responseStatusCode,
-    setResponseStatusCode,
-  } = usePlayground();
+  const [queryParams, setQueryParams] = useState<QueryParams>({
+    sender: "",
+    sourceChainIds: ["all"],
+  });
+
+  const { data, isLoading, isError, error, refetch } = useIndexerQuery(queryParams);
 
   const handleInputChange = (key: QueryParamKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -99,17 +99,8 @@ export function ApiPlayground() {
     );
   };
 
-  const handleSubmit = async () => {
-    setResponseStatusCode(null);
-    setResponse(null);
-    try {
-      const { status, data } = await fetchIndexerData(queryParams);
-      setResponseStatusCode(status);
-      setResponse(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setResponseStatusCode(500);
-    }
+  const handleSubmit = () => {
+    refetch();
   };
 
   const url = `${CONFIG.INDEXER_URL}/payments${buildQueryString(queryParams)}`;
@@ -193,24 +184,15 @@ export function ApiPlayground() {
             <Flex gap="2" justify="between" align="center" width="100%">
               <Flex gap="2" align="center">
                 <Text size="2">Response:</Text>
-                {responseStatusCode && (
-                  <Code
-                    color={responseStatusCode >= 200 && responseStatusCode < 300 ? "green" : "red"}
-                    size="2"
-                  >
-                    {responseStatusCode}
-                  </Code>
-                )}
+                {isLoading && <Text>Loading...</Text>}
+                {isError && <Text color="red">Error: {error?.message}</Text>}
               </Flex>
-              <Button size="1" variant="outline" color="gray" onClick={() => setResponse(null)}>
-                Clear
-              </Button>
             </Flex>
-            {response && (
+            {data && (
               <Box width="100%">
                 <ScrollArea scrollbars="both" className="p-2 w-full max-h-72">
                   <Flex gap="4" p="2" width="700px" className="text-xs">
-                    <ResponseTable data={response} isExpanded={true} />
+                    <ResponseTable data={data.data} isExpanded={true} />
                   </Flex>
                 </ScrollArea>
               </Box>
