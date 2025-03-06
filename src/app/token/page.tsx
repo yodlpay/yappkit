@@ -24,7 +24,7 @@ export default function TokenPage() {
 
       <Section>
         <Text as="p" align="center">
-          Below shows data from the current token. Tab the info icon to learn more about each data
+          Below table shows data from the current token. Tab the info icon to learn more about each data
           item.
         </Text>
       </Section>

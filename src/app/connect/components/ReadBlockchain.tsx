@@ -72,7 +72,7 @@ export function ReadBlockchain() {
 
       <Section size="1">
         <Text as="p" align="center">
-          Below shows select stable coin balances of the user&apos;s address from the jwt. Switch
+          See select stable coin balances of the user&apos;s address from the jwt below. Switch
           the chain to fetch balances on other chains.
         </Text>
       </Section>
