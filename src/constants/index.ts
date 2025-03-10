@@ -11,4 +11,8 @@ export const CONFIG = {
   IS_DEV: process.env.NODE_ENV === "development",
 };
 
-export const accentColor = "teal";
+// export const accentColor = "teal";
+export const accentColor = "iris";
+export const accentGradient = "bg-gradient-to-r from-blue-500 to-purple-500";
+
+// export const accentGradient = "bg-gradient-to-r from-blue-500 to-purple-500";

@@ -21,8 +21,8 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <TabNav.Root size="1" style={{ backgroundColor: "var(--gray-1)" }}>
-      <Flex width="100%" justify="between" py="2">
+    <TabNav.Root size="1">
+      <Flex width="100%" justify="between" py="4">
         {ROUTES.map(({ path, icon: Icon }) => (
           <TabNav.Link
             key={path}

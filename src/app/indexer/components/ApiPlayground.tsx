@@ -110,7 +110,7 @@ export function ApiPlayground() {
       <Section size="1">
         <Flex direction="column" gap="2">
           <Text as="p" align="center">
-            The indexer API let&apos;s yapps query the db for payment history with the{" "}
+            The indexer API lets yapps query the db for payment history with the{" "}
             <Code>/payments</Code> endpoint. The inputs below show some of the possible filters for
             the query. Full documentation can be found{" "}
             <Link href="" target="_blank">
