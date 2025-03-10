@@ -9,7 +9,7 @@ type InfoBoxProps = {
   children: ReactNode;
   icon?: ReactNode;
   size?: "1" | "2" | "3";
-  color?: "teal" | "gray" | "red";
+  color?: "teal" | "gray" | "red" | "iris";
 };
 
 export function InfoBox({

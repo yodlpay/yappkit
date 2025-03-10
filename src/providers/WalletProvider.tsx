@@ -29,7 +29,7 @@ export const WalletProvider = memo(({ children }: { children: React.ReactNode })
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={darkTheme({
-            accentColor: "#10a594",
+            accentColor: "var(--light-purple)",
             accentColorForeground: "white",
             overlayBlur: "small",
             borderRadius: "small",

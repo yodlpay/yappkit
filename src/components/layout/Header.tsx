@@ -1,25 +1,28 @@
 "use client";
 
 import { Flex, Link } from "@radix-ui/themes";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaTwitter } from "react-icons/fa";
+import { CustomConnectButton } from "./CustomConnectButton";
 
 export function Header() {
   return (
     <Flex
-      py="3"
+      py="4"
+      px="4"
       justify="between"
       align="center"
       gap="1"
-      className="sticky top-0 z-50"
-      style={{ backgroundColor: "var(--gray-1)" }}
+      className="sticky top-0 z-50 bg-black/10 backdrop-blur-sm"
     >
-      <Flex gap="2">
-        <Link href="https://github.com/AndyOooh/kitchensink-yapp" target="_blank">
+      <Flex gap="4">
+        <Link href="https://github.com/yodlpay/yappkit" target="_blank">
           <FaGithub color="white" size={24} />
         </Link>
+        <Link href="https://x.com/yodlpay" target="_blank">
+          <FaTwitter color="white" size={24} />
+        </Link>
       </Flex>
-      <ConnectButton label="Connect" chainStatus="icon" accountStatus="avatar" />
+      <CustomConnectButton />
     </Flex>
   );
 }
