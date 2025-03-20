@@ -12,7 +12,7 @@ export function Header() {
       justify="between"
       align="center"
       gap="1"
-      className="sticky top-0 z-50 bg-black/10 backdrop-blur-sm"
+      className="sticky top-0 z-50 backdrop-blur"
     >
       <Flex gap="4">
         <Link href="https://github.com/yodlpay/yappkit" target="_blank">

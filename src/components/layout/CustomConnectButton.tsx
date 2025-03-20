@@ -1,8 +1,6 @@
-import { accentGradient } from "@/constants";
 import { GearIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { Button, Flex, Text } from "@radix-ui/themes";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useEffect } from "react";
 
 export const CustomConnectButton = () => {
   return (
@@ -16,13 +14,6 @@ export const CustomConnectButton = () => {
         authenticationStatus,
         mounted,
       }) => {
-        // Note: If your app doesn't use authentication, you
-        // can remove all 'authenticationStatus' checks
-
-        // TESTING
-        // openConnectModal();
-        // const connected = true;
-
         const ready = mounted && authenticationStatus !== "loading";
         const connected =
           ready &&

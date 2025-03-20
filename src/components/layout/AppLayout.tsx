@@ -13,26 +13,18 @@ export function AppLayout({ children }: AppLayoutProps) {
       <div className="blob-cont">
         <div className="light-purple blob"></div>
         <div className="deep-purple blob"></div>
-        {/* <div className="red blob"></div> */}
       </div>
       <GrainyFilter />
-      <Header />
-      <Container size="1" mt="4">
-        <Flex direction="column" minHeight="100vh">
+      <Container size="2">
+        <Header />
+        <Flex direction="column">
           <main className="mb-16 px-4">{children}</main>
         </Flex>
       </Container>
-      {/* <Container size="1" px="4" position="fixed" bottom="0" left="0" right="0"> */}
-      <Box
-        // py="3"
-        px="4"
-        position="fixed"
-        bottom="0"
-        left="0"
-        right="0"
-        className="bg-black/10 backdrop-blur-sm"
-      >
-        <Navigation />
+      <Box position="fixed" bottom="0" left="0" right="0" className="backdrop-blur">
+        <Container size="2">
+          <Navigation />
+        </Container>
       </Box>
     </>
   );

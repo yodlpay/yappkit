@@ -22,7 +22,7 @@ export function Navigation() {
 
   return (
     <TabNav.Root size="1">
-      <Flex width="100%" justify="between" py="4">
+      <Flex width="100%" justify="between" p="4">
         {ROUTES.map(({ path, icon: Icon }) => (
           <TabNav.Link
             key={path}

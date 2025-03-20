@@ -65,7 +65,8 @@ const FAQ_ITEMS = [
     question: "How to close a Yapp?",
     content: (
       <Text>
-        To close a Yapp, use the <Code>close(targetOrigin: string)</Code> function from the yapp SDK. Try it:{" "}
+        To close a Yapp, use the <Code>close(targetOrigin: string)</Code> function from the yapp
+        SDK. Try it:{" "}
         <Button type="button" mt="2" onClick={() => sdk.close(CONFIG.PARENT_URL!)}>
           Close
         </Button>
@@ -78,7 +79,7 @@ export default function ProfilePage() {
   return (
     <>
       <StickyTopBox>
-        <PageHeader title="Welcome to Kitchen Sink" />
+        <PageHeader title="YappKit" />
       </StickyTopBox>
 
       <InfoBox>This yapp is maintained by the Yodl team.</InfoBox>
@@ -89,7 +90,7 @@ export default function ProfilePage() {
 
         <Flex direction="column" gap="2">
           <Text as="p" align="center">
-            Kitchen Sink is the demo app for yapp builders.
+            YappKit is the demo app for yapp builders.
             <br />
             It showcases the core building blocks of yapp creation including the yapp SDK, Indexer
             API, webhooks and payments. This is done through examples and explanations. Use it to:
