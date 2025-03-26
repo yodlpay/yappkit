@@ -13,14 +13,16 @@ import {
   Callout,
   Skeleton,
   Box,
+  Code,
 } from "@radix-ui/themes";
 import { CardList } from "@/components/ui/CardList";
 import { SupportedChainId } from "@/types";
 import { SUPPORTED_CHAINS } from "@/constants";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useUserContext } from "@/hooks/useUserContext";
-import { Hex } from "viem";
+import { Address, Hex } from "viem";
 import { truncateAddress } from "@/lib/utils";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 const USECASES = [
   {
@@ -51,38 +53,44 @@ export function ReadBlockchain() {
     data: tokenBalances,
     isLoading: isLoadingTokenBalances,
     isError: isErrorTokenBalances,
-  } = useTokenBalances(userContext.address as Hex, selectedChainId, TOKENS_TO_FETCH);
+  } = useTokenBalances(userContext?.address, selectedChainId, TOKENS_TO_FETCH);
 
   const headingText = isLoading
     ? "Loading..."
     : userContext?.address
-    ? `Balances of ${truncateAddress(userContext.address as Hex)}`
-    : "Please connect via Yodl app";
+    ? `Balances of ${truncateAddress(userContext.address)}`
+    : "Unable to fetch user context";
 
   return (
     <>
       <Section size="1">
         <Flex direction="column" gap="2">
           <Text as="p" align="center">
-            Building great yapps does not require a wallet connection. The verified properties of
-            the jwt enables yapps to identify users and communities. A few examples of what&apos;s
-            possible:
+            Building great yapps does not require a wallet connection. Yapps can leverage the
+            <Code>userContext</Code> from the sdk to identify users and communities. A few examples
+            of what&apos;s possible:
           </Text>
           <CardList list={USECASES} />
         </Flex>
       </Section>
-
       <Section size="1">
         <Text as="p" align="center">
-          See select stable coin balances of the user&apos;s address from the jwt below. Switch the
-          chain to fetch balances on other chains.
+          See select stable coin balances of the user&apos;s address below. Switch the chain to
+          fetch balances on other chains.
         </Text>
       </Section>
 
+      {!userContext && (
+        <Callout.Root mb="4" color="red">
+          <Callout.Icon>
+            <InfoCircledIcon />
+          </Callout.Icon>
+          <Callout.Text>Open this yapp through the Yodl app to fetch user context.</Callout.Text>
+        </Callout.Root>
+      )}
       <Heading as="h3" size="2" align="center" color="gray">
         {headingText}
       </Heading>
-
       <Section size="1" pt="1">
         <Card size="1">
           <Flex direction="column" gap="3">

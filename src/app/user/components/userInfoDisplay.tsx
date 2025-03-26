@@ -1,8 +1,7 @@
 import { CodeCopy } from "@/components/ui/CodeCopy";
-import { FullScreenLoader } from "@/components/ui/Loader";
 import { useUserContext } from "@/hooks/useUserContext";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { Card, DataList, Flex, Popover, Text } from "@radix-ui/themes";
+import { Callout, Card, DataList, Flex, Popover, Spinner, Text } from "@radix-ui/themes";
 
 export type UserInfoDisplayItem = {
   label: string;
@@ -13,8 +12,23 @@ export type UserInfoDisplayItem = {
 export const UserInfoDisplay = () => {
   const { data: userContext, isLoading } = useUserContext();
 
-  if (isLoading) return <FullScreenLoader />;
-  if (!userContext) return null;
+  if (isLoading)
+    return (
+      <Flex justify="center" align="center" width="100%" gap="2" mt="6">
+        <Spinner />
+        <Text>Loading...</Text>
+      </Flex>
+    );
+
+  if (!userContext)
+    return (
+      <Callout.Root color="red" mt="6">
+        <Callout.Icon>
+          <InfoCircledIcon />
+        </Callout.Icon>
+        <Callout.Text>Open this yapp through the Yodl app to fetch user context.</Callout.Text>
+      </Callout.Root>
+    );
 
   const { address, primaryEnsName, community } = userContext;
 
