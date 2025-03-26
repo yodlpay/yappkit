@@ -17,9 +17,9 @@ import { getTokenBySymbol, TokenInfo } from "@yodlpay/tokenlists";
 import Image from "next/image";
 import { getLeaderboardData } from "./utils";
 import { processPaymentsData } from "./utils";
-import { useUser } from "@/providers/UserProviders";
 import { useIndexerQuery } from "@/hooks/useIndexerQuery";
 import { CardList } from "@/components/ui/CardList";
+import { useUserContext } from "@/hooks/useUserContext";
 
 export type LeaderboardItem = {
   rank: number;
@@ -46,13 +46,13 @@ const USECASES = [
 ];
 
 export function Leaderboard() {
-  const { userInfo } = useUser();
-  const [receiver, setReceiver] = useState(userInfo?.ens || "vitalik.eth");
+  const { data: userContext } = useUserContext();
+  const [receiver, setReceiver] = useState(userContext?.primaryEnsName || "vitalik.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
 
-  const { data, isLoading, isError, error, refetch } = useIndexerQuery({
+  const { data, isLoading, isError, refetch } = useIndexerQuery({
     receiver,
   });
 
@@ -189,7 +189,7 @@ export function Leaderboard() {
                         <Table.RowHeaderCell>
                           <Skeleton>
                             <Box width="20px">{i + 1}</Box>
-                          </Skeleton>ß
+                          </Skeleton>
                         </Table.RowHeaderCell>
                         <Table.Cell>
                           <Skeleton>
