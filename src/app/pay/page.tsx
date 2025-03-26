@@ -16,23 +16,24 @@ import {
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { InfoBox } from "@/components/ui/InfoBox";
-import { FiatCurrency } from "@yodlpay/yapp-sdk/dist/types/currency";
-import { PaymentResponse } from "@yodlpay/yapp-sdk";
+import { FiatCurrency } from "@yodlpay/yapp-sdk/types";
+import { Payment } from "@yodlpay/yapp-sdk";
 import { sdk } from "@/lib/sdk";
 import { useState } from "react";
 import { getChain } from "@yodlpay/tokenlists";
+import { Address } from "viem";
 
 export default function PayPage() {
   const [amount, setAmount] = useState<number>(1);
   const [currency, setCurrency] = useState<FiatCurrency>(FiatCurrency.USD);
-  const [receiver, setReceiver] = useState<string>("");
+  const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [paymentResponse, setPaymentResponse] = useState<PaymentResponse | null>(null);
+  const [paymentResponse, setPaymentResponse] = useState<Payment | null>(null);
 
   const handlePayment = async () => {
     setError(null);
 
-    if (!receiver) {
+    if (!receiverAddress) {
       setError("Please enter a receiver address");
       return;
     }
@@ -43,7 +44,7 @@ export default function PayPage() {
     };
 
     try {
-      const response = await sdk.requestPayment(receiver, payload);
+      const response = await sdk.requestPayment(receiverAddress as Address, payload);
       setPaymentResponse(response);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -93,8 +94,8 @@ export default function PayPage() {
                 <Text size="2">To</Text>
                 <TextField.Root
                   size="2"
-                  value={receiver}
-                  onChange={(e) => setReceiver(e.target.value)}
+                  value={receiverAddress}
+                  onChange={(e) => setReceiverAddress(e.target.value)}
                   placeholder="Enter receiver address"
                 />
               </Flex>
@@ -127,7 +128,11 @@ export default function PayPage() {
                 </Flex>
               </Flex>
 
-              <Button onClick={handlePayment} size="2" disabled={!receiver || !amount || !currency}>
+              <Button
+                onClick={handlePayment}
+                size="2"
+                disabled={!receiverAddress || !amount || !currency}
+              >
                 Pay
               </Button>
 
@@ -155,7 +160,6 @@ export default function PayPage() {
                   </Text>
                 </Flex>
               )}
-              
             </Flex>
           </Flex>
         </Card>

@@ -15,10 +15,12 @@ import {
   Box,
 } from "@radix-ui/themes";
 import { CardList } from "@/components/ui/CardList";
-import { useUser } from "@/providers/UserProviders";
 import { SupportedChainId } from "@/types";
 import { SUPPORTED_CHAINS } from "@/constants";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
+import { useUserContext } from "@/hooks/useUserContext";
+import { Hex } from "viem";
+import { truncateAddress } from "@/lib/utils";
 
 const USECASES = [
   {
@@ -43,18 +45,18 @@ const TOKENS_TO_FETCH = ["USDT", "USDC", "USDGLO", "DAI", "USDM"];
 
 export function ReadBlockchain() {
   const [selectedChainId, setSelectedChainId] = useState<SupportedChainId>(8453);
-  const { userInfo, isLoading: isLoadingUser } = useUser();
+  const { data: userContext, isLoading } = useUserContext();
 
   const {
     data: tokenBalances,
     isLoading: isLoadingTokenBalances,
     isError: isErrorTokenBalances,
-  } = useTokenBalances(userInfo?.address, selectedChainId, TOKENS_TO_FETCH);
+  } = useTokenBalances(userContext.address as Hex, selectedChainId, TOKENS_TO_FETCH);
 
-  const headingText = isLoadingUser
+  const headingText = isLoading
     ? "Loading..."
-    : userInfo?.truncatedAddress
-    ? `Balances of ${userInfo.truncatedAddress}`
+    : userContext?.address
+    ? `Balances of ${truncateAddress(userContext.address as Hex)}`
     : "Please connect via Yodl app";
 
   return (
@@ -72,8 +74,8 @@ export function ReadBlockchain() {
 
       <Section size="1">
         <Text as="p" align="center">
-          See select stable coin balances of the user&apos;s address from the jwt below. Switch
-          the chain to fetch balances on other chains.
+          See select stable coin balances of the user&apos;s address from the jwt below. Switch the
+          chain to fetch balances on other chains.
         </Text>
       </Section>
 

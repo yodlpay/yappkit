@@ -2,35 +2,34 @@
 
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Heading, Section, Text, Code } from "@radix-ui/themes";
+import { Heading, Section, Text } from "@radix-ui/themes";
 import { UserInfoDisplay } from "./components/userInfoDisplay";
 
-export default function TokenPage() {
+export default function UserPage() {
   return (
     <>
       <StickyTopBox>
-        <PageHeader title="JSON Web Token" backPath="/" />
+        <PageHeader title="User Context" backPath="/" />
       </StickyTopBox>
 
       <Section size="1">
         <Text as="p" align="center">
-          Yapps opened through the Yodl app receive a JSON Web Token in the <Code>jwt</Code> query
-          parameter.
+          Yapps opened through the Yodl app can utilize the yapp-sdk to access user context.
           <br />
-          The token containes verfied details about the user and where they came from.
+          The context includes details of the user and the optionally the community they came from.
           <br />
         </Text>
       </Section>
 
       <Section>
         <Text as="p" align="center">
-          Below table shows data from the current token. Tab the info icon to learn more about each data
-          item.
+          Below table shows details about the current user context. Tab the info icon to learn more
+          about each data item.
         </Text>
       </Section>
 
       <Heading as="h3" size="2" align="center" color="gray">
-        Token details
+        User context
       </Heading>
       <Section size="1" pt="1">
         <UserInfoDisplay />

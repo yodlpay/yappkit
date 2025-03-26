@@ -1,6 +1,6 @@
 import { CodeCopy } from "@/components/ui/CodeCopy";
 import { FullScreenLoader } from "@/components/ui/Loader";
-import { useUser } from "@/providers/UserProviders";
+import { useUserContext } from "@/hooks/useUserContext";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Card, DataList, Flex, Popover, Text } from "@radix-ui/themes";
 
@@ -11,18 +11,12 @@ export type UserInfoDisplayItem = {
 };
 
 export const UserInfoDisplay = () => {
-  const { userInfo, isLoading } = useUser();
+  const { data: userContext, isLoading } = useUserContext();
 
   if (isLoading) return <FullScreenLoader />;
-  if (!userInfo) return null;
+  if (!userContext) return null;
 
-  const { ens, yappEns, communityEns, exp, address } = userInfo;
-  const expirationDate = new Date(userInfo.exp * 1000);
-  const formattedExpDate = `${userInfo.exp} (${expirationDate.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  })})`;
+  const { address, primaryEnsName, community } = userContext;
 
   const userInfoDisplayItems: UserInfoDisplayItem[] = [
     {
@@ -35,24 +29,24 @@ export const UserInfoDisplay = () => {
       label: "Ens",
       description:
         "The connected ENS name of the user in the Yodl app. Useful for looking up ENS records, e.g. Yodl settings including preferred tokens and chains.",
-      element: <CodeCopy text={ens || "n/a"} truncate={true} />,
+      element: <CodeCopy text={primaryEnsName || "n/a"} truncate={true} />,
+    },
+
+    {
+      label: "Community Address",
+      description: "The address of the community.",
+      element: <CodeCopy text={community?.address || "n/a"} truncate={true} />,
     },
     {
-      label: "Yapp",
-      description:
-        "This yapp's ENS name. It must match the SDK config.ensName. Essential in rejecting malicious JWT's. The SDK's verify function handles the check.",
-      element: <CodeCopy text={yappEns} truncate={true} />,
-    },
-    {
-      label: "Community",
+      label: "Community ENS",
       description:
         "The community from which the yapp was opened. Useful for implementing community specifc features, styling etc.",
-      element: <CodeCopy text={communityEns} truncate={true} />,
+      element: <CodeCopy text={community?.ensName || "n/a"} truncate={true} />,
     },
     {
-      label: "Token Exp.",
-      description: "The JWT expiry time as a unix timestamp.",
-      element: <Text>{formattedExpDate}</Text>,
+      label: "Community User ENS",
+      description: "The ENS name of the user in the community.",
+      element: <CodeCopy text={community?.userEnsName || "n/a"} truncate={true} />,
     },
   ];
   return (

@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { UserProvider } from "@/providers/UserProviders";
 import { WalletProvider } from "@/providers/WalletProvider";
 import { JustaNameProvider } from "@/providers/JustaNameProvider";
 import { accentColor } from "@/constants";
@@ -37,17 +36,15 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <WalletProvider>
           <JustaNameProvider>
-            <UserProvider>
-              <Theme
-                accentColor={accentColor}
-                hasBackground={false}
-                panelBackground="translucent"
-                radius="medium"
-                appearance="dark"
-              >
-                <AppLayout>{children}</AppLayout>
-              </Theme>
-            </UserProvider>
+            <Theme
+              accentColor={accentColor}
+              hasBackground={false}
+              panelBackground="translucent"
+              radius="medium"
+              appearance="dark"
+            >
+              <AppLayout>{children}</AppLayout>
+            </Theme>
           </JustaNameProvider>
         </WalletProvider>
       </body>
