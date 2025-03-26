@@ -16,8 +16,7 @@ import {
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { InfoBox } from "@/components/ui/InfoBox";
-import { FiatCurrency } from "@yodlpay/yapp-sdk/types";
-import { Payment } from "@yodlpay/yapp-sdk";
+import { FiatCurrency, Payment } from "@yodlpay/yapp-sdk/types";
 import { sdk } from "@/lib/sdk";
 import { useState } from "react";
 import { getChain } from "@yodlpay/tokenlists";

@@ -16,15 +16,15 @@ export default function UserPage() {
         <Text as="p" align="center">
           Yapps opened through the Yodl app can utilize the yapp-sdk to access user context.
           <br />
-          The context includes details of the user and the optionally the community they came from.
+          The context includes details of the user and the community they came from if any.
           <br />
         </Text>
       </Section>
 
       <Section>
         <Text as="p" align="center">
-          Below table shows details about the current user context. Tab the info icon to learn more
-          about each data item.
+          Below table shows the current user context. Tab the info icon to learn more about each
+          data item.
         </Text>
       </Section>
 

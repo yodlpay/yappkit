@@ -46,13 +46,13 @@ const USECASES = [
 ];
 
 export function Leaderboard() {
-  const { data: userContext, isLoading: isUserContextLoading } = useUserContext();
+  const { data: userContext } = useUserContext();
   const [receiver, setReceiver] = useState(userContext?.primaryEnsName || "vitalik.eth");
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
 
-  const { data, isLoading, isError, error, refetch } = useIndexerQuery({
+  const { data, isLoading, isError, refetch } = useIndexerQuery({
     receiver,
   });
 
@@ -190,7 +190,6 @@ export function Leaderboard() {
                           <Skeleton>
                             <Box width="20px">{i + 1}</Box>
                           </Skeleton>
-                          ß
                         </Table.RowHeaderCell>
                         <Table.Cell>
                           <Skeleton>

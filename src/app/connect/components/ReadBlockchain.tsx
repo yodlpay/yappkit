@@ -20,7 +20,6 @@ import { SupportedChainId } from "@/types";
 import { SUPPORTED_CHAINS } from "@/constants";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useUserContext } from "@/hooks/useUserContext";
-import { Address, Hex } from "viem";
 import { truncateAddress } from "@/lib/utils";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
