@@ -27,8 +27,6 @@ export function useTokenBalances(
             args: [address!],
           });
 
-          if (balance === BigInt(0)) return;
-
           return {
             chainId,
             token,
@@ -37,7 +35,6 @@ export function useTokenBalances(
           };
         })
       );
-      //   return tokenBalances.filter(Boolean);
 
       const filteredTokenBalances = tokenBalances.filter((tokenBalance) => !!tokenBalance);
       return filteredTokenBalances;
