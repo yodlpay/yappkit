@@ -452,10 +452,24 @@
     axios "^1.6.0"
     qs "^6.12.0"
 
+"@justaname.id/sdk@^0.2.181":
+  version "0.2.183"
+  resolved "https://registry.yarnpkg.com/@justaname.id/sdk/-/sdk-0.2.183.tgz#ba45d950f4033e18216e3dc5cf478823f64d7345"
+  integrity sha512-qYFwe9f0dxpkzcRv5YWGvWXVuPYvOWFKBvj5dvXfMxrhBBeMPgDB/Ps+77c6VOPZwneKgAmINwwQ9HbIbn8C7A==
+  dependencies:
+    "@justaname.id/siwens" "0.0.116"
+    axios "^1.6.0"
+    qs "^6.12.0"
+
 "@justaname.id/siwens@0.0.114":
   version "0.0.114"
   resolved "https://registry.yarnpkg.com/@justaname.id/siwens/-/siwens-0.0.114.tgz#3452f6b4e62f68a66000ba173b96668aa795f7f4"
   integrity sha512-elcjT4DoxiFIxwINdH82ojvnhxPVN86emtUO6/VZc+2PKQ29kHBes4yoFjXZjyZSRqNIHp9MJSuED6sIMC2cuA==
+
+"@justaname.id/siwens@0.0.116":
+  version "0.0.116"
+  resolved "https://registry.yarnpkg.com/@justaname.id/siwens/-/siwens-0.0.116.tgz#5f62a7e21a4d51c7e9f649ef5f974ea4683c1ee6"
+  integrity sha512-9htX+xqqVt67+ZLxfgxsHhSxI9MpTqXiOpd43fQWgHLktuPRMwVq/S3DOBNSbSd05MRThGTiKb6RV1E6B/Cm6Q==
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.5"
@@ -2224,11 +2238,12 @@
   resolved "https://registry.yarnpkg.com/@yodlpay/tokenlists/-/tokenlists-0.8.11.tgz#4bea99237c481e84e7b7882b1698a3d76c53e4c2"
   integrity sha512-Ce12MyH4YVI2AGjXIpiGiKXB+pH+r4fv8n+uCX3P5U3uyzAQAet4Zc32o5iC9PKNlx2dIqKhdXh2K8buFthOqQ==
 
-"@yodlpay/yapp-sdk@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@yodlpay/yapp-sdk/-/yapp-sdk-1.4.1.tgz#270038274180ef5cc393808d0b04a837a9c41cb4"
-  integrity sha512-X3aFo0LLhFYHqh3mPsMOe77kMO5Ave1RNHxhFUvIdzPSehcTSG/RKXljNYd3wun97b7W50+sFcgFeSUNRMxT1Q==
+"@yodlpay/yapp-sdk@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@yodlpay/yapp-sdk/-/yapp-sdk-1.9.1.tgz#3d6baeebebe8d647d5633ae8733c06d2bd70de92"
+  integrity sha512-eVubWfOY/gd5+ojPygK+7Rd8e96BtLdEEO7dK9U0XvMjS2pAbAK22qDXPekX5V1cwX0gBeLrwGDEiLVCQpxXnw==
   dependencies:
+    "@justaname.id/sdk" "^0.2.181"
     jose "5.x"
 
 abitype@1.0.8, abitype@^1.0.0, abitype@^1.0.6:
