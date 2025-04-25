@@ -2,6 +2,5 @@ import { CONFIG } from "@/constants";
 import YappSDK from "@yodlpay/yapp-sdk";
 
 export const sdk = new YappSDK({
-  ensName: CONFIG.YAPP_ENS_NAME!,
-  origin: CONFIG.IS_DEV ? "http://localhost:3001" : CONFIG.PARENT_URL,
+  origin: CONFIG.IS_DEV ? "http://localhost:3000" : CONFIG.PARENT_URL,
 });

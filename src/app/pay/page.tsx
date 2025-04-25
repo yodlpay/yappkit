@@ -16,11 +16,10 @@ import {
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { InfoBox } from "@/components/ui/InfoBox";
-import { FiatCurrency, Payment } from "@yodlpay/yapp-sdk/types";
+import { FiatCurrency, Payment, PaymentRequestData } from "@yodlpay/yapp-sdk/types";
 import { sdk } from "@/lib/sdk";
 import { useState } from "react";
 import { getChain } from "@yodlpay/tokenlists";
-import { Address } from "viem";
 
 export default function PayPage() {
   const [amount, setAmount] = useState<number>(1);
@@ -37,13 +36,14 @@ export default function PayPage() {
       return;
     }
 
-    const payload = {
+    const payload: PaymentRequestData = {
       amount,
       currency,
+      addressOrEns: receiverAddress,
     };
 
     try {
-      const response = await sdk.requestPayment(receiverAddress as Address, payload);
+      const response = await sdk.requestPayment(payload);
       setPaymentResponse(response);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -95,7 +95,7 @@ export default function PayPage() {
                   size="2"
                   value={receiverAddress}
                   onChange={(e) => setReceiverAddress(e.target.value)}
-                  placeholder="Enter receiver address"
+                  placeholder="Enter receiver address or ENS"
                 />
               </Flex>
               <Flex justify="between">
