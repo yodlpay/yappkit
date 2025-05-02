@@ -6,7 +6,7 @@ import { Theme } from "@radix-ui/themes";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { WalletProvider } from "@/providers/WalletProvider";
 import { JustaNameProvider } from "@/providers/JustaNameProvider";
-import { accentColor } from "@/constants";
+import { ACCENT_COLOR } from "@/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +37,7 @@ export default function RootLayout({
         <WalletProvider>
           <JustaNameProvider>
             <Theme
-              accentColor={accentColor}
+              accentColor={ACCENT_COLOR}
               hasBackground={false}
               panelBackground="translucent"
               radius="medium"

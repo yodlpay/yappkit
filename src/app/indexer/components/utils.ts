@@ -1,7 +1,5 @@
 import { TokenInfo, getTokenBySymbol } from "@yodlpay/tokenlists";
 import { LeaderboardItem, TokenCount } from "./Leaderboard";
-import { QueryParams } from "../types";
-import { CONFIG } from "@/constants";
 
 export const processPaymentsData = (payments: any[]): TokenCount[] => {
   const tokenCounts = payments.reduce((acc: Record<string, number>, payment: any) => {
@@ -83,14 +81,4 @@ export const buildQueryString = (params: Record<string, any>) => {
     }
   });
   return urlParams.toString() ? `?${urlParams.toString()}` : "";
-};
-
-export const fetchIndexerData = async (params: QueryParams) => {
-  const queryString = buildQueryString(params);
-  const url = `${CONFIG.INDEXER_URL}/payments${queryString}`;
-  const response = await fetch(url);
-  return {
-    status: response.status,
-    data: await response.json(),
-  };
 };

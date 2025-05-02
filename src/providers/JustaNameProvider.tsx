@@ -3,13 +3,12 @@ import {
   JustaNameProviderConfig,
 } from "@justaname.id/react";
 import { mainnet } from "viem/chains";
-import { CONFIG } from "@/constants";
 
 export const JustaNameProvider = ({ children }: { children: React.ReactNode }) => {
   const justaNameConfig: JustaNameProviderConfig = {
     config: {
-      origin: CONFIG.IS_DEV ? "http://localhost:3000" : CONFIG.YAPP_URL,
-      domain: CONFIG.IS_DEV ? "localhost:3000" : CONFIG.YAPP_DOMAIN,
+      origin: process.env.NEXT_PUBLIC_YAPP_URL,
+      domain: process.env.NEXT_PUBLIC_YAPP_DOMAIN,
       signInTtl: 120000,
     },
     networks: [

@@ -1,18 +1,4 @@
-export type BaseQueryParams = {
-  tokenOutSymbols?: string;
-  sourceChainIds?: string[];
-};
+import { GetPaymentsQuery } from "@yodlpay/yapp-sdk";
 
-export type QueryParams = BaseQueryParams &
-  (
-    | {
-        sender: string;
-        receiver?: string;
-      }
-    | {
-        sender?: string;
-        receiver: string;
-      }
-  );
-
+export type QueryParams = Partial<GetPaymentsQuery>;
 export type QueryParamKey = keyof QueryParams;

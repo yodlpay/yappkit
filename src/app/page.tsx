@@ -17,7 +17,6 @@ import { StickyTopBox } from "@/components/ui/StickyTopBox";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { CardList } from "@/components/ui/CardList";
 import { sdk } from "@/lib/sdk";
-import { CONFIG } from "@/constants";
 
 const USE_CASES = [
   {
@@ -67,7 +66,7 @@ const FAQ_ITEMS = [
       <Text>
         To close a Yapp, use the <Code>close(targetOrigin: string)</Code> function from the yapp
         SDK. Try it:{" "}
-        <Button type="button" mt="2" onClick={() => sdk.close(CONFIG.PARENT_URL!)}>
+        <Button type="button" mt="2" onClick={() => sdk.close(process.env.NEXT_PUBLIC_PARENT_URL!)}>
           Close
         </Button>
       </Text>

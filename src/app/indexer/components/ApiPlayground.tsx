@@ -17,11 +17,12 @@ import {
 } from "@radix-ui/themes";
 import { useIndexerQuery } from "@/hooks/useIndexerQuery";
 import { ResponseTable } from "./ResponseTable";
-import { CONFIG, SUPPORTED_CHAINS } from "@/constants";
+import { INDEXER_URL, SUPPORTED_CHAINS } from "@/constants";
 import { CodeCopy } from "@/components/ui/CodeCopy";
 import { useState } from "react";
 import { QueryParamKey, QueryParams } from "../types";
 import { buildQueryString } from "./utils";
+import { isAddress } from "viem";
 
 type Input = {
   label: string;
@@ -35,12 +36,12 @@ type Input = {
 const inputs: Input[] = [
   {
     label: "Sender",
-    key: "sender",
+    key: "senderEnsPrimaryName",
     placeholder: "Sender ENS or Address",
   },
   {
     label: "Receiver",
-    key: "receiver",
+    key: "receiverEnsPrimaryName",
     placeholder: "Receiver ENS or Address",
   },
   {
@@ -64,11 +65,7 @@ const inputs: Input[] = [
 ];
 
 export function ApiPlayground() {
-  const [queryParams, setQueryParams] = useState<QueryParams>({
-    sender: "",
-    sourceChainIds: ["all"],
-  });
-
+  const [queryParams, setQueryParams] = useState<QueryParams>({});
   const { data, isLoading, isError, error, refetch } = useIndexerQuery(queryParams);
 
   const handleInputChange = (key: QueryParamKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +74,17 @@ export function ApiPlayground() {
       const arrayValue = value ? value.split(",").map((v) => v.trim()) : [];
       setQueryParams({ ...queryParams, [key]: arrayValue });
     } else {
-      setQueryParams({ ...queryParams, [key]: value });
+      let newKey: QueryParamKey = key;
+      // change property name if sender/receiver is an address
+      if (isAddress(value)) {
+        newKey =
+          key === "senderEnsPrimaryName"
+            ? "sender"
+            : key === "receiverEnsPrimaryName"
+            ? "receiver"
+            : key;
+      }
+      setQueryParams({ ...queryParams, [newKey]: value });
     }
   };
 
@@ -93,28 +100,22 @@ export function ApiPlayground() {
     }
   };
 
-  const isValidRequest = () => {
-    return ["sender", "receiver"].some(
-      (key) => queryParams[key as QueryParamKey]?.toString().trim() !== ""
-    );
-  };
-
-  const handleSubmit = () => {
-    refetch();
-  };
-
-  const url = `${CONFIG.INDEXER_URL}/payments${buildQueryString(queryParams)}`;
+  const url = `${INDEXER_URL}/payments${buildQueryString(queryParams)}`;
 
   return (
     <>
       <Section size="1">
         <Flex direction="column" gap="2">
           <Text as="p" align="center">
-            The indexer API lets yapps query the db for payment history with the{" "}
-            <Code>/payments</Code> endpoint. The inputs below show some of the possible filters for
-            the query. Full documentation can be found{" "}
-            <Link href="" target="_blank">
-              here
+            The indexer API lets yapps query the db for payment history through the sdk with the
+            <Code>getPayment()</Code> and <Code>getPayments()</Code> functions. The inputs below
+            show some of the possible filters for querying multiple payments. Full documentation can
+            be found in the{" "}
+            <Link
+              href="https://github.com/yodlpay/yapp-sdk?tab=readme-ov-file#-fetching-payment-details"
+              target="_blank"
+            >
+              sdk docs
             </Link>
             . The endpoint returns a paginated list of payments. Try it out below.
           </Text>
@@ -167,9 +168,14 @@ export function ApiPlayground() {
             <ScrollArea scrollbars="horizontal" className="text-xs py-1">
               <CodeCopy text={url} position="back" justify="start" />
             </ScrollArea>
-            <Button size="2" disabled={!isValidRequest()} onClick={handleSubmit}>
-              Submit
-            </Button>
+            <Flex gap="4">
+              <Button size="2" onClick={() => refetch()}>
+                Submit
+              </Button>
+              <Button size="2" onClick={() => setQueryParams({})} variant="soft">
+                Clear
+              </Button>
+            </Flex>
           </Flex>
         </Card>
       </Section>
@@ -192,7 +198,7 @@ export function ApiPlayground() {
               <Box width="100%">
                 <ScrollArea scrollbars="both" className="p-2 w-full max-h-72">
                   <Flex gap="4" p="2" width="700px" className="text-xs">
-                    <ResponseTable data={data.data} isExpanded={true} />
+                    <ResponseTable data={data} isExpanded={true} />
                   </Flex>
                 </ScrollArea>
               </Box>

@@ -47,27 +47,36 @@ const USECASES = [
 
 export function Leaderboard() {
   const { data: userContext } = useUserContext();
-  const [receiver, setReceiver] = useState(userContext?.primaryEnsName || "vitalik.eth");
+  const [receiverEnsPrimaryName, setReceiverEnsPrimaryName] = useState(
+    userContext?.primaryEnsName || "vitalik.eth"
+  );
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [availableTokens, setAvailableTokens] = useState<TokenCount[]>([]);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardItem[]>([]);
 
   const { data, isLoading, isError, refetch } = useIndexerQuery({
-    receiver,
+    receiverEnsPrimaryName,
   });
 
   useEffect(() => {
-    if (data?.data?.payments) {
-      const tokens = processPaymentsData(data.data.payments);
-      setAvailableTokens(tokens);
+    if (!data) return;
 
-      if (!selectedToken && tokens.length > 0) {
-        setSelectedToken(tokens[0].token);
-      }
-
-      const newLeaderboard = getLeaderboardData(data.data.payments, selectedToken);
-      setLeaderboardData(newLeaderboard);
+    // Handle error case
+    if ("error" in data) {
+      setAvailableTokens([]);
+      setLeaderboardData([]);
+      return;
     }
+
+    const tokens = processPaymentsData(data.payments);
+    setAvailableTokens(tokens);
+
+    if (!selectedToken && tokens.length > 0) {
+      setSelectedToken(tokens[0].token);
+    }
+
+    const newLeaderboard = getLeaderboardData(data.payments, selectedToken);
+    setLeaderboardData(newLeaderboard);
   }, [data, selectedToken]);
 
   const numberFormatter = new Intl.NumberFormat("en-US", {
@@ -115,8 +124,8 @@ export function Leaderboard() {
               <TextField.Root
                 size="2"
                 placeholder="Receiver ENS or Address"
-                value={receiver}
-                onChange={(e) => setReceiver(e.target.value)}
+                value={receiverEnsPrimaryName}
+                onChange={(e) => setReceiverEnsPrimaryName(e.target.value)}
               />
               <Button size="2" onClick={handleSubmit}>
                 Submit
