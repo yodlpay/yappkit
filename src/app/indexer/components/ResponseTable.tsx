@@ -1,9 +1,8 @@
 import { Flex, Button, Code, Box, Text } from "@radix-ui/themes";
-import { GetPaymentsResponse } from "@yodlpay/yapp-sdk";
 import { useState } from "react";
 
 type JsonViewerProps = {
-  data: GetPaymentsResponse;
+  data: any;
   level?: number;
   isExpanded?: boolean;
 };
